@@ -1,0 +1,36 @@
+.container {
+  margin-top: -3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f7f7f7;
+  
+    &__content {
+      width: 100%; // Asegura que el espacio entre los elementos se distribuye bien
+      padding: 1rem 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap; // Permite que los elementos se acomoden si no hay suficiente espacio
+  
+      &__proItem {
+        padding: 1rem;
+        text-align: center;
+        display: flex; // Alinea los elementos en una fila
+        align-items: center; // Centra verticalmente los elementos
+        gap: 0.5rem; // Espacio entre los elementos
+
+        img {
+          width: 50px;
+          height: 50px;
+        }
+
+        div{
+          display: flex;
+          flex-direction: column; // Mantiene el título y la descripción en dos líneas
+          align-items: flex-start; // Alinea el texto a la izquierda
+          text-align: left; // Asegura que el texto esté alineado correctamente
+        }
+      }
+    }
+  }
+  
