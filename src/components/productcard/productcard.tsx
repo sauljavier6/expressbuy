@@ -7,7 +7,7 @@ interface ProductProps {
   name: string;
   price: number;
   image: string;
-  stock: number; // 🔹 Agregar stock
+  stock: number;
 }
 
 export default function ProductCard({ product }: { product: ProductProps }) {

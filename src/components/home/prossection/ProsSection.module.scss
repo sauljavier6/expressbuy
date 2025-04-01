@@ -1,5 +1,4 @@
 .container {
-  margin-top: -3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,3 +33,23 @@
     }
   }
   
+
+  /* 📌 Estilos para móviles */
+@media (max-width: 426px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .container__content {
+    flex-direction: column; /* Apila los elementos */
+    align-items: center; /* Centra los elementos */
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .container__content__proItem {
+    flex-direction: column; /* Icono arriba, texto abajo */
+    align-items: center;
+    text-align: center;
+  }
+}

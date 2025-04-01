@@ -45,8 +45,8 @@ const SummerCollection = () => {
 
         {/* Contenedor de las imágenes "For Her" y "For Him" */}
         <div className={styles.container__content__imgDetails}>
-          <img src="/summercollection/tenis-correr.jpg" alt={t("forHer")} />
-          <img src="/summercollection/tenis-correr.jpg" alt={t("forHim")} />
+          <img src="/summercollection/ella.jpg" alt={t("forHer")} />
+          <img src="/summercollection/el.jpg" alt={t("forHim")} />
         </div>
       </div>
     </section>

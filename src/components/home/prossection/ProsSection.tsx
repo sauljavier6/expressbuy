@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "@/components/home/prossection/ProsSection.module.scss";
+import Image from "next/image";
 
 const ProsSection = () => {
   const { t } = useTranslation();
@@ -42,7 +43,7 @@ const ProsSection = () => {
       <div className={styles.container__content}>
         {pros.map((pro, index) => (
           <div key={index} className={styles.container__content__proItem}>
-            <img src={pro.icon} alt={pro.title} />
+            <Image src={pro.icon} alt={pro.title} width={50} height={50}/>
             <div>
               <h3>{pro.title}</h3>
               <p>{pro.description}</p>

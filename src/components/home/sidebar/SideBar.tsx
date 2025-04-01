@@ -1,34 +1,62 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";  // Usa el router de Next.js
 import styles from "./SideBar.module.scss";
 
 const SideBar = () => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+  const [productTypes, setProductTypes] = useState<{ id: string; name: string }[]>([]);
+  const router = useRouter(); // Instancia del router
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await fetch("/api/categories");
         const data = await res.json();
-        
         if (Array.isArray(data)) {
-          setCategories(data.map((category: { name: string }) => category.name));
-        } else {
-          console.error("Invalid categories data:", data);
+          setCategories(data.map((category: { name: string; _id: string }) => ({
+            name: category.name,
+            id: category._id
+          })));
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
 
+    const fetchProductTypes = async () => {
+      try {
+        const res = await fetch("/api/producttype");
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setProductTypes(data.map((type: { name: string; _id: string }) => ({
+            name: type.name,
+            id: type._id
+          })));
+        }
+      } catch (error) {
+        console.error("Error fetching product types:", error);
+      }
+    };
+
     fetchCategories();
+    fetchProductTypes();
   }, []);
 
-  const toggleMenu = (category: string) => {
-    setOpenMenu(openMenu === category ? null : category);
+  const toggleMenu = (menu: string) => {
+    setOpenMenu(openMenu === menu ? null : menu);
   };
+
+  const goToProductsPage = (type: "category" | "product", id: string) => {
+    if (type === "category") {
+      router.push(`/products/product?categoryId=${id}`);
+    } else {
+      router.push(`/products/product?productTypeId=${id}`);
+    }
+  };
+   
 
   return (
     <div className={styles.sidebar}>
@@ -37,13 +65,13 @@ const SideBar = () => {
       </div>
       <h3>Home</h3>
       <ul>
-        {["Categories", "Products", "Features", "Elements"].map((category) => (
-          <li key={category} className={styles.sidebar__item}>
+        {["Categories", "Products"].map((menu) => (
+          <li key={menu} className={styles.sidebar__item}>
             <button 
-              onClick={() => toggleMenu(category)} 
-              className={`${styles.sidebar__button} ${openMenu === category ? styles.open : ""}`}
+              onClick={() => toggleMenu(menu)} 
+              className={`${styles.sidebar__button} ${openMenu === menu ? styles.open : ""}`}
             >
-              {category} 
+              {menu} 
               <img 
                 src="/icons/next.png" 
                 alt="Arrow" 
@@ -51,11 +79,31 @@ const SideBar = () => {
               />
             </button>
 
-            {openMenu === "Categories" && category === "Categories" && (
+            {openMenu === "Categories" && menu === "Categories" && (
               <ul className={styles.sidebar__submenu}>
                 {categories.length > 0 ? (
                   categories.map((cat) => (
-                    <li key={cat}><a href="#">{cat}</a></li>
+                    <li key={cat.id}>
+                      <button onClick={() => goToProductsPage("category", cat.id)}>
+                        {cat.name}
+                      </button>
+                    </li>
+                  ))
+                ) : (
+                  <li>Cargando...</li>
+                )}
+              </ul>
+            )}
+
+            {openMenu === "Products" && menu === "Products" && (
+              <ul className={styles.sidebar__submenu}>
+                {productTypes.length > 0 ? (
+                  productTypes.map((type) => (
+                    <li key={type.id}>
+                      <button onClick={() => goToProductsPage("product", type.id)}>
+                        {type.name}
+                      </button>
+                    </li>
                   ))
                 ) : (
                   <li>Cargando...</li>

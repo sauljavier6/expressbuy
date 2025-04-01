@@ -1,11 +1,19 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { Schema, model, models } from 'mongoose';
 
 const productSchema = new Schema({
   name: { type: String, required: true },
-  description: String,
+  talla: { type: String, required: true },
   price: { type: Number, required: true },
-  category: String,
-  image: String,
+  category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+  productType: { type: Schema.Types.ObjectId, ref: 'ProductType', required: true },
+  image: { type: String, required: true },
+  stock: { type: Number, required: true },
+  sex: { type: String, required: true },
 }, { timestamps: true });
 
-export const Product = models.Product || model("Product", productSchema);
+productSchema.index({ category: 1 });
+
+// Verifica si el modelo ya está definido
+const Product = models.Product || model('Product', productSchema);
+
+export default Product;

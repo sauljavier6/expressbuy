@@ -21,8 +21,6 @@ const BestSellerProducts = () => {
       name: "Light Brown Shoes",
       category: "SPORTS SUMMER",
       price: 49.00,
-      oldPrice: 59.00,
-      discount: 17,
       image: "/products/best1.jpeg",
     },
     {
@@ -37,8 +35,6 @@ const BestSellerProducts = () => {
       name: "Yellow Men Shoes",
       category: "FASHION MAN",
       price: 49.00,
-      oldPrice: 59.00,
-      discount: 17,
       image: "/products/best3.jpg",
     },
   ];
@@ -53,11 +49,6 @@ const BestSellerProducts = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {products.map((product) => (
           <div key={product.id} className="border rounded-lg p-4 shadow-md bg-white relative">
-            {product.discount && (
-              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded absolute -mt-4 -ml-4">
-                -{product.discount}%
-              </span>
-            )}
             <div className="relative">
               <Image 
                 src={product.image} 
@@ -69,9 +60,7 @@ const BestSellerProducts = () => {
             </div>
             <p className="text-xs text-gray-500 mt-2">{product.category}</p>
             <h3 className="text-sm font-semibold">{product.name}</h3>
-            <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}
-              {product.oldPrice && <span className="text-gray-400 line-through text-sm ml-2">${product.oldPrice.toFixed(2)}</span>}
-            </p>
+            <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
             <Link href="#" passHref>
               <button className="mt-2 bg-black text-white px-4 py-1 rounded hover:bg-gray-800 transition">
                 Add to Cart

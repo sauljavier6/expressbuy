@@ -21,8 +21,6 @@ const FeaturedProducts = () => {
       name: "Light Brown Shoes",
       category: "SPORTS SUMMER",
       price: 49.00,
-      oldPrice: 59.00,
-      discount: 17,
       image: "/products/tenis1.jpg",
     },
     {
@@ -37,8 +35,6 @@ const FeaturedProducts = () => {
       name: "Yellow Men Shoes",
       category: "FASHION MAN",
       price: 49.00,
-      oldPrice: 59.00,
-      discount: 17,
       image: "/products/tenis3.jpg",
     },
     {
@@ -49,24 +45,17 @@ const FeaturedProducts = () => {
       image: "/products/tenis4.jpg",
     },
   ];
-
+ 
   return (
-    <section className="py-12 px-12">
+    <section className="py-12 px-6 md:px-12">
       <h2 className="text-2xl font-semibold text-center">
         {t("featured")}
       </h2>
-      <p className="text-gray-500 text-center mb-6">
-        {t("featuredDescription")}
-      </p>
+      <p className="text-gray-500 text-center mb-6">{t("featuredDescription")}</p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {products.map((product) => (
           <div key={product.id} className="border rounded-lg p-4 shadow-md bg-white relative">
-            {product.discount && (
-              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded absolute top-2 left-2">
-                -{product.discount}%
-              </span>
-            )}
             <div className="relative">
               <Image 
                 src={product.image} 
@@ -78,10 +67,7 @@ const FeaturedProducts = () => {
             </div>
             <p className="text-xs text-gray-500 mt-2">{product.category}</p>
             <h3 className="text-sm font-semibold">{product.name}</h3>
-            <p className="text-lg font-bold text-red-600">
-              ${product.price.toFixed(2)}
-              {product.oldPrice && <span className="text-gray-400 line-through text-sm ml-2">${product.oldPrice.toFixed(2)}</span>}
-            </p>
+            <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
             <button className="mt-2 bg-black text-white px-4 py-1 rounded hover:bg-gray-800 transition">
               Add to Cart
             </button>

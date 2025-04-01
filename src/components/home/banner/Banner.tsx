@@ -20,16 +20,11 @@ const Banner = () => {
   const icons = [
     {
       icon: "/icons/loupe.png",
-      title: t("freeShippingReturn"), // Usamos la traducción aquí
-      link: ""
-    },
-    {
-      icon: "/icons/user.png",
       title: t("freeShippingReturn"),
       link: ""
     },
     {
-      icon: "/icons/heart.png",
+      icon: "/icons/user.png",
       title: t("freeShippingReturn"),
       link: ""
     },
@@ -42,14 +37,13 @@ const Banner = () => {
 
   return (
     <div className={styles.banner}>
-      <SideBar />
+      <div className={styles.banner__sidebar}><SideBar /></div>
       <div className={styles.banner__content}>
         <h1>{t("newBrownCollection")}</h1>
         <h2>{t("summerSale")}</h2>
         <h3>{t("thirtyPercentOff")}</h3>
         <div>
           <p>{t("startingAt")}: $39.99</p>
-          <button className={styles.button}>{t("getYours")}</button>
         </div>
       </div>
       <div className={styles.image}>

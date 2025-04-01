@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   const pros = [
@@ -8,8 +9,8 @@ const Footer = () => {
   ];
 
   const socialMedia = [
-    { icon: "/icons/facebook.png", alt: "Facebook" },
-    { icon: "/icons/instagram.png", alt: "Instagram" },
+    { icon: "/icons/facebook.png", alt: "Facebook", link: "https://www.instagram.com/cindereellashoes_?igsh=NTc4MTIwNjQ2YQ%3D%3D&utm_source=qr" },
+    { icon: "/icons/instagram.png", alt: "Instagram", link: "" },
   ];
 
   const paymentMethods = [
@@ -42,9 +43,11 @@ const Footer = () => {
           <div>
             <h3 className="text-sm font-semibold mb-2 text-right">Follow Us</h3>
             <div className="flex space-x-4 justify-end">
-              {socialMedia.map((social, index) => (
-                <Image key={index} src={social.icon} alt={social.alt} width={30} height={30} />
-              ))}
+            {socialMedia.map((social, index) => (
+              <a key={index} href={social.link} target="_blank" rel="noopener noreferrer">
+                <Image src={social.icon} alt={social.alt} width={30} height={30} />
+              </a>
+            ))}
             </div>
           </div>
 

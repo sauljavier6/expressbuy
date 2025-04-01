@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { Category } from "@/models/Category"; // Asegúrate de tener este modelo
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -19,4 +20,4 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Error creating category" }, { status: 500 });
     }
   }
-  
+

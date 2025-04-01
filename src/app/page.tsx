@@ -12,7 +12,6 @@ import BrandsSection from "@/components/home/brandssection/BrandsSection";
 export default function Home() {
   return (
     <div className={styles.container}>
-    
       <Banner />
       <ProsSection />
       <FeaturedProducts />

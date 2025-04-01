@@ -1,5 +1,7 @@
 {
   "home":"Home",
+  "admin":"Administrator",
+  "products": "Products",
   "welcome": "Welcome",
   "myAccount": "My Account",
   "myWishlist": "My Wishlist",

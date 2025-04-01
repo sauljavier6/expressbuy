@@ -1,5 +1,7 @@
 {
   "home":"Commencer",
+  "admin":"Administrateur",
+  "products": "Produits",
   "welcome": "Bienvenue",
   "myAccount": "Mon Compte",
   "myWishlist": "Ma Liste de Souhaits",

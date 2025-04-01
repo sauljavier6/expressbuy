@@ -1,0 +1,96 @@
+
+
+
+.sidebar {
+  width: 200px; 
+  height: 100%;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__logo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  
+    img {
+      width: 80px;
+      height: auto;
+      border-radius: 50%; /* Hace la imagen completamente redonda */
+    }
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+
+    .sidebar__item {
+      width: 85%;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd; /* Línea separadora */
+
+      &:last-child {
+        border-bottom: none; /* No agregar línea en el último elemento */
+      }
+
+      .sidebar__button {
+        width: 100%;
+        padding: 10px 0;
+        text-align: left;
+        border: none;
+        background: none;
+        font-size: 1rem;
+        cursor: pointer;
+        color: #333;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between; /* Espaciado entre texto y flecha */
+        align-items: center;
+
+        &:hover {
+          background-color: #ddd;
+        }
+
+        .sidebar__arrow {
+          width: 16px;
+          height: 16px;
+          transition: transform 0.3s ease;
+        }
+
+        &.open .sidebar__arrow {
+          transform: rotate(180deg); /* Girar flecha cuando el menú esté abierto */
+        }
+      }
+
+      .sidebar__submenu {
+        list-style: none;
+        margin-top: 5px;
+        transition: max-height 0.3s ease-in-out;
+        
+        li {
+          padding: 5px 0;
+
+          a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9rem;
+
+            &:hover {
+              color: #000;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+}

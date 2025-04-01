@@ -7,36 +7,47 @@ interface CartItem {
   price: number;
   image: string;
   quantity: number;
-  stock: number; // 🔹 Asegurar que manejamos el stock
+  stock: number;
 }
 
 interface CartContextProps {
   cart: CartItem[];
   addToCart: (product: CartItem) => void;
-  removeFromCart: (id: string) => void; // Eliminar uno del carrito
-  clearCart: () => void; // Vaciar carrito
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
   getProductQuantity: (id: string) => number;
+  deliveryAddress: string;
+  setDeliveryAddress: (address: string) => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [deliveryAddress, setDeliveryAddress] = useState<string>("");
 
-  // Cargar el carrito desde localStorage cuando se monta el componente
+  // Cargar carrito y dirección de entrega desde localStorage al montar el componente
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
+    
+    const savedAddress = localStorage.getItem("deliveryAddress");
+    if (savedAddress) {
+      setDeliveryAddress(savedAddress);
+    }
   }, []);
 
-  // Guardar el carrito en localStorage cada vez que cambie
+  // Guardar carrito en localStorage cuando cambie
   useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
+    localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  // Guardar dirección de entrega en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem("deliveryAddress", deliveryAddress);
+  }, [deliveryAddress]);
 
   const addToCart = (product: CartItem) => {
     setCart((prevCart) => {
@@ -57,34 +68,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // 🛑 Eliminar un solo producto, o restar 1 a la cantidad
   const removeFromCart = (id: string) => {
-    setCart((prevCart) => {
-      return prevCart.map((item) => {
-        if (item._id === id) {
-          if (item.quantity > 1) {
-            return { ...item, quantity: item.quantity - 1 };
-          } else {
-            return null;
+    setCart((prevCart) =>
+      prevCart
+        .map((item) => {
+          if (item._id === id) {
+            return item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : null;
           }
-        }
-        return item;
-      }).filter((item) => item !== null); // Filtramos los items nulos (eliminados)
-    });
+          return item;
+        })
+        .filter((item) => item !== null) as CartItem[] // Filtramos elementos nulos
+    );
   };
 
-  // 🛑 Vaciar el carrito completamente
   const clearCart = () => {
     setCart([]);
   };
 
-  // 🔹 Obtener la cantidad actual de un producto en el carrito
   const getProductQuantity = (id: string) => {
     return cart.find((item) => item._id === id)?.quantity || 0;
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, getProductQuantity }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        getProductQuantity,
+        deliveryAddress,
+        setDeliveryAddress,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
