@@ -9,8 +9,9 @@ export default function CreateProduct() {
     category: "",
     productType: "",
     image: null as File | null,
+    imagedos: null as File | null,
     stock: "",
-    sex: "H",
+    sex: "",
   });
 
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
@@ -53,11 +54,14 @@ export default function CreateProduct() {
   };
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      setProduct({ ...product, image: file });
-    }
+    const { name } = e.target;
+    const file = e.target.files?.[0] || null;
+    setProduct((prev) => ({
+      ...prev,
+      [name]: file,
+    }));
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,21 +77,24 @@ export default function CreateProduct() {
     formData.append("productType", product.productType);
     formData.append("stock", product.stock.toString());
     formData.append("sex", product.sex);
-
-    // Verificar si hay una imagen antes de añadirla
+  
     if (product.image) {
-        formData.append("image", product.image);
+      formData.append("image", product.image);
+    }
+  
+    if (product.imagedos) {
+      formData.append("imagedos", product.imagedos);
     }
   
     try {
       const res = await fetch("/api/products/product", {
         method: "POST",
-        body: formData, // Enviar FormData con el archivo
+        body: formData,
       });
-       
-      const data = await res.json(); // Convertir la respuesta en JSON
-      
-      if (data.msg ==="success") {
+  
+      const data = await res.json();
+  
+      if (data.msg === "success") {
         alert("Producto creado exitosamente.");
         setProduct({
           name: "",
@@ -96,8 +103,9 @@ export default function CreateProduct() {
           category: "",
           productType: "",
           image: null,
+          imagedos: null,
           stock: "",
-          sex: "H",
+          sex: "",
         });
       } else {
         setError("Error al crear el producto.");
@@ -108,6 +116,7 @@ export default function CreateProduct() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="p-6">
@@ -197,7 +206,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Sexo</label>
+          <label className="block text-sm font-medium text-gray-700">Gender</label>
           <select
             name="sex"
             value={product.sex}
@@ -205,9 +214,11 @@ export default function CreateProduct() {
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
+            <option value="">Seleccionar</option>
             <option value="H">Hombre</option>
             <option value="M">Mujer</option>
-            <option value="U">Unisex</option>
+            <option value="O">Niño</option>
+            <option value="A">Niña</option>
           </select>
         </div>
 
@@ -216,6 +227,18 @@ export default function CreateProduct() {
           <input
             type="file"
             name="image"
+            accept="image/*"
+            onChange={handleChangeFile}
+            className="mt-2 p-2 border border-gray-300 rounded w-full"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Imagen</label>
+          <input
+            type="file"
+            name="imagedos"
             accept="image/*"
             onChange={handleChangeFile}
             className="mt-2 p-2 border border-gray-300 rounded w-full"

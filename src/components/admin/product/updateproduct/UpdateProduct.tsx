@@ -10,6 +10,7 @@ interface Product {
   stock: number;
   sex: string;
   image: any;
+  imagedos: any;
 }
 
 interface UpdateProductProps {
@@ -56,11 +57,12 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
   };
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      setUpdatedProduct({ ...updatedProduct, image: file });
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      const file = files[0];
+      setUpdatedProduct((prev) => ({ ...prev, [name]: file }));
     }
-  };
+  };  
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +88,11 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
     if (updatedProduct.image) {
       formData.append("image", updatedProduct.image);
     }
+
+    if (updatedProduct.imagedos) {
+      formData.append("imagedos", updatedProduct.imagedos);
+    }
+    
   
     try {
       const res = await fetch(`/api/products/product/updateproduct/${updatedProduct._id}`, {
@@ -217,6 +224,17 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
           <input
             type="file"
             name="image"
+            accept="image/*"
+            onChange={handleChangeFile}
+            className="mt-2 p-2 border border-gray-300 rounded w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Imagen</label>
+          <input
+            type="file"
+            name="imagedos"
             accept="image/*"
             onChange={handleChangeFile}
             className="mt-2 p-2 border border-gray-300 rounded w-full"

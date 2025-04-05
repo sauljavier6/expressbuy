@@ -1,14 +1,10 @@
 import { connectDB } from "@/lib/db";
 import { ProductType } from "@/models/ProductType";
-import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function PUT(req: Request, { params }: { params: { _id: string } }) {
-    const productTypeId = params._id;
+    const objectId = params._id;
     await connectDB();
-    
-    // Convertir categoryId en ObjectId correctamente
-    const objectId = new mongoose.Types.ObjectId(productTypeId);
     
     const data = await req.json();
     
@@ -24,11 +20,8 @@ export async function PUT(req: Request, { params }: { params: { _id: string } })
   }
 
   export async function DELETE(req: Request, { params }: { params: { _id: string } }) {
-    const productTypeId = params._id;
+    const objectId = params._id;
     await connectDB();
-  
-    // Convertir categoryId en ObjectId correctamente
-    const objectId = new mongoose.Types.ObjectId(productTypeId);
   
     try {
       // Buscar la categoría y eliminarla

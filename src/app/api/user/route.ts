@@ -1,32 +1,12 @@
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 import { NextResponse } from "next/server";
-
-// 📌 GET: Obtener información del usuario
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId"); // Obtenemos el userId de los parámetros de la URL
-
-  if (!userId) {
-    return NextResponse.json({ error: "userId es requerido" }, { status: 400 });
-  }
-
-  try {
-    await connectDB(); // Conectar a la base de datos antes de realizar la consulta
-
-    // Buscar al usuario por el userId
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
-    }
-
-    return NextResponse.json(user); // Devolver la información del usuario en formato JSON
-  } catch (error) {
-    console.error("Error al obtener los datos del usuario:", error);
-    return NextResponse.json({ error: "Error al obtener los datos del usuario" }, { status: 500 });
-  }
-}
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { Address } from "@/models/Address";
+import Order from "@/models/Order";
+import "@/models/OrderItem";
+import "@/models/Product";
 
 
 // 📌 POST: Agregar un nuevo usuario
@@ -47,3 +27,39 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Error al crear el usuario" }, { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    await connectDB();
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user || !session.user.id) {
+      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 401 });
+    }
+
+    const user = await User.findById(session.user.id);
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Usuario no encontrado" }), { status: 404 });
+    }
+
+    const addresses = await Address.find({ userId: user._id }).lean();
+
+    // 🔹 Obtener los últimos 10 pedidos ordenados de la más nueva a la más vieja
+    const orders = await Order.find({ userId: user._id })
+      .populate({
+        path: "items",
+        populate: { path: "productId", model: "Product" },
+        options: { strictPopulate: false }
+      })
+      .sort({ createdAt: -1 })
+      .limit(10) // Limitar a los últimos 10 pedidos
+      .lean();
+
+    return new Response(JSON.stringify({ user, addresses, orders }), { status: 200 });
+  } catch (error) {
+    console.error("Error en API user:", error);
+    return new Response(JSON.stringify({ error: "Error interno del servidor" }), { status: 500 });
+  }
+}
+

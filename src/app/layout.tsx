@@ -24,7 +24,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <SessionProviderWrapper>
             <Navbar />
-            <CartProvider>{children}</CartProvider>
+            <CartProvider >
+              <div className="pt-14"> {/* pt-20 = 80px (ajustable según tu navbar) */}
+                {children}
+              </div></CartProvider>
             <Footer />
           </SessionProviderWrapper>
         </body>

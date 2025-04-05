@@ -4,13 +4,13 @@ import { useCart } from "@/context/cartcontext/CartContext";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AddressForm from "@/components/checkout/addressform/AddressForm";
+import UserForm from "@/components/checkout/user/UserForm";
 
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart, setDeliveryAddress } = useCart();
+  const { cart, removeFromCart, clearCart, setDeliveryAddress, setUser } = useCart();
   const router = useRouter();
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
-
 
 
   const handleCheckout = (newAddress: any) => {
@@ -19,7 +19,7 @@ export default function CartPage() {
       return;
     }
 
-    setDeliveryAddress(JSON.stringify(newAddress));
+    setDeliveryAddress((newAddress));
     setDisabledSubmit(false);
   };
 
@@ -52,6 +52,8 @@ export default function CartPage() {
               </button>
             </div>
           ))}
+
+          <UserForm setUser={setUser} />
 
           {!showAddressForm ? (
             <button

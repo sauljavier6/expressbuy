@@ -18,6 +18,8 @@ interface CartContextProps {
   getProductQuantity: (id: string) => number;
   deliveryAddress: string;
   setDeliveryAddress: (address: string) => void;
+  user: { name: string, email: string; };
+  setUser: (user: {name: string, email: string; }) => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -25,6 +27,7 @@ const CartContext = createContext<CartContextProps | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
+  const [user, setUser] = useState<{ name: string, email: string;  }>({ name: "", email: "" });
 
   // Cargar carrito y dirección de entrega desde localStorage al montar el componente
   useEffect(() => {
@@ -32,22 +35,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
-    
-    const savedAddress = localStorage.getItem("deliveryAddress");
-    if (savedAddress) {
-      setDeliveryAddress(savedAddress);
-    }
+
   }, []);
 
   // Guardar carrito en localStorage cuando cambie
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-
-  // Guardar dirección de entrega en localStorage cuando cambie
-  useEffect(() => {
-    localStorage.setItem("deliveryAddress", deliveryAddress);
-  }, [deliveryAddress]);
 
   const addToCart = (product: CartItem) => {
     setCart((prevCart) => {
@@ -99,6 +93,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         getProductQuantity,
         deliveryAddress,
         setDeliveryAddress,
+        user,
+        setUser
       }}
     >
       {children}

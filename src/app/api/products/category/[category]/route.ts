@@ -3,13 +3,12 @@ import { Category } from '@/models/Category';
 import Product from '@/models/Product';
 import mongoose from 'mongoose';
 
-export async function GET(request: NextRequest, { params }: { params: { category: string } }) {
+export async function GET(request: NextRequest, context : Promise<{ params: { category: string } }>) {
   try {
-    // Convertir el categoryId a ObjectId usando el constructor
-    const categoryId = new mongoose.Types.ObjectId(params.category);
+    const cat = (await(await context).params).category;
 
     // Verificar si la categoría existe
-    const categoryRecord = await Category.findById(categoryId);
+    const categoryRecord = await Category.findById(cat);
 
     if (!categoryRecord) {
       return new NextResponse(
@@ -19,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: { category
     }
 
     // Si la categoría existe, obtener los productos asociados a esa categoría
-    const products = await Product.find({ category: categoryId });
+    const products = await Product.find({ category: cat });
 
     return NextResponse.json(products);
   } catch (error) {

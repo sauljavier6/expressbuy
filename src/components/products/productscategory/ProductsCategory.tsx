@@ -40,19 +40,26 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   }, [category]);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-2">
       <h1 className="text-3xl font-bold mb-4 text-center">
-        {category ? `Productos en ${category}` : "Productos"}
+        {category ? "Productos" : "Productos"}
       </h1>
 
-      {loading && <p className="text-gray-500 text-center">Cargando productos...</p>}
-      {error && <p className="text-red-500 text-center">{error}</p>}
-
-      {!loading && !error && products.length === 0 && (
-        <p className="text-gray-500 text-center">No hay productos disponibles.</p>
+      {loading && (
+        <p className="text-gray-500 col-span-full text-center">Cargando productos...</p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {error && (
+        <p className="text-red-500 col-span-full text-center">{error}</p>
+      )}
+
+      {!loading && !error && products.length === 0 && (
+        <p className="text-gray-500 col-span-full text-center">
+          No hay productos disponibles.
+        </p>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}

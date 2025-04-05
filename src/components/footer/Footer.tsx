@@ -10,7 +10,7 @@ const Footer = () => {
 
   const socialMedia = [
     { icon: "/icons/facebook.png", alt: "Facebook", link: "https://www.instagram.com/cindereellashoes_?igsh=NTc4MTIwNjQ2YQ%3D%3D&utm_source=qr" },
-    { icon: "/icons/instagram.png", alt: "Instagram", link: "" },
+    { icon: "/icons/instagram.png", alt: "Instagram", link: "https://www.instagram.com/cindereellashoes_?igsh=NTc4MTIwNjQ2YQ%3D%3D&utm_source=qr" },
   ];
 
   const paymentMethods = [

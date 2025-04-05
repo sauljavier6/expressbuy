@@ -4,41 +4,18 @@ import { useCart } from "@/context/cartcontext/CartContext";
 import { useEffect, useState } from "react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/navigation";
-import { components } from "@paypal/paypal-js/types/apis/openapi/checkout_orders_v2";
 
 export default function CheckoutPage() {
-  const { cart, clearCart, deliveryAddress } = useCart();
+  const { cart, clearCart, deliveryAddress, user } = useCart();
   const router = useRouter();
   const [total, setTotal] = useState(0);
+
+  const storedId = localStorage.getItem("userId");
 
   useEffect(() => {
     const calculatedTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotal(calculatedTotal);
   }, [cart]);
-
-  const handlePaymentSuccess = async (details: { create_time?: components["schemas"]["date_time"]; update_time?: components["schemas"]["date_time"]; } & { id?: string; payment_source?: components["schemas"]["payment_source_response"]; intent?: components["schemas"]["checkout_payment_intent"]; processing_instruction?: components["schemas"]["processing_instruction"]; payer?: components["schemas"]["payer"]; purchase_units?: components["schemas"]["purchase_unit"][]; status?: components["schemas"]["order_status"]; links?: readonly components["schemas"]["link_description"][]; }) => {
-        console.log("submit")
-    const orderData = {
-      items: cart,
-      total,
-      paymentId: details.id,
-      status: details.status,
-    };
-
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    });
-
-    if (response.ok) {
-      /*clearCart();
-      router.push("/order-success");*/
-      console.log('llego')
-    } else {
-      alert("Payment failed. Please try again.");
-    }
-  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -65,19 +42,35 @@ export default function CheckoutPage() {
           <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "" }}>
               <PayPalButtons
                 createOrder={async() => {
-                  const res = await fetch('/api/checkout', {
-                    method: "POST"
-                  })
+                  const orderData = {
+                    items: cart,
+                    total,
+                    deliveryAddress, 
+                    user,
+                    storedId
+                  };
+
+                  const res = await fetch("/api/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(orderData),
+                  });
+
                   const order = await res.json()
-                  console.log(order)
                   return order.id
                 }}
                 onCancel={(data) => {
                   console.log('Cancelled:',data)
                 }}
                 onApprove={async (data, actions) => {
-                  console.log(data)
-                  actions.order?.capture()
+                  const order = await actions.order?.capture();
+
+                  if(order?.status === "COMPLETED"){
+                    clearCart();
+                    router.push("/account");
+                  }
+
+                  
                 }}
               />
           </PayPalScriptProvider>

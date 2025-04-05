@@ -3,79 +3,98 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import PersonalInfo from '../../components/account/personalinfo/PersonalInfo';
-import AddressInfo from '../../components/account/addressinfo/AddressInfo';
-import PaymentMethods from '../../components/account/paymentmethods/PaymentMethods';
-import OrdersHistory from '../../components/account/ordershistory/OrdersHistory';
-import { fetchUserData } from '../../services/userService';
+import AddressInfo from '@/components/account/addressinfo/AddressInfo';
+import OrdersHistory from '@/components/account/ordershistory/OrdersHistory';
 
-interface PersonalInfo {
+interface user {
   name: string;
   email: string;
 }
 
+interface product {
+  _id: string;
+  sex: string;
+  image: string;
+}
+
+interface OrderItem {
+  productId: product;
+  name: string,
+  price: number,
+  quantity: number,
+  talla: string,
+}
+
+interface orders {
+  _id: string;
+  total: number;
+  status: string;
+  items: OrderItem[];
+  address: string
+}
+
 interface Address {
+  userId: string;
   street: string;
   city: string;
   state: string;
-  zipCode: string;
-}  
-
-interface PaymentMethod {
-  cardType: string;
-  last4: string;
-}  
-
-interface Order {
-  id: string;
-  date: string;
-  status: string;
-  total: number;
+  zip: string;
+  country: string;
 }
 
 interface UserData {
-  personalInfo: PersonalInfo;
-  addresses: Address[];
-  paymentMethods: PaymentMethod[];
-  orders: Order[];
+  user: user;
+  orders: orders[];
+  addresses: Address[]; // 🔥 Ahora es un array
 }
 
 const AccountPage = () => {
   const { user, isAuthenticated } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // 📌 Cargar datos del usuario
+  const loadUserData = async () => {
+    try {
+      if (!isAuthenticated) return;
+
+      setLoading(true);
+
+      const response = await fetch(`/api/user`);
+      const data = await response.json();
+      console.log(data)
+      setUserData({
+        user: {
+          name: data.user.name || "No disponible",
+          email: data.user.email || "No disponible",
+        },
+        addresses: Array.isArray(data.addresses) ? data.addresses : [], // 🔥 Asegurar que sea un array,
+        orders: Array.isArray(data.orders) ? data.orders : [],
+      });
+    } catch (error) {
+      console.error("Error al obtener los datos del usuario:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleupdate = (updatedAddresses: Address[]) => {
+    setUserData((prev) => prev ? { ...prev, addresses: updatedAddresses } : null);
+  };
+  
 
   useEffect(() => {
-    if (isAuthenticated && user?.id) {
-      fetchUserData(user.id)
-        .then(data => {
-          if (data) {
-            const formattedData: UserData = {
-              personalInfo: {
-                name: data.name || 'No disponible',
-                email: data.email || 'No disponible',
-              },
-              addresses: data.addresses || [],
-              paymentMethods: data.paymentMethods || [],
-              orders: data.orders || [],
-            };
-            setUserData(formattedData);
-          }
-        })
-        .catch(error => console.error('Error al obtener los datos del usuario:', error));
+    if (isAuthenticated) {
+      loadUserData();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-lg text-gray-600">Por favor, inicia sesión para acceder a tu cuenta.</p>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg text-gray-600">No se pudo obtener la información del usuario.</p>
+        <p className="text-lg text-gray-600">
+          Por favor, inicia sesión para acceder a tu cuenta.
+        </p>
       </div>
     );
   }
@@ -85,15 +104,20 @@ const AccountPage = () => {
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">Mi Cuenta</h1>
 
-        {userData ? (
+        {loading ? (
+          <p className="text-gray-500 text-center">
+            Cargando información de la cuenta...
+          </p>
+        ) : userData ? (
           <div className="grid gap-6">
-            <PersonalInfo user={userData.personalInfo} />
-            <AddressInfo addresses={userData.addresses} />
-            <PaymentMethods paymentMethods={userData.paymentMethods} />
+            <PersonalInfo user={userData.user} />
+            <AddressInfo addresses={userData.addresses} onUpdate={handleupdate}/>
             <OrdersHistory orders={userData.orders} />
           </div>
         ) : (
-          <p className="text-gray-500 text-center">Cargando información de la cuenta...</p>
+          <p className="text-gray-500 text-center">
+            No se encontró información del usuario.
+          </p>
         )}
       </div>
     </div>

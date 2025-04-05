@@ -19,14 +19,9 @@ const Banner = () => {
 
   const icons = [
     {
-      icon: "/icons/loupe.png",
-      title: t("freeShippingReturn"),
-      link: ""
-    },
-    {
       icon: "/icons/user.png",
       title: t("freeShippingReturn"),
-      link: ""
+      link: "/account"
     },
     {
       icon: "/icons/cart.png",

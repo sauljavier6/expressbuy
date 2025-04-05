@@ -24,7 +24,7 @@ export default function ProductPage() {
 
   return (
     <div className="container mx-auto p-2">
-      <h1 className="text-3xl font-bold mb-4 text-center">Nuestros Productos</h1>
+      <h1 className="text-3xl font-bold mb-4 text-center">Productos</h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.length > 0 ? (
           products.map((product) => <ProductCard key={product._id} product={product} />)

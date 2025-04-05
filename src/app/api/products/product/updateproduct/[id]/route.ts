@@ -13,6 +13,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   try {
     const data = await req.formData();
     const file = data.get("image") as File | null;
+    const file2 = data.get("imagedos") as File | null;
     const name = data.get("name");
     const price = data.get("price") ? parseFloat(data.get("price") as string) : undefined;
     const talla = data.get("talla");
@@ -36,6 +37,20 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
       await writeFile(newFilePath, buffer);
       updateFields.image = `/products/${newFilename}`;
+    }
+
+    if (file2 && file2.size > 0) {
+      const newFilename2 = `${uuidv4()}.${file2.name.split(".").pop()}`;
+      const uploadDir = path.join(process.cwd(), "public", "products");
+    
+      await mkdir(uploadDir, { recursive: true });
+    
+      const newFilePath2 = path.join(uploadDir, newFilename2);
+      const bytes2 = await file2.arrayBuffer();
+      const buffer2 = Buffer.from(bytes2);
+    
+      await writeFile(newFilePath2, buffer2);
+      updateFields.imagedos = `/products/${newFilename2}`;
     }
 
     // 📌 Filtrar campos undefined para no sobrescribir valores existentes

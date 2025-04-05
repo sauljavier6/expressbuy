@@ -6,9 +6,11 @@ import styles from "./SideBar.module.scss";
 interface SidebarProps {
   setCategoryId: (id: string | null) => void;
   setProductTypeId: (id: string | null) => void;
+  setIsSidebarOpen?: (state: boolean) => void; // ← esta es la nueva prop
 }
 
-const SideBar: FC<SidebarProps> = ({ setCategoryId, setProductTypeId }) => {
+
+const SideBar: FC<SidebarProps> = ({ setCategoryId, setProductTypeId, setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [productTypes, setProductTypes] = useState<{ id: string; name: string }[]>([]);
@@ -60,21 +62,25 @@ const SideBar: FC<SidebarProps> = ({ setCategoryId, setProductTypeId }) => {
     setOpenMenu(openMenu === menu ? null : menu);
   };
 
+  const handleCategorySelect = (id: string) => {
+    setCategoryId(id);
+    setProductTypeId(null);
+    setIsSidebarOpen?.(false); // ← Cierra si está definida
+  };
+  
+  const handleProductTypeSelect = (id: string) => {
+    setProductTypeId(id);
+    setCategoryId(null);
+    setIsSidebarOpen?.(false); // ← Cierra si está definida
+  };
+  
   const handleResetFilters = () => {
     setCategoryId(null);
     setProductTypeId(null);
     setOpenMenu(null);
+    setIsSidebarOpen?.(false); // ← También cierra si se da "See all"
   };
-
-  const handleCategorySelect = (id: string) => {
-    setCategoryId(id);
-    setProductTypeId(null); // Resetea el tipo de producto al seleccionar una categoría
-  };
-
-  const handleProductTypeSelect = (id: string) => {
-    setProductTypeId(id);
-    setCategoryId(null); // Resetea la categoría al seleccionar un tipo de producto
-  };
+  
 
   return (
     <div className={styles.sidebar}>

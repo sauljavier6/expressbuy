@@ -64,30 +64,41 @@ export default function ProductList() {
       ) : (
         <div>
           {/* Listado de productos */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {currentProducts.map((product) => (
-              <div key={product._id} className="border p-4 rounded-lg shadow-md">
-                <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-2" />
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-gray-600">${product.price.toFixed(2)}</p>
+          <div className="container mx-auto p-2">
+            <h1 className="text-3xl font-bold mb-4 text-center">Productos</h1>
 
-                {/* Botones de acciones */}
-                <div className="flex justify-between mt-3">
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                    onClick={() => setEditProduct(product)} // Activa la edición
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(product._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  >
-                    Eliminar
-                  </button>
-                </div>
+            {currentProducts.length === 0 ? (
+              <p className="text-gray-500 col-span-full text-center">No hay productos disponibles.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {currentProducts.map((product) => (
+                  <div key={product._id} className="border p-4 rounded-lg shadow-md">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-40 object-cover mb-2 rounded"
+                    />
+                    <h3 className="text-lg font-semibold">{product.name}</h3>
+                    <p className="text-gray-600">${product.price.toFixed(2)}</p>
+
+                    <div className="flex justify-between mt-3">
+                      <button
+                        className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                        onClick={() => setEditProduct(product)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product._id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
 
           {/* Paginación */}

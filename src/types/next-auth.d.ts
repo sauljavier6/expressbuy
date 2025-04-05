@@ -5,7 +5,8 @@ import { User as DBUser } from "@/models/User"; // Ajusta la ruta a tu modelo
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string; // Agregar la propiedad 'id'
+      role: string;
+      id: string;
       name?: string | null;
       email?: string | null;
       image?: string | null;

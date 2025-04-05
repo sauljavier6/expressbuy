@@ -11,6 +11,18 @@ const AuthPage = () => {
 
   useEffect(() => {
     if (session) {
+      // Guardar el ID de usuario y el nombre en localStorage
+      const userId = session.user?.id;
+      const userName = session.user?.name;
+      const userEmail = session.user?.email;
+
+      if (userId && userName && userEmail) {
+        // Guardar en localStorage
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("userName", userName);
+        localStorage.setItem("userEmail", userEmail);
+      }
+
       setTimeout(() => {
         router.push("/");
       }, 2000);
