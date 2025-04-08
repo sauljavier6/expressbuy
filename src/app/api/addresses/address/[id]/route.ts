@@ -5,10 +5,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    // Esperar a que la promesa se resuelva y obtener el id
     const { id } = await params;
 
-    // 🔹 Validación del ID
     if (!id || id.trim() === "") {
       return NextResponse.json({ success: false, message: "ID de usuario inválido" }, { status: 400 });
     }
@@ -25,14 +23,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   
-
   if (req.method === "DELETE") {
     try {
       
       const { id } = await params;
       await connectDB();
 
-      
       const deletedAddress = await Address.findByIdAndDelete(id);
 
       if (!deletedAddress) {
@@ -55,13 +51,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { id } = await params;
     const data = await req.json();
 
-    // Verificar si la dirección existe
     const existingAddress = await Address.findById(id);
     if (!existingAddress) {
       return NextResponse.json({ error: "Dirección no encontrada" }, { status: 404 });
     }
 
-    // Actualizar los campos de la dirección
     const updatedAddress = await Address.findByIdAndUpdate(id, data, { new: true });
 
     return NextResponse.json({ message: "Dirección actualizada correctamente", address: updatedAddress }, { status: 201 });
