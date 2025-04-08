@@ -5,4 +5,4 @@ import NextAuth from "next-auth";
 const handler = NextAuth(authOptions);
 
 // Exportar los métodos GET y POST de la ruta
-export { handler as GET, handler as POST, authOptions };
+export { handler as GET, handler as POST };
