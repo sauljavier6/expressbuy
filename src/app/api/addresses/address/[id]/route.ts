@@ -1,12 +1,14 @@
-import { connectDB } from "@/lib/db";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { connectDB } from "@/lib/db"; 
 import { Address } from "@/models/Address";
 import { NextResponse } from "next/server";
 
-// Corregir el tipo de función GET y demás
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    // Esperar a que la promesa se resuelva y obtener el id
+    const { id } = await params;
 
+    // 🔹 Validación del ID
     if (!id || id.trim() === "") {
       return NextResponse.json({ success: false, message: "ID de usuario inválido" }, { status: 400 });
     }
@@ -21,34 +23,45 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  try {
-    const { id } = params;
-    await connectDB();
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  
 
-    const deletedAddress = await Address.findByIdAndDelete(id);
+  if (req.method === "DELETE") {
+    try {
+      
+      const { id } = await params;
+      await connectDB();
 
-    if (!deletedAddress) {
-      return NextResponse.json({ success: false, message: "Dirección no encontrada" });
+      
+      const deletedAddress = await Address.findByIdAndDelete(id);
+
+      if (!deletedAddress) {
+        return NextResponse.json({ success: false, message: "Dirección no encontrada" });
+      }
+
+      return NextResponse.json({ success: true, message: "Dirección eliminada con éxito" });
+    } catch (error) {
+        return NextResponse.json({ success: false, message: "Error eliminando la dirección", error });
     }
-
-    return NextResponse.json({ success: true, message: "Dirección eliminada con éxito" });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: "Error eliminando la dirección", error });
+  } else {
+    return NextResponse.json({ success: false, message: "Método no permitido" });
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  try {
-    const { id } = params;
-    const data = await request.json();
-    await connectDB();
 
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    await connectDB();
+    const { id } = await params;
+    const data = await req.json();
+
+    // Verificar si la dirección existe
     const existingAddress = await Address.findById(id);
     if (!existingAddress) {
       return NextResponse.json({ error: "Dirección no encontrada" }, { status: 404 });
     }
 
+    // Actualizar los campos de la dirección
     const updatedAddress = await Address.findByIdAndUpdate(id, data, { new: true });
 
     return NextResponse.json({ message: "Dirección actualizada correctamente", address: updatedAddress }, { status: 201 });
