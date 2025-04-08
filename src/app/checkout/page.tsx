@@ -10,31 +10,43 @@ import { useTranslation } from "react-i18next";
 export default function CheckoutPage() {
   const { cart, clearCart, deliveryAddress, user } = useCart();
   const router = useRouter();
-  const [total, setTotal] = useState(0);
   const { t } = useTranslation();
-  const [isClient, setIsClient] = useState(false);
 
-  const storedId = localStorage.getItem("userId");
+  const [isClient, setIsClient] = useState(false);
+  const [storedId, setStoredId] = useState<string | null>(null);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     setIsClient(true);
+
+    // Solo se ejecuta en cliente
+    const id = localStorage.getItem("userId");
+    setStoredId(id);
+
+    // Calcular total del carrito
     const calculatedTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotal(calculatedTotal);
   }, [cart]);
 
-  if (!isClient) return null; // Evita el error de hidratación
+  if (!isClient || storedId === null) return null; // Prevenir errores de SSR
 
-  //configuracion de stripe
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
   const handleStripeCheckout = async () => {
     const stripe = await stripePromise;
-
     const res = await fetch("/api/checkout/stripe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cart, total, deliveryAddress, user, storedId, paymentMethod: "stripe", }),
+      body: JSON.stringify({
+        items: cart,
+        total,
+        deliveryAddress,
+        user,
+        storedId,
+        paymentMethod: "stripe",
+      }),
     });
+
     const session = await res.json();
 
     if (stripe) {
@@ -60,9 +72,12 @@ export default function CheckoutPage() {
           </ul>
         </div>
 
-        <p className="text-lg font-bold text-right mb-6">{t("CheckoutPage.total")}: ${total.toFixed(2)}</p>
-        {/* PayPal Buttons */}
-        <div className="flex justify-center">
+        <p className="text-lg font-bold text-right mb-6">
+          {t("CheckoutPage.total")}: ${total.toFixed(2)}
+        </p>
+
+        {/* PayPal */}
+        <div className="flex justify-center mb-4">
           <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "" }}>
             <PayPalButtons
               style={{
@@ -72,19 +87,17 @@ export default function CheckoutPage() {
                 height: 44,
               }}
               createOrder={async () => {
-                const orderData = {
-                  items: cart,
-                  total,
-                  deliveryAddress,
-                  user,
-                  storedId,
-                  paymentMethod: "paypal",
-                };
-
                 const res = await fetch("/api/checkout", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(orderData),
+                  body: JSON.stringify({
+                    items: cart,
+                    total,
+                    deliveryAddress,
+                    user,
+                    storedId,
+                    paymentMethod: "paypal",
+                  }),
                 });
 
                 const order = await res.json();
@@ -105,6 +118,7 @@ export default function CheckoutPage() {
           </PayPalScriptProvider>
         </div>
 
+        {/* Stripe */}
         <div className="flex justify-center">
           <button
             className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 mt-4 w-full"
