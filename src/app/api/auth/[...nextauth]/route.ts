@@ -1,11 +1,12 @@
-import NextAuth, { Session, User as NextAuthUser, AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 
-export const authOptions: AuthOptions = {
+// Aquí tienes la configuración de NextAuth.js
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -41,10 +42,10 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt", // para soportar credenciales
+    strategy: "jwt" as const, // Aquí usamos el tipo literal 'jwt' explícitamente
   },
   callbacks: {
-    async signIn({ user }: { user: NextAuthUser }) {
+    async signIn({ user }: { user: any }) {
       try {
         await connectDB();
         const existingUser = await User.findOne({ email: user.email });
@@ -71,7 +72,7 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: any }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (session?.user) {
         session.user.id = token.id;
         session.user.role = token.role;
@@ -81,5 +82,6 @@ export const authOptions: AuthOptions = {
   },
 };
 
+// Crear el handler para los métodos GET y POST
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
