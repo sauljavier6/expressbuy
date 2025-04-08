@@ -3,18 +3,17 @@ import { ProductType } from "@/models/ProductType";
 import Product from "@/models/Product";
 import mongoose from "mongoose";
 
-export async function GET(request: NextRequest, context: { params: { product: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ product: string }> }) {
   try {
-    const productId = (await(await context).params).product;
+    const { product } = await params;
 
-    if (!productId) {
+    if (!product) {
       return NextResponse.json(
         { message: "Missing productType ID" },
         { status: 400 }
       );
     }
-
-    const productTypeRecord = await ProductType.findById(productId);
+    const productTypeRecord = await ProductType.findById(product);
 
     if (!productTypeRecord) {
       return NextResponse.json(
@@ -22,8 +21,7 @@ export async function GET(request: NextRequest, context: { params: { product: st
         { status: 404 }
       );
     }
-
-    const products = await Product.find({ productType: productId });
+    const products = await Product.find({ productType: product });
 
     return NextResponse.json(products);
   } catch (error) {

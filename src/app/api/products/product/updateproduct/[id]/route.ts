@@ -6,11 +6,12 @@ import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 
 // 📌 PUT: Actualizar producto
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  await connectDB();
-  const { id } = await params;
+export async function PUT(req: Request,  { params }: { params: Promise<{ id: string }> }) {
 
   try {
+    await connectDB();
+    const { id } = await params;
+
     const data = await req.formData();
     const file = data.get("image") as File | null;
     const file2 = data.get("imagedos") as File | null;

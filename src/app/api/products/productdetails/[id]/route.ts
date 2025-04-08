@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Product from '@/models/Product';
 import mongoose from 'mongoose';
 
-export async function GET(request: NextRequest, context : Promise<{ params: { id: string } }>) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = (await(await context).params).id;
+    const { id } = await params;
 
     const product = await Product.findById(id); // aquí va el id directamente
 

@@ -3,11 +3,11 @@ import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 
 // 📌 DELETE: Eliminar un producto por ID
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  await connectDB();
-
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  
   try {
-    const { id } = params;
+    await connectDB();
+    const { id } = await params;
     const product = await Product.findById(id);
 
     if (!product) {
