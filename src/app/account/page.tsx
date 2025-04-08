@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import PersonalInfo from '../../components/account/personalinfo/PersonalInfo';
 import AddressInfo from '@/components/account/addressinfo/AddressInfo';
 import OrdersHistory from '@/components/account/ordershistory/OrdersHistory';
+import { useTranslation } from "react-i18next";
 
 interface user {
   name: string;
@@ -52,6 +53,16 @@ const AccountPage = () => {
   const { user, isAuthenticated } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+    
+  useEffect(() => {
+    setIsClient(true);
+    if (isAuthenticated) {
+      loadUserData();
+    }
+  }, [isAuthenticated, isClient]);
 
   // 📌 Cargar datos del usuario
   const loadUserData = async () => {
@@ -81,19 +92,14 @@ const AccountPage = () => {
   const handleupdate = (updatedAddresses: Address[]) => {
     setUserData((prev) => prev ? { ...prev, addresses: updatedAddresses } : null);
   };
-  
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadUserData();
-    }
-  }, [isAuthenticated]);
+  if (!isClient) return null; 
 
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-lg text-gray-600">
-          Por favor, inicia sesión para acceder a tu cuenta.
+        Please log in to access your account.
         </p>
       </div>
     );
@@ -102,11 +108,11 @@ const AccountPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Mi Cuenta</h1>
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">{t("myAccount")}</h1>
 
         {loading ? (
           <p className="text-gray-500 text-center">
-            Cargando información de la cuenta...
+            Loading account information...
           </p>
         ) : userData ? (
           <div className="grid gap-6">
@@ -116,7 +122,7 @@ const AccountPage = () => {
           </div>
         ) : (
           <p className="text-gray-500 text-center">
-            No se encontró información del usuario.
+            User information not found.
           </p>
         )}
       </div>

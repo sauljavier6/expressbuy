@@ -29,5 +29,95 @@
   "forHer": "For Her",
   "forHim": "For Him",
   "bestSeller": "Best Seller Products",
-  "bestSellerDescription": "Only the best seller products added recently in our catalog"
+  "bestSellerDescription": "Only the best seller products added recently in our catalog",
+  "followUs": "Follow Us",
+  "paymentMethods": "Payment Methods",
+  "allRightsReserved": "All rights reserved.",
+  "productsTitle": "Products",
+  "personalInfo": {
+    "title": "Personal Information",
+    "name": "Name",
+    "email": "Email"
+  }, 
+  "addressInfo": {
+    "title": "Addresses",
+    "edit": "Edit",
+    "delete": "Delete",
+    "addNew": "Add New Address",
+    "editTitle": "Edit Address",
+    "addTitle": "Add Address",
+    "street": "Street",
+    "city": "City",
+    "state": "State",
+    "zip": "ZIP Code",
+    "country": "Country"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "ordersHistory": {
+    "title": "Order History",
+    "order": "Order",
+    "status": "Status",
+    "total": "Total",
+    "address": "Address",
+    "products": "Products",
+    "price": "Price",
+    "quantity": "Quantity",
+    "size": "Size"
+  },
+  "cartPage": {
+    "title": "Your Cart",
+    "emptyCart": "Your cart is empty.",
+    "quantity": "Quantity",
+    "continue": "Continue to Checkout",
+    "deliveryAddress": "Delivery Address",
+    "checkout": "Proceed to Payment",
+    "backToCart": "Back to Cart",
+    "clearCart": "Clear Cart",
+    "completeAddress": "Please complete all address fields."
+    },
+    "checkout": {
+      "nameLabel": "Name of the person placing the order",
+      "namePlaceholder": "Enter your name",
+      "emailLabel": "Email for confirmation",
+      "emailPlaceholder": "Enter your email"
+    },
+    "addressForm": {
+    "streetPlaceholder": "Street and number",
+    "cityPlaceholder": "City",
+    "statePlaceholder": "State / Province",
+    "zipPlaceholder": "Postal Code",
+    "countryPlaceholder": "Country"
+  },
+  "addressTitle": "Mailing address",
+  "useSavedAddressLabel": "Use Saved Address",
+  "selectSavedAddressOption": "Select a saved address",
+  "addressSavedAlert": "Address saved successfully!",
+  "continueButton": "Continue",
+  "Login": {
+    "welcome": "Welcome",
+    "redirecting": "Redirecting to the home page...",
+    "signIn": "Sign In",
+    "googleLogin": "Log in with your Google account",
+    "googleSignIn": "Sign in with Google",
+    "loading": "Loading...",
+    "googleSignInError": "Error signing in with Google:",
+    "createAccount": "Create Account",
+    "login": "Login",
+    "fillForm": "Fill out the following form to register.",
+    "loginOrGoogle": "Log in with your existing account or with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "registerNow": "Register",
+    "continueWithGoogle": "Continue with Google"
+  },
+  "CheckoutPage": {
+    "checkoutTitle": "Checkout",
+    "orderDetails": "Order Details:",
+    "total": "Total",
+    "payWithStripe": "Pay with Stripe",
+    "payWithPaypal": "Pay with PayPal"
+  }
 }

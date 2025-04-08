@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request, context: Promise<{ params: { id: string } }>) {
   try {
-    const id = (await context).params.id;
+    const id = (await (await context).params).id;
 
     // 🔹 Validación del ID
     if (!id || id.trim() === "") {

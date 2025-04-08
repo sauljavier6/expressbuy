@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Address {
   _id?: string;
@@ -21,6 +22,15 @@ export default function AddressInfo({ addresses, onUpdate }: AddressInfoProps) {
     userId: "", street: "", city: "", state: "", zip: "", country: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null; // Evita el error de hidratación
+
 
   const handleDelete = async (id?: string) => {
     if (!id) return;
@@ -82,37 +92,37 @@ export default function AddressInfo({ addresses, onUpdate }: AddressInfoProps) {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mb-4">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">Direcciones</h2>
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">{t("addressInfo.title")}</h2>
       {addresses.map((address, index) => (
         <div key={address._id} className="border-b border-gray-300 pb-4 mb-4">
           <p className="text-gray-700">{address.street}</p>
           <p className="text-gray-600">{address.city}, {address.state}, {address.zip}</p>
           <div className="mt-4 space-x-4">
-            <button onClick={() => openModal(address)} className="px-4 py-2 bg-yellow-500 text-white rounded-md">Editar</button>
-            <button onClick={() => handleDelete(address._id)} className="px-4 py-2 bg-red-600 text-white rounded-md">Eliminar</button>
+            <button onClick={() => openModal(address)} className="px-4 py-2 bg-yellow-500 text-white rounded-md">{t("addressInfo.edit")}</button>
+            <button onClick={() => handleDelete(address._id)} className="px-4 py-2 bg-red-600 text-white rounded-md">{t("addressInfo.delete")}</button>
           </div>
         </div>
       ))}
-      <button onClick={() => openModal()} className="w-full px-4 py-2 bg-blue-600 text-white rounded-md mt-4">Agregar Nueva Dirección</button>
+      <button onClick={() => openModal()} className="w-full px-4 py-2 bg-blue-600 text-white rounded-md mt-4">{t("addressInfo.addNew")}</button>
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-xl shadow-2xl w-[90%] max-w-md">
             <h3 className="text-xl font-bold mb-4 text-gray-800">
-              {editingAddress ? "Editar Dirección" : "Agregar Dirección"}
+              {editingAddress ? t("addressInfo.editTitle") : t("addressInfo.addTitle")}
             </h3>
 
             <div className="space-y-3">
-              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Calle" value={formData.street} onChange={(e) => setFormData({ ...formData, street: e.target.value })} />
-              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ciudad" value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} />
-              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Estado" value={formData.state} onChange={(e) => setFormData({ ...formData, state: e.target.value })} />
-              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Código Postal" value={formData.zip} onChange={(e) => setFormData({ ...formData, zip: e.target.value })} />
-              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="País" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
+              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder={t("addressInfo.street")} value={formData.street} onChange={(e) => setFormData({ ...formData, street: e.target.value })} />
+              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder={t("addressInfo.city")} value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} />
+              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder={t("addressInfo.state")} value={formData.state} onChange={(e) => setFormData({ ...formData, state: e.target.value })} />
+              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder={t("addressInfo.zip")} value={formData.zip} onChange={(e) => setFormData({ ...formData, zip: e.target.value })} />
+              <input className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder={t("addressInfo.country")} value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
             </div>
 
             <div className="flex justify-end space-x-3 mt-5">
               <button onClick={closeModal} className="px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition">
-                Cancelar
+                {t("common.cancel")}
               </button>
               <button
                 onClick={handleSave}
@@ -123,7 +133,7 @@ export default function AddressInfo({ addresses, onUpdate }: AddressInfoProps) {
                     : "bg-blue-600 hover:bg-blue-700 text-white"
                 }`}
               >
-                Guardar
+                {t("common.save")}
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => void }) {
   const [disabledSubmit, setDisabledSubmit] = useState(false);
@@ -11,12 +12,14 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
     country: "",
   });
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+
     const fetchSavedAddresses = async () => {
       const id = localStorage.getItem("userId");
-  
-      console.log("ID desde localStorage:", id); // <-- Debug: revisa qué imprime
   
       // Validación robusta
       if (!id || id === "null" || id.trim() === "") {
@@ -39,6 +42,8 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
   
     fetchSavedAddresses();
   }, []);
+
+  if (!isClient) return null; // Evita el error de hidratación
   
 
   const handleChange = (e: any) => {
@@ -49,7 +54,7 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
     e.preventDefault();
     onSubmit(address);
     setDisabledSubmit(true);
-    alert("Dirección guardada correctamente!");
+    alert(t("addressSavedAlert"));
   };
 
   const handleSelectAddress = (e: any) => {
@@ -65,17 +70,17 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
 
   return (
     <form onSubmit={handleSubmit} className="p-6 border rounded-lg shadow-lg bg-white">
-      <h2 className="text-xl font-bold mb-4 text-center">Mailing address</h2>
+      <h2 className="text-xl font-bold mb-4 text-center">{t("addressTitle")}</h2>
       
       {/* Mostrar las direcciones guardadas */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Use Saved Address</label>
+        <label className="block text-sm font-medium text-gray-700">{t("useSavedAddressLabel")}</label>
         <select
           name="savedAddress"
           onChange={handleSelectAddress}
           className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
         >
-          <option value="">Selecciona una dirección guardada</option>
+          <option value="">{t("selectSavedAddressOption")}</option>
           {savedAddresses.map((addressItem, index) => (
             <option key={addressItem._id} value={addressItem._id}>
             {addressItem.street}, {addressItem.city}, {addressItem.state}, {addressItem.zip}, {addressItem.country}
@@ -89,7 +94,7 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
         <input
           type="text"
           name="street"
-          placeholder="Calle y número"
+          placeholder={t("addressForm.streetPlaceholder")}
           className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={address.street}
           onChange={handleChange}
@@ -98,7 +103,7 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
         <input
           type="text"
           name="city"
-          placeholder="Ciudad"
+          placeholder={t("addressForm.cityPlaceholder")}
           className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={address.city}
           onChange={handleChange}
@@ -107,7 +112,7 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
         <input
           type="text"
           name="state"
-          placeholder="Estado / Provincia"
+          placeholder={t("addressForm.statePlaceholder")}
           className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={address.state}
           onChange={handleChange}
@@ -116,7 +121,7 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
         <input
           type="text"
           name="zip"
-          placeholder="Código Postal"
+          placeholder={t("addressForm.zipPlaceholder")}
           className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={address.zip}
           onChange={handleChange}
@@ -125,20 +130,20 @@ export default function AddressForm({ onSubmit }: { onSubmit: (address: any) => 
         <input
           type="text"
           name="country"
-          placeholder="País"
+          placeholder={t("addressForm.countryPlaceholder")}
           className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={address.country}
           onChange={handleChange}
           required
         />
       </div>
-      
+
       <button
         type="submit"
         className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
         disabled={disabledSubmit}
       >
-        Continue
+        {t("continueButton")}
       </button>
     </form>
   );

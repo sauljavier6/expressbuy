@@ -17,14 +17,14 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
 
   return (
     <div className="bg-gray-800 text-white h-full md:h-screen w-64 fixed md:static top-0 left-0 z-50 p-4 overflow-y-auto">
-      <h1 className="text-2xl font-bold mb-6">Panel de Administración</h1>
+      <h1 className="text-2xl font-bold mb-6">Admin Panel</h1>
       <ul>
         <li className="mb-4">
           <button
             onClick={() => handleSelect("Category")}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left"
           >
-            Categorías
+            Categories
           </button>
         </li>
         <li className="mb-4">
@@ -32,7 +32,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => handleSelect("ProductType")}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left"
           >
-            Tipo de producto
+            Product Type
           </button>
         </li>
         <li className="mb-4">
@@ -40,7 +40,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left flex justify-between items-center"
           >
-            Productos
+            Products
             <img
               src="/icons/down-arrow.png"
               alt="Flecha"
@@ -54,7 +54,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
                   onClick={() => handleSelect("ListProducts")}
                   className="hover:bg-gray-600 p-2 w-full text-left"
                 >
-                  Ver Todos
+                  View All
                 </button>
               </li>
               <li>
@@ -62,7 +62,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
                   onClick={() => handleSelect("Products")}
                   className="hover:bg-gray-600 p-2 w-full text-left"
                 >
-                  Agregar Producto
+                  Add Product
                 </button>
               </li>
             </ul>
@@ -73,7 +73,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => handleSelect("Orders")}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left"
           >
-            Pedidos
+            Orders
           </button>
         </li>
       </ul>

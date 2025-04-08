@@ -1,7 +1,20 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null; // Evita el error de hidratación
+
   const pros = [
     { icon: "/icons/transport.png", title: "FREE SHIPPING & RETURN", description: "Free shipping on all orders over $99." },
     { icon: "/icons/dollar.png", title: "MONEY BACK GUARANTEE", description: "100% money-back guarantee." },
@@ -41,7 +54,7 @@ const Footer = () => {
         <div className="flex flex-col space-y-6 items-end">
           {/* Redes Sociales */}
           <div>
-            <h3 className="text-sm font-semibold mb-2 text-right">Follow Us</h3>
+            <h3 className="text-sm font-semibold mb-2 text-right">{t("followUs")}</h3>
             <div className="flex space-x-4 justify-end">
             {socialMedia.map((social, index) => (
               <a key={index} href={social.link} target="_blank" rel="noopener noreferrer">
@@ -53,7 +66,7 @@ const Footer = () => {
 
           {/* Métodos de Pago */}
           <div>
-            <h3 className="text-sm font-semibold mb-2 text-right">Payment Methods</h3>
+            <h3 className="text-sm font-semibold mb-2 text-right">{t("paymentMethods")}</h3>
             <div className="flex space-x-4 justify-end">
               {paymentMethods.map((payment, index) => (
                 <Image key={index} src={payment.icon} alt={payment.alt} width={50} height={30} />
@@ -65,7 +78,7 @@ const Footer = () => {
 
       {/* Derechos Reservados */}
       <div className="text-center mt-8 text-sm">
-        © {new Date().getFullYear()} ExpressBuy - All rights reserved. by     <a href="https://www.facebook.com/profile.php?id=61571089566319&locale=es_LA" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Souls Web Solutions</a> 
+        © {new Date().getFullYear()} ExpressBuy - {t("allRightsReserved")} <a href="https://www.facebook.com/profile.php?id=61571089566319&locale=es_LA" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Souls Web Solutions</a> 
       </div>
     </footer>
   );

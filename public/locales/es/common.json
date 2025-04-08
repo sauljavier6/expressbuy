@@ -29,5 +29,96 @@
   "forHer": "Para Ella",
   "forHim": "Para Él",
   "bestSeller": "Productos Más Vendidos",
-  "bestSellerDescription": "Solo los productos más vendidos añadidos recientemente a nuestro catálogo"
+  "bestSellerDescription": "Solo los productos más vendidos añadidos recientemente a nuestro catálogo",
+  "followUs": "Síguenos",
+  "paymentMethods": "Métodos de Pago",
+  "allRightsReserved": "Todos los derechos reservados.",
+  "productsTitle": "Productos",
+  "personalInfo": {
+    "title": "Información Personal",
+    "name": "Nombre",
+    "email": "Correo Electrónico"
+  },
+  "addressInfo": {
+    "title": "Direcciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "addNew": "Agregar Nueva Dirección",
+    "editTitle": "Editar Dirección",
+    "addTitle": "Agregar Dirección",
+    "street": "Calle",
+    "city": "Ciudad",
+    "state": "Estado",
+    "zip": "Código Postal",
+    "country": "País"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  },
+  "ordersHistory": {
+    "title": "Historial de Pedidos",
+    "order": "Pedido",
+    "status": "Estado",
+    "total": "Total",
+    "address": "Dirección",
+    "products": "Productos",
+    "price": "Precio",
+    "quantity": "Cantidad",
+    "size": "Talla"
+  },
+  "cartPage": {
+    "title": "Tu Carrito",
+    "emptyCart": "Tu carrito está vacío.",
+    "quantity": "Cantidad",
+    "continue": "Continuar con la compra",
+    "deliveryAddress": "Dirección de entrega",
+    "checkout": "Ir a pagar",
+    "backToCart": "Volver al carrito",
+    "clearCart": "Vaciar carrito",
+    "completeAddress": "Por favor, completa todos los campos de la dirección."
+    },
+    "checkout": {
+      "nameLabel": "Nombre de la persona que realiza el pedido",
+      "namePlaceholder": "Ingrese su nombre",
+      "emailLabel": "Email para correo de confirmación",
+      "emailPlaceholder": "Ingrese su email"
+    },
+    "addressForm": {
+    "streetPlaceholder": "Calle y número",
+    "cityPlaceholder": "Ciudad",
+    "statePlaceholder": "Estado / Provincia",
+    "zipPlaceholder": "Código Postal",
+    "countryPlaceholder": "País"
+  },
+  "addressTitle": "Dirección de envío",
+  "useSavedAddressLabel": "Usar dirección guardada",
+  "selectSavedAddressOption": "Selecciona una dirección guardada",
+  "addressSavedAlert": "¡Dirección guardada correctamente!",
+  "continueButton": "Continuar",
+  "Login": {
+    "welcome": "Bienvenido",
+    "redirecting": "Redirigiendo al inicio...",
+    "signIn": "Iniciar sesión",
+    "googleLogin": "Accede con tu cuenta de Google",
+    "googleSignIn": "Iniciar sesión con Google",
+    "loading": "Cargando...",
+    "googleSignInError": "Error al iniciar sesión con Google:",
+    "createAccount": "Crear cuenta",
+    "login": "Iniciar sesión",
+    "fillForm": "Llena el siguiente formulario para registrarte.",
+    "loginOrGoogle": "Inicia sesión con tu cuenta existente o con Google",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "dontHaveAccount": "¿No tienes cuenta?",
+    "registerNow": "Regístrate",
+    "continueWithGoogle": "Continuar con Google"
+  },
+  "CheckoutPage": {
+    "checkoutTitle": "Realizar Compra",
+    "orderDetails": "Detalles de la compra:",
+    "total": "Total",
+    "payWithStripe": "Pagar con Stripe",
+    "payWithPaypal": "Pagar con PayPal"
+  }
+
 }

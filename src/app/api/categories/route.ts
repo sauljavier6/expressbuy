@@ -4,9 +4,17 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  await connectDB();
-  const categories = await Category.find();
-  return NextResponse.json(categories);
+  try {
+    await connectDB();
+    const categories = await Category.find();
+    return NextResponse.json(categories);
+  } catch (error) {
+    console.error("Error al obtener categorías:", error);
+    return NextResponse.json(
+      { error: "Error al obtener las categorías" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: Request) {

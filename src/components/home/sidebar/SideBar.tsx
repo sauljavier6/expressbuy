@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";  // Usa el router de Next.js
+import { useRouter } from "next/navigation";
 import styles from "./SideBar.module.scss";
 
 const SideBar = () => {
@@ -12,38 +12,66 @@ const SideBar = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
+
       try {
         const res = await fetch("/api/categories");
-        const data = await res.json();
+  
+        if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
+  
+        const text = await res.text();
+        if (!text) {
+          console.warn("Categorías vacías");
+          setCategories([]);
+          return;
+        }
+  
+        const data = JSON.parse(text);
+  
         if (Array.isArray(data)) {
-          setCategories(data.map((category: { name: string; _id: string }) => ({
-            name: category.name,
-            id: category._id
-          })));
+          setCategories(
+            data.map((category: { name: string; _id: string }) => ({
+              name: category.name,
+              id: category._id,
+            }))
+          );
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
-
+  
     const fetchProductTypes = async () => {
       try {
         const res = await fetch("/api/producttype");
-        const data = await res.json();
+  
+        if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
+  
+        const text = await res.text();
+        if (!text) {
+          console.warn("Tipos de producto vacíos");
+          setProductTypes([]);
+          return;
+        }
+  
+        const data = JSON.parse(text);
+  
         if (Array.isArray(data)) {
-          setProductTypes(data.map((type: { name: string; _id: string }) => ({
-            name: type.name,
-            id: type._id
-          })));
+          setProductTypes(
+            data.map((type: { name: string; _id: string }) => ({
+              name: type.name,
+              id: type._id,
+            }))
+          );
         }
       } catch (error) {
         console.error("Error fetching product types:", error);
       }
     };
-
+  
     fetchCategories();
     fetchProductTypes();
   }, []);
+  
 
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);
@@ -90,7 +118,7 @@ const SideBar = () => {
                     </li>
                   ))
                 ) : (
-                  <li>Cargando...</li>
+                  <li>Loading...</li>
                 )}
               </ul>
             )}
@@ -106,7 +134,7 @@ const SideBar = () => {
                     </li>
                   ))
                 ) : (
-                  <li>Cargando...</li>
+                  <li>Loading...</li>
                 )}
               </ul>
             )}

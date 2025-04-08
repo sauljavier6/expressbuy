@@ -3,9 +3,17 @@ import { ProductType } from "@/models/ProductType"; // Asegúrate de tener este 
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  await connectDB();
-  const producttype = await ProductType.find();
-  return NextResponse.json(producttype);
+  try {
+    await connectDB();
+    const producttype = await ProductType.find();
+    return NextResponse.json(producttype);
+  } catch (error) {
+    console.error("Error al obtener los tipos de producto:", error);
+    return NextResponse.json(
+      { error: "Error al obtener los tipos de producto" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: Request) {

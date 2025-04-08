@@ -1,21 +1,30 @@
 "use client";
 
 import { useCart } from "@/context/cartcontext/CartContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AddressForm from "@/components/checkout/addressform/AddressForm";
 import UserForm from "@/components/checkout/user/UserForm";
+import { useTranslation } from "react-i18next";
 
 export default function CartPage() {
   const { cart, removeFromCart, clearCart, setDeliveryAddress, setUser } = useCart();
   const router = useRouter();
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null; // Evita el error de hidratación
 
 
   const handleCheckout = (newAddress: any) => {
     if (!newAddress.street || !newAddress.city || !newAddress.state || !newAddress.zip || !newAddress.country) {
-      alert("Por favor, completa todos los campos de la dirección.");
+      alert(t("cartPage.completeAddress"));
       return;
     }
 
@@ -30,10 +39,10 @@ export default function CartPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">🛒 Tu Carrito</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">🛒 {t("cartPage.title")}</h1>
 
       {cart.length === 0 ? (
-        <p className="text-gray-500 text-center">Tu carrito está vacío.</p>
+        <p className="text-gray-500 text-center">{t("cartPage.emptyCart")}</p>
       ) : (
         <div className="space-y-6">
           {cart.map((item) => (
@@ -42,7 +51,7 @@ export default function CartPage() {
               <div className="ml-6 flex-grow">
                 <h2 className="text-lg font-semibold">{item.name}</h2>
                 <p className="text-gray-600">${item.price}</p>
-                <p className="text-gray-700 font-medium">Cantidad: {item.quantity}</p>
+                <p className="text-gray-700 font-medium">{t("cartPage.quantity")}: {item.quantity}</p>
               </div>
               <button
                 className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600 transition"
@@ -60,11 +69,11 @@ export default function CartPage() {
               className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition w-full"
               onClick={() => setShowAddressForm(true)}
             >
-              📍 Continuar con la compra
+              📍 {t("cartPage.continue")}
             </button>
           ) : (
             <div className="bg-gray-100 p-6 rounded-lg mt-6 shadow-md">
-              <h3 className="text-lg font-semibold mb-3">📦 Dirección de entrega</h3>
+              <h3 className="text-lg font-semibold mb-3">📦 {t("cartPage.deliveryAddress")}</h3>
 
               <AddressForm onSubmit={handleCheckout} />
 
@@ -74,13 +83,13 @@ export default function CartPage() {
                   onClick={submit}
                   disabled ={disabledSubmit}
                 >
-                  🛍 Ir a pagar
+                  🛍 {t("cartPage.checkout")}
                 </button>
                 <button
                   className="bg-gray-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600 transition w-full sm:w-auto mt-4 sm:mt-0"
                   onClick={() => setShowAddressForm(false)}
                 >
-                  🔙 Volver al carrito
+                  🔙 {t("cartPage.backToCart")}
                 </button>
               </div>
             </div>
@@ -90,7 +99,7 @@ export default function CartPage() {
             className="bg-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-600 transition w-full"
             onClick={clearCart}
           >
-            🗑 Vaciar carrito
+            🗑 {t("cartPage.clearCart")}
           </button>
         </div>
       )}

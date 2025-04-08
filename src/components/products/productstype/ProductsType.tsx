@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/productcard/productcard";
+import { useTranslation } from "react-i18next";
 
 interface Product {
   _id: string;
@@ -19,12 +20,15 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
  
   useEffect(() => {
     if (!productType) return;
 
     setLoading(true);
     setError(null);
+    setIsClient(true);
 
     fetch(`/api/products/producttype/${productType}`)
       .then((res) => {
@@ -37,16 +41,20 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
         setError("No se pudieron cargar los productos.");
       })
       .finally(() => setLoading(false));
+
+      
   }, [productType]);
+
+  if (!isClient) return;
 
   return (
     <div className="container mx-auto p-2">
       <h1 className="text-3xl font-bold mb-4 text-center">
-        {productType ? "Productos" : "Productos"}
+      {t("productsTitle")}
       </h1>
 
       {loading && (
-        <p className="text-gray-500 col-span-full text-center">Cargando productos...</p>
+        <p className="text-gray-500 col-span-full text-center">Loading products...</p>
       )}
 
       {error && (
@@ -55,7 +63,7 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
 
       {!loading && !error && products.length === 0 && (
         <p className="text-gray-500 col-span-full text-center">
-          No hay productos disponibles.
+          There are no products available.
         </p>
       )}
 

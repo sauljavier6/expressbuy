@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 export default function CreateProduct() {
   const [product, setProduct] = useState({
     name: "",
-    talla: "",
+    size: "",
     price: "",
     category: "",
     productType: "",
     image: null as File | null,
-    imagedos: null as File | null,
+    imageTwo: null as File | null,
     stock: "",
-    sex: "",
+    gender: "",
   });
 
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
@@ -30,7 +30,7 @@ export default function CreateProduct() {
       const data = await res.json();
       setCategories(data);
     } catch (error) {
-      setError("Error al cargar las categorías.");
+      setError("Error loading categories.");
     }
   };
 
@@ -40,14 +40,14 @@ export default function CreateProduct() {
       const data = await res.json();
       setProductTypes(data);
     } catch (error) {
-      setError("Error al cargar los tipos de producto.");
+      setError("Error loading product types.");
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
   
-    // Si el campo es "price" o "stock", convertirlo a número
+    // If the field is "price" or "stock", convert it to a number
     const newValue = ["price", "stock"].includes(name) ? Number(value) || 0 : value;
   
     setProduct({ ...product, [name]: newValue });
@@ -71,19 +71,19 @@ export default function CreateProduct() {
   
     const formData = new FormData();
     formData.append("name", product.name);
-    formData.append("talla", product.talla);
+    formData.append("size", product.size);
     formData.append("price", product.price.toString());
     formData.append("category", product.category);
     formData.append("productType", product.productType);
     formData.append("stock", product.stock.toString());
-    formData.append("sex", product.sex);
+    formData.append("gender", product.gender);
   
     if (product.image) {
       formData.append("image", product.image);
     }
   
-    if (product.imagedos) {
-      formData.append("imagedos", product.imagedos);
+    if (product.imageTwo) {
+      formData.append("imageTwo", product.imageTwo);
     }
   
     try {
@@ -95,23 +95,23 @@ export default function CreateProduct() {
       const data = await res.json();
   
       if (data.msg === "success") {
-        alert("Producto creado exitosamente.");
+        alert("Product created successfully.");
         setProduct({
           name: "",
-          talla: "",
+          size: "",
           price: "",
           category: "",
           productType: "",
           image: null,
-          imagedos: null,
+          imageTwo: null,
           stock: "",
-          sex: "",
+          gender: "",
         });
       } else {
-        setError("Error al crear el producto.");
+        setError("Error creating product.");
       }
     } catch (error) {
-      setError("Error de conexión con el servidor.");
+      setError("Connection error with the server.");
     } finally {
       setLoading(false);
     }
@@ -120,10 +120,10 @@ export default function CreateProduct() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Crear Producto</h2>
+      <h2 className="text-2xl font-bold mb-4">Create Product</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Nombre</label>
+          <label className="block text-sm font-medium text-gray-700">Name</label>
           <input
             type="text"
             name="name"
@@ -135,18 +135,18 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Talla</label>
+          <label className="block text-sm font-medium text-gray-700">Size</label>
           <input
             type="text"
-            name="talla"
-            value={product.talla}
+            name="size"
+            value={product.size}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Precio</label>
+          <label className="block text-sm font-medium text-gray-700">Price</label>
           <input
             type="number"
             name="price"
@@ -170,7 +170,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Categoría</label>
+          <label className="block text-sm font-medium text-gray-700">Category</label>
           <select
             name="category"
             value={product.category}
@@ -178,7 +178,7 @@ export default function CreateProduct() {
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Selecciona una categoría</option>
+            <option value="">Select a category</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -188,7 +188,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Tipo de Producto</label>
+          <label className="block text-sm font-medium text-gray-700">Product Type</label>
           <select
             name="productType"
             value={product.productType}
@@ -196,7 +196,7 @@ export default function CreateProduct() {
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Selecciona un tipo</option>
+            <option value="">Select a type</option>
             {productTypes.map((type) => (
               <option key={type._id} value={type._id}>
                 {type.name}
@@ -208,22 +208,22 @@ export default function CreateProduct() {
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Gender</label>
           <select
-            name="sex"
-            value={product.sex}
+            name="gender"
+            value={product.gender}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Seleccionar</option>
-            <option value="H">Hombre</option>
-            <option value="M">Mujer</option>
-            <option value="O">Niño</option>
-            <option value="A">Niña</option>
+            <option value="">Select</option>
+            <option value="H">Men</option>
+            <option value="M">Women</option>
+            <option value="O">Boys</option>
+            <option value="A">Girls</option>
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Imagen</label>
+          <label className="block text-sm font-medium text-gray-700">Image</label>
           <input
             type="file"
             name="image"
@@ -235,10 +235,10 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Imagen</label>
+          <label className="block text-sm font-medium text-gray-700">Image</label>
           <input
             type="file"
-            name="imagedos"
+            name="imageTwo"
             accept="image/*"
             onChange={handleChangeFile}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
@@ -249,7 +249,7 @@ export default function CreateProduct() {
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
         <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded" disabled={loading}>
-          {loading ? "Guardando..." : "Crear Producto"}
+          {loading ? "Saving..." : "Create Product"}
         </button>
       </form>
     </div>

@@ -3,7 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import Image from "next/image";
 
 const Navbar = () => {
@@ -14,7 +14,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    setLanguage(i18n.language || "es");
+    setLanguage(i18n.language || "en");
   }, [i18n.language]);
 
   const changeLanguage = (lang: string) => {

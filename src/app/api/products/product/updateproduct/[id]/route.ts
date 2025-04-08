@@ -8,7 +8,7 @@ import path from "path";
 // 📌 PUT: Actualizar producto
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   await connectDB();
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const data = await req.formData();

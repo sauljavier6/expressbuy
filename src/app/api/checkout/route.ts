@@ -136,128 +136,52 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
   });
 
   const mailOptions = {
-    from: `"Tienda Online" <${process.env.SMTP_USER}>`,
+    from: `"Online Store" <${process.env.SMTP_USER}>`,
     to: userEmail,
-    subject: "Confirmación de compra",
+    subject: "Purchase Confirmation",
     html: `
       <div style="font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; color: #333;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                <h1 style="text-align: center; color: #4CAF50;">¡Gracias por tu compra, ${userName}!</h1>
-          
-          <p style="font-size: 16px; color: #555;">Tu orden <strong>${orderId}</strong> ha sido procesada exitosamente.</p>
-          <p style="font-size: 16px; color: #555;">A continuación, los detalles de tu compra:</p>
+                <h1 style="text-align: center; color: #4CAF50;">Thank you for your purchase, ${userName}!</h1>
+      
+        <p style="font-size: 16px; color: #555;">Your order <strong>${orderId}</strong> has been successfully processed.</p>
+        <p style="font-size: 16px; color: #555;">Here are the details of your purchase:</p>
   
-          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-            <thead>
-              <tr style="background-color: #4CAF50; color: white;">
-                <th style="padding: 10px; text-align: left;">Producto</th>
-                <th style="padding: 10px; text-align: left;">Precio</th>
-                <th style="padding: 10px; text-align: left;">Cantidad</th>
-                <th style="padding: 10px; text-align: left;">Subtotal</th>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background-color: #4CAF50; color: white;">
+              <th style="padding: 10px; text-align: left;">Product</th>
+              <th style="padding: 10px; text-align: left;">Price</th>
+              <th style="padding: 10px; text-align: left;">Quantity</th>
+              <th style="padding: 10px; text-align: left;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map((item: { name: any; price: number; quantity: number; }) => `
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">${item.name}</td>
+                <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
+                <td style="padding: 10px;">${item.quantity}</td>
+                <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>
               </tr>
-            </thead>
-            <tbody>
-              ${items.map((item: { name: any; price: number; quantity: number; }) => `
-                <tr style="border-bottom: 1px solid #ddd;">
-                  <td style="padding: 10px;">${item.name}</td>
-                  <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
-                  <td style="padding: 10px;">${item.quantity}</td>
-                  <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+            `).join('')}
+          </tbody>
+        </table>
   
-          <p style="font-size: 16px; color: #555;"><strong>Total:</strong> $${total.toFixed(2)} USD</p>
-          <p style="font-size: 16px; color: #555;"><strong>Dirección de entrega:</strong></p>
-          <p style="font-size: 16px; color: #555;">${formattedAddress}</p>
-          
-          <p style="font-size: 16px; color: #555;">Te avisaremos cuando tu pedido esté en camino.</p>
+        <p style="font-size: 16px; color: #555;"><strong>Total:</strong> $${total.toFixed(2)} USD</p>
+        <p style="font-size: 16px; color: #555;"><strong>Delivery Address:</strong></p>
+        <p style="font-size: 16px; color: #555;">${formattedAddress}</p>
+        
+        <p style="font-size: 16px; color: #555;">We will notify you when your order is on its way.</p>
   
-          <div style="text-align: center; margin-top: 30px;">
-            <p style="font-size: 14px; color: #888;">Si tienes alguna pregunta, no dudes en contactarnos.</p>
-            <p style="font-size: 14px; color: #888;">¡Gracias por elegirnos!</p>
-          </div>
+        <div style="text-align: center; margin-top: 30px;">
+          <p style="font-size: 14px; color: #888;">If you have any questions, feel free to contact us.</p>
+          <p style="font-size: 14px; color: #888;">Thank you for choosing us!</p>
         </div>
       </div>
+    </div>
     `,
-  };
-  
+  };  
 
   await transporter.sendMail(mailOptions);
 }
-
-
-
-
-/*
-export async function POST(req: any) {
-  await connectDB();
-  const { userId, cart, paymentMethod, address } = await req.json();
-
-  if (!cart || cart.length === 0) {
-    return NextResponse.json({ error: "El carrito está vacío" }, { status: 400 });
-  }
-
-  try {
-    // 1️⃣ Guardar dirección en la base de datos
-    const savedAddress = await Address.create({ userId, ...address });
-
-    // 2️⃣ Crear la orden con la dirección incluida
-    const order = await Order.create({
-      userId,
-      items: cart,
-      total: cart.reduce((sum: any, item: any) => sum + item.price * item.quantity, 0),
-      status: "pending",
-      address: savedAddress, // Guardamos la dirección en la orden
-      paymentMethod,
-    });
-
-    // 3️⃣ Procesar pago
-    let paymentResponse;
-
-    if (paymentMethod === "paypal") {
-      paymentResponse = await processPayPalPayment(order.total);
-    } else if (["visa", "mastercard", "amex"].includes(paymentMethod)) {
-      paymentResponse = await processStripePayment(order.total);
-    } else {
-      return NextResponse.json({ error: "Método de pago no soportado" }, { status: 400 });
-    }
-
-    if (!paymentResponse.success) {
-      return NextResponse.json({ error: "Error en el pago" }, { status: 500 });
-    }
-
-    // 4️⃣ Actualizar orden y stock
-    order.status = "paid";
-    order.paymentId = paymentResponse.transactionId;
-    await order.save();
-
-    for (const item of cart) {
-      await Product.findByIdAndUpdate(item._id, { $inc: { stock: -item.quantity } });
-    }
-
-    return NextResponse.json({ message: "Pago exitoso", orderId: order._id });
-  } catch (error) {
-    console.error("Error en checkout:", error);
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
-  }
-}
-
-
-// 🔹 Función para procesar pago con Stripe (Visa, Mastercard, Amex)
-async function processStripePayment(amount:any) {
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100),
-      currency: "usd",
-      payment_method_types: ["card"],
-    });
-
-    return { success: true, transactionId: paymentIntent.id };
-  } catch (error) {
-    console.error("Error en Stripe:", error);
-    return { success: false };
-  }
-}
-*/

@@ -18,10 +18,10 @@ export default function CreateCategory() {
       if (response.ok) {
         setCategories(data);
       } else {
-        setError("Error cargando las categorías.");
+        setError("Error loading categories.");
       }
     } catch (error) {
-      setError("Error al comunicarse con el servidor.");
+      setError("Error communicating with the server.");
       console.error("Error:", error);
     }
   };
@@ -38,7 +38,7 @@ export default function CreateCategory() {
     e.preventDefault();
 
     if (!categoryName) {
-      setError("El nombre de la categoría es obligatorio.");
+      setError("Category name is required.");
       return;
     }
 
@@ -72,16 +72,15 @@ export default function CreateCategory() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Categoría guardada:", data);
-        setCategoryName(""); // Limpiar el campo después de crear o actualizar
-        setEditingCategoryId(null); // Limpiar la categoría en edición
+        setCategoryName(""); // Clear the field after creating or updating
+        setEditingCategoryId(null); // Clear the category being edited
         // Refetch categories
         fetchCategories();
       } else {
-        setError("Error creando/actualizando la categoría.");
+        setError("Error creating/updating the category.");
       }
     } catch (error) {
-      setError("Error al comunicarse con el servidor.");
+      setError("Error communicating with the server.");
       console.error("Error:", error);
     } finally {
       setLoading(false);
@@ -94,21 +93,21 @@ export default function CreateCategory() {
   };
 
   const handleDeleteCategory = async (categoryId: string) => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
+    if (window.confirm("Are you sure you want to delete this category?")) {
       try {
         const response = await fetch(`/api/categories/categories/${categoryId}`, {
           method: "DELETE",
         });
 
         if (response.ok) {
-          alert("Categoría eliminada exitosamente");
+          alert("Category deleted successfully.");
           // Refetch categories after deletion
           fetchCategories();
         } else {
-          setError("Error al eliminar la categoría.");
+          setError("Error deleting the category.");
         }
       } catch (error) {
-        setError("Error al comunicarse con el servidor.");
+        setError("Error communicating with the server.");
         console.error("Error:", error);
       }
     }
@@ -116,11 +115,11 @@ export default function CreateCategory() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Crear/Editar Categoría</h2>
+      <h2 className="text-2xl font-bold mb-4">Create/Edit Category</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700" htmlFor="categoryName">
-            Nombre de la Categoría
+            Category Name
           </label>
           <input
             type="text"
@@ -137,14 +136,14 @@ export default function CreateCategory() {
           className="bg-blue-500 text-white py-2 px-4 rounded"
           disabled={loading}
         >
-          {loading ? "Guardando..." : editingCategoryId ? "Actualizar Categoría" : "Crear Categoría"}
+          {loading ? "Saving..." : editingCategoryId ? "Update Category" : "Create Category"}
         </button>
       </form>
 
-      <h2 className="text-2xl font-bold mt-6">Categorías Existentes</h2>
+      <h2 className="text-2xl font-bold mt-6">Existing Categories</h2>
       <ul className="mt-4">
         {categories.length === 0 ? (
-          <li>No hay categorías disponibles.</li>
+          <li>No categories available.</li>
         ) : (
           categories.map((category) => (
             <li key={category._id} className="flex justify-between items-center py-2">
@@ -154,13 +153,13 @@ export default function CreateCategory() {
                   onClick={() => handleEditCategory(category._id, category.name)}
                   className="ml-4 text-blue-500"
                 >
-                  Editar
+                  Edit
                 </button>
                 <button
                   onClick={() => handleDeleteCategory(category._id)}
                   className="ml-4 text-red-500"
                 >
-                  Eliminar
+                  Delete
                 </button>
               </div>
             </li>

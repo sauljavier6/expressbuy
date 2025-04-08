@@ -12,6 +12,7 @@ interface Product {
     stock: number;
     sex: string;
     image: any;
+    imagedos: any;
 }
 
 export default function ProductList() {
@@ -65,10 +66,10 @@ export default function ProductList() {
         <div>
           {/* Listado de productos */}
           <div className="container mx-auto p-2">
-            <h1 className="text-3xl font-bold mb-4 text-center">Productos</h1>
+            <h1 className="text-3xl font-bold mb-4 text-center">Products</h1>
 
             {currentProducts.length === 0 ? (
-              <p className="text-gray-500 col-span-full text-center">No hay productos disponibles.</p>
+              <p className="text-gray-500 col-span-full text-center">No products available.</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {currentProducts.map((product) => (
@@ -86,13 +87,13 @@ export default function ProductList() {
                         className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                         onClick={() => setEditProduct(product)}
                       >
-                        Editar
+                        Edit
                       </button>
                       <button
                         onClick={() => handleDelete(product._id)}
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                       >
-                        Eliminar
+                        Delete
                       </button>
                     </div>
                   </div>

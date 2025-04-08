@@ -89,23 +89,23 @@ const AdminOrders = () => {
 
   const generatePDF = (order: Order) => {
     const doc = new jsPDF();
-
+  
     doc.setFont("helvetica", "normal");
     doc.setFontSize(16);
-    doc.text("Factura de Orden", 10, 20);
-
+    doc.text("Order Invoice", 10, 20);
+  
     doc.setFontSize(12);
-    doc.text(`Orden ID: ${order._id}`, 10, 30);
-    doc.text(`Fecha: ${new Date(order.createdAt).toLocaleDateString()}`, 10, 40);
+    doc.text(`Order ID: ${order._id}`, 10, 30);
+    doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 10, 40);
     doc.text(`Total: $${order.total.toFixed(2)}`, 10, 50);
-    doc.text(`Estado: ${order.status}`, 10, 60);
-    doc.text(`Dirección de entrega: ${order.address}`, 10, 70);
-
+    doc.text(`Status: ${order.status}`, 10, 60);
+    doc.text(`Shipping Address: ${order.address}`, 10, 70);
+  
     doc.line(10, 80, 200, 80);
-    doc.text("Detalles de productos:", 10, 90);
-
+    doc.text("Product Details:", 10, 90);
+  
     let y = 100;
-
+  
     const loadImage = (url: string): Promise<string> =>
       new Promise((resolve) => {
         const img = new Image();
@@ -120,39 +120,40 @@ const AdminOrders = () => {
         };
         img.src = url;
       });
-
+  
     const processImagesAndSave = async () => {
       for (let i = 0; i < order.items.length; i++) {
         const item = order.items[i];
         const imageData = await loadImage(item.productId.image);
-
-        doc.text(`Producto: ${item.productId.name}`, 10, y + 5);
-        doc.text(`Cantidad: ${item.quantity}`, 10, y + 15);
-        doc.text(`Precio: $${(item.productId.price * item.quantity).toFixed(2)}`, 10, y + 25);
-
+  
+        doc.text(`Product: ${item.productId.name}`, 10, y + 5);
+        doc.text(`Quantity: ${item.quantity}`, 10, y + 15);
+        doc.text(`Price: $${(item.productId.price * item.quantity).toFixed(2)}`, 10, y + 25);
+  
         doc.addImage(imageData, "JPEG", 150, y, 40, 40);
-
+  
         y += 50;
       }
-
-      doc.text("Gracias por su compra!", 10, y + 10);
+  
+      doc.text("Thank you for your purchase!", 10, y + 10);
       doc.save(`${order._id}.pdf`);
     };
-
+  
     processImagesAndSave();
   };
+  
 
-  if (loading) return <p className="text-center text-xl text-gray-500">Cargando...</p>;
+  if (loading) return <p className="text-center text-xl text-gray-500">Loading...</p>;
 
   return (
     <div className="admin-orders max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-semibold text-gray-800 mb-6">Órdenes Pagadas</h1>
+      <h1 className="text-3xl font-semibold text-gray-800 mb-6">Orders</h1>
 
       {/* Buscador */}
       <div className="mb-4 flex items-center gap-4">
         <input
           type="text"
-          placeholder="Buscar por ID de orden..."
+          placeholder="Search by Order ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-lg w-64"
@@ -161,7 +162,7 @@ const AdminOrders = () => {
           onClick={fetchSearchResults}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
-          Buscar
+          Search
         </button>
       </div>
 
@@ -169,11 +170,11 @@ const AdminOrders = () => {
         <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-800 text-white">
             <tr>
-              <th className="px-4 py-2 text-left">Pedido ID</th>
-              <th className="px-4 py-2 text-left">Fecha</th>
-              <th className="px-4 py-2 text-left">Total</th>
-              <th className="px-4 py-2 text-left">Estado</th>
-              <th className="px-4 py-2 text-left">Acciones</th>
+            <th className="px-4 py-2 text-left">Order ID</th>
+            <th className="px-4 py-2 text-left">Date</th>
+            <th className="px-4 py-2 text-left">Total</th>
+            <th className="px-4 py-2 text-left">Status</th>
+            <th className="px-4 py-2 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -204,16 +205,16 @@ const AdminOrders = () => {
                       onChange={(e) => handleChangeStatus(order._id, e.target.value)}
                       className="bg-gray-100 border border-gray-300 rounded-lg p-2"
                     >
-                      <option value="paid">Pagado</option>
-                      <option value="shipped">Enviado</option>
-                      <option value="delivered">Entregado</option>
-                      <option value="cancelled">Cancelado</option>
+                      <option value="paid">Paid</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
                     </select>
                     <button
                       onClick={() => generatePDF(order)}
                       className="ml-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                     >
-                      Imprimir PDF
+                      Print PDF
                     </button>
                   </td>
                 </tr>
@@ -221,7 +222,7 @@ const AdminOrders = () => {
             ) : (
               <tr>
                 <td colSpan={5} className="text-center py-4 text-gray-500">
-                  No se encontraron órdenes.
+                  No orders found.
                 </td>
               </tr>
             )}
@@ -236,17 +237,17 @@ const AdminOrders = () => {
           disabled={currentPage === 1}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
         >
-          Anterior
+          Previous
         </button>
         <span className="text-lg">
-          Página {currentPage} de {totalPages}
+          Page  {currentPage} of {totalPages}
         </span>
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
         >
-          Siguiente
+          Next
         </button>
       </div>
     </div>

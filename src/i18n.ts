@@ -12,7 +12,7 @@ i18n
   .use(initReactI18next) // Configura react-i18next
   .init({
     supportedLngs: ["en", "es", "fr"],
-    fallbackLng: "es",
+    fallbackLng: "en",
     debug: false,
     interpolation: {
       escapeValue: false,
@@ -21,7 +21,7 @@ i18n
       loadPath: "/locales/{{lng}}/common.json", // Ruta de los archivos JSON
     },
     detection: {
-      order: ["localStorage", "navigator"], // Primero revisa localStorage, luego el navegador
+      order: ["navigator", "localStorage"], // Primero revisa localStorage, luego el navegador
       caches: ["localStorage"], // Guarda el idioma seleccionado en localStorage
     },
   });
