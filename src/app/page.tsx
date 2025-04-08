@@ -1,6 +1,4 @@
 import React from "react";
-//import Navbar from "@/components/Navbar";
-//import Footer from "@/components/Footer";
 import Banner from "@/components/home/banner/Banner";
 import ProsSection from "@/components/home/prossection/ProsSection";
 import FeaturedProducts from "@/components/home/featuredproducts/FeaturedProducts";

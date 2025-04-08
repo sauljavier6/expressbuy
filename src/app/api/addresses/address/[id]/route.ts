@@ -4,7 +4,7 @@ import { Address } from "@/models/Address";
 import { NextResponse } from "next/server";
 
 
-export async function GET(req: Request, context: Promise<{ params: { id: string } }>) {
+export async function GET(req: Request, context:{ params: { id: string } }) {
   try {
     const id = (await (await context).params).id;
 
@@ -23,7 +23,7 @@ export async function GET(req: Request, context: Promise<{ params: { id: string 
   }
 }
 
-export async function DELETE(req: Request, context: Promise<{ params: { id: string } }>) {
+export async function DELETE(req: Request, context: { params: { id: string } }) {
   
 
   if (req.method === "DELETE") {
@@ -49,7 +49,7 @@ export async function DELETE(req: Request, context: Promise<{ params: { id: stri
 }
 
 
-export async function PUT(req: Request, context: Promise<{ params: { id: string } }>) {
+export async function PUT(req: Request, context: { params: { id: string } }) {
   try {
     await connectDB();
     const id = (await (await context).params).id;

@@ -19,15 +19,16 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <LanguageProvider>  {/* Envuelve con LanguageProvider */}
+    <LanguageProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <SessionProviderWrapper>
             <Navbar />
-            <CartProvider >
-              <div className="pt-14"> {/* pt-20 = 80px (ajustable según tu navbar) */}
-                {children}
-              </div></CartProvider>
+              <CartProvider >
+                <div className="pt-14">
+                  {children}
+                </div>
+              </CartProvider>
             <Footer />
           </SessionProviderWrapper>
         </body>
