@@ -49,7 +49,7 @@ interface UserData {
   addresses: Address[]; // 🔥 Ahora es un array
 }
 
-const AccountPage = () => {
+const Page = () => {
   const { user, isAuthenticated } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -130,4 +130,4 @@ const AccountPage = () => {
   );
 };
 
-export default AccountPage;
+export default Page;

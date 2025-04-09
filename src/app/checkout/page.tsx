@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import { useTranslation } from "react-i18next";
 
-export default function CheckoutPage() {
+export default function Page() {
   const { cart, clearCart, deliveryAddress, user } = useCart();
   const router = useRouter();
   const { t } = useTranslation();

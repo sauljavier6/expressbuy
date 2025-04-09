@@ -10,7 +10,7 @@ import Products from "@/components/admin/product/addproduct/AddProduct";
 import ListProducts from "@/components/admin/product/listproducts/ListProducts";
 import AdminOrders from "@/components/admin/orders/Orders";
 
-export default function AdminDashboard() {
+export default function Page() {
   const { data: session, status } = useSession();
   const router = useRouter();
   
