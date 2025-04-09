@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { useTranslation } from "react-i18next";
 
-const Page = () => {
+export default function Page() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -230,4 +230,3 @@ const Page = () => {
   );
 };
 
-export default Page;

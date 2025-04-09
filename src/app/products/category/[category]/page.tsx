@@ -12,7 +12,7 @@ interface Product {
   stock: number;
 }
 
-export default function CategoryPage() {
+export default function Page() {
   const { category } = useParams(); // Obtiene el parámetro de la URL
   const [products, setProducts] = useState<Product[]>([]);
 

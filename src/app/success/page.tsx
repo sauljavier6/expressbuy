@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 import { useCart } from "@/context/cartcontext/CartContext";
 
-export default function SuccessPage() {
+export default function Page() {
   const { clearCart } = useCart();
 
   useEffect(() => {

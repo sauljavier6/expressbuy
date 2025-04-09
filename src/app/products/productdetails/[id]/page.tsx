@@ -16,7 +16,7 @@ interface Product {
   sex?: string;
 }
 
-export default function ProductDetailPage() {
+export default function Page() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [mainImage, setMainImage] = useState<string>("");

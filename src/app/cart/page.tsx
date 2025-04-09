@@ -7,7 +7,7 @@ import AddressForm from "@/components/checkout/addressform/AddressForm";
 import UserForm from "@/components/checkout/user/UserForm";
 import { useTranslation } from "react-i18next";
 
-export default function CartPage() {
+export default function Page() {
   const { cart, removeFromCart, clearCart, setDeliveryAddress, setUser } = useCart();
   const router = useRouter();
   const [showAddressForm, setShowAddressForm] = useState(false);

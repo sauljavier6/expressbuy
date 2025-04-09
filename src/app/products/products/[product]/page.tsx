@@ -12,7 +12,7 @@ interface Product {
   stock: number;
 }
 
-export default function ProductsPage() {
+export default function Page() {
   const { product } = useParams() as { product: string };
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

@@ -20,10 +20,10 @@ interface product {
 
 interface OrderItem {
   productId: product;
-  name: string,
-  price: number,
-  quantity: number,
-  talla: string,
+  name: string;
+  price: number;
+  quantity: number;
+  talla: string;
 }
 
 interface orders {
@@ -31,7 +31,7 @@ interface orders {
   total: number;
   status: string;
   items: OrderItem[];
-  address: string
+  address: string;
 }
 
 interface Address {
@@ -46,40 +46,38 @@ interface Address {
 interface UserData {
   user: user;
   orders: orders[];
-  addresses: Address[]; // 🔥 Ahora es un array
+  addresses: Address[];
 }
 
-const Page = () => {
+export default function Page() {
   const { user, isAuthenticated } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
   const [isClient, setIsClient] = useState(false);
 
-    
   useEffect(() => {
     setIsClient(true);
-    if (isAuthenticated) {
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && !userData) {
       loadUserData();
     }
-  }, [isAuthenticated, isClient]);
+  }, [isAuthenticated, userData]);
 
-  // 📌 Cargar datos del usuario
   const loadUserData = async () => {
     try {
-      if (!isAuthenticated) return;
-
       setLoading(true);
+      const res = await fetch(`/api/user`, { cache: "no-store" });
+      const data = await res.json();
 
-      const response = await fetch(`/api/user`);
-      const data = await response.json();
-      console.log(data)
       setUserData({
         user: {
-          name: data.user.name || "No disponible",
-          email: data.user.email || "No disponible",
+          name: data.user?.name || "No disponible",
+          email: data.user?.email || "No disponible",
         },
-        addresses: Array.isArray(data.addresses) ? data.addresses : [], // 🔥 Asegurar que sea un array,
+        addresses: Array.isArray(data.addresses) ? data.addresses : [],
         orders: Array.isArray(data.orders) ? data.orders : [],
       });
     } catch (error) {
@@ -89,17 +87,19 @@ const Page = () => {
     }
   };
 
-  const handleupdate = (updatedAddresses: Address[]) => {
-    setUserData((prev) => prev ? { ...prev, addresses: updatedAddresses } : null);
+  const handleUpdate = (updatedAddresses: Address[]) => {
+    setUserData(prev =>
+      prev ? { ...prev, addresses: updatedAddresses } : null
+    );
   };
 
-  if (!isClient) return null; 
+  if (!isClient) return null;
 
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-lg text-gray-600">
-        Please log in to access your account.
+          Please log in to access your account.
         </p>
       </div>
     );
@@ -117,7 +117,7 @@ const Page = () => {
         ) : userData ? (
           <div className="grid gap-6">
             <PersonalInfo user={userData.user} />
-            <AddressInfo addresses={userData.addresses} onUpdate={handleupdate}/>
+            <AddressInfo addresses={userData.addresses} onUpdate={handleUpdate} />
             <OrdersHistory orders={userData.orders} />
           </div>
         ) : (
@@ -128,6 +128,4 @@ const Page = () => {
       </div>
     </div>
   );
-};
-
-export default Page;
+}

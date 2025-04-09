@@ -7,7 +7,7 @@ import Products from "@/components/products/products/Products";
 import ProductsCategory from "@/components/products/productscategory/ProductsCategory";
 import ProductTypeProducts from "@/components/products/productstype/ProductsType";
 
-export default function ProductPage() {
+export default function Page() {
   const searchParams = useSearchParams();
   const categoryIdFromUrl = searchParams.get("categoryId");
   const productTypeIdFromUrl = searchParams.get("productTypeId");
