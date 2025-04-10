@@ -20,10 +20,10 @@ interface product {
 
 interface OrderItem {
   productId: product;
-  name: string;
-  price: number;
-  quantity: number;
-  talla: string;
+  name: string,
+  price: number,
+  quantity: number,
+  talla: string,
 }
 
 interface orders {
@@ -31,7 +31,7 @@ interface orders {
   total: number;
   status: string;
   items: OrderItem[];
-  address: string;
+  address: string
 }
 
 interface Address {
@@ -46,7 +46,7 @@ interface Address {
 interface UserData {
   user: user;
   orders: orders[];
-  addresses: Address[];
+  addresses: Address[]; // 🔥 Ahora es un array
 }
 
 export default function Page() {
@@ -56,50 +56,61 @@ export default function Page() {
   const { t } = useTranslation();
   const [isClient, setIsClient] = useState(false);
 
+    
   useEffect(() => {
     setIsClient(true);
   }, []);
-
+  
   useEffect(() => {
-    if (isAuthenticated && !userData) {
+    if (isClient && isAuthenticated) {
       loadUserData();
     }
-  }, [isAuthenticated, userData]);
+  }, [isClient, isAuthenticated]);
+  
 
   const loadUserData = async () => {
     try {
+      if (!isAuthenticated) return;
+  
       setLoading(true);
-      const res = await fetch(`/api/user`, { cache: "no-store" });
-      const data = await res.json();
-
+      console.time("loadUserData");
+  
+      const response = await fetch(`/api/user`);
+  
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.timeEnd("loadUserData");
+  
       setUserData({
         user: {
-          name: data.user?.name || "No disponible",
-          email: data.user?.email || "No disponible",
+          name: data.user.name || "No disponible",
+          email: data.user.email || "No disponible",
         },
         addresses: Array.isArray(data.addresses) ? data.addresses : [],
         orders: Array.isArray(data.orders) ? data.orders : [],
       });
     } catch (error) {
-      console.error("Error al obtener los datos del usuario:", error);
+      console.error("❌ Error al obtener los datos del usuario:", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
-  const handleUpdate = (updatedAddresses: Address[]) => {
-    setUserData(prev =>
-      prev ? { ...prev, addresses: updatedAddresses } : null
-    );
+  const handleupdate = (updatedAddresses: Address[]) => {
+    setUserData((prev) => prev ? { ...prev, addresses: updatedAddresses } : null);
   };
 
-  if (!isClient) return null;
+  if (!isClient) return null; 
 
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-lg text-gray-600">
-          Please log in to access your account.
+        Please log in to access your account.
         </p>
       </div>
     );
@@ -117,7 +128,7 @@ export default function Page() {
         ) : userData ? (
           <div className="grid gap-6">
             <PersonalInfo user={userData.user} />
-            <AddressInfo addresses={userData.addresses} onUpdate={handleUpdate} />
+            <AddressInfo addresses={userData.addresses} onUpdate={handleupdate}/>
             <OrdersHistory orders={userData.orders} />
           </div>
         ) : (
@@ -128,4 +139,4 @@ export default function Page() {
       </div>
     </div>
   );
-}
+};

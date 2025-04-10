@@ -30,7 +30,6 @@ export default function ProductPage() {
       setIsClient(true);
   }, []);
 
-  if (!isClient) return;
 
   return (
     <div className="container mx-auto p-2">

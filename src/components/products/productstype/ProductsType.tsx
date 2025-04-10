@@ -45,7 +45,6 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
       
   }, [productType]);
 
-  if (!isClient) return;
 
   return (
     <div className="container mx-auto p-2">

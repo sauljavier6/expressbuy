@@ -22,7 +22,7 @@ export default function Page() {
   useEffect(() => {
     if (categoryIdFromUrl) {
       setCategoryId(categoryIdFromUrl);
-      setProductTypeId(null); // Evita conflictos
+      setProductTypeId(null); 
     }
     if (productTypeIdFromUrl) {
       setProductTypeId(productTypeIdFromUrl);
@@ -35,16 +35,6 @@ export default function Page() {
     };
   }, [categoryIdFromUrl, productTypeIdFromUrl]);
   
-
-  // Determina qué componente mostrar
-  let ContentComponent;
-  if (categoryId) {
-    ContentComponent = <ProductsCategory category={categoryId} />;
-  } else if (productTypeId) {
-    ContentComponent = <ProductTypeProducts productType={productTypeId} />;
-  } else {
-    ContentComponent = <Products />;
-  }
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -76,7 +66,12 @@ export default function Page() {
       >
         <img src="/icons/more.png" alt="Menu" className="w-6 h-6" />
       </button>
-      <main className="w-full md:w-3/4 container mx-auto p-6">{ContentComponent}</main>
+      <main className="w-full md:w-3/4 container mx-auto p-6">
+        {categoryId && <ProductsCategory category={categoryId} />}
+        {productTypeId && !categoryId && <ProductTypeProducts productType={productTypeId} />}
+        {!categoryId && !productTypeId && <Products />}
+      </main>
+
     </div>
   );
 }

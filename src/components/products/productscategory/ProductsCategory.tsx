@@ -45,7 +45,6 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
       setIsClient(true);
   }, [category]);
 
-  if (!isClient) return;
 
   return (
     <div className="container mx-auto p-2">
