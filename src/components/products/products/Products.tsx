@@ -35,7 +35,7 @@ export default function ProductPage() {
   return (
     <div className="container mx-auto p-2">
       <h1 className="text-3xl font-bold mb-4 text-center">
-        {t("productsTitle")}
+      {t("productsTitle")}
       </h1>
       {loading ? (
         <p className="text-gray-500 col-span-full text-center">
