@@ -2,18 +2,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import Sidebar from "@/components/products/sidebar/SideBar";
 import Products from "@/components/products/products/Products";
 import ProductsCategory from "@/components/products/productscategory/ProductsCategory";
 import ProductTypeProducts from "@/components/products/productstype/ProductsType";
 
-export default function ProductClientPage() {
-  const searchParams = useSearchParams();
-  const categoryIdFromUrl = searchParams.get("categoryId");
-  const productTypeIdFromUrl = searchParams.get("productTypeId");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+type Props = {
+  categoryIdFromUrl: string | null;
+  productTypeIdFromUrl: string | null;
+};
 
+export default function ProductClientPage({
+  categoryIdFromUrl,
+  productTypeIdFromUrl,
+}: Props) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [productTypeId, setProductTypeId] = useState<string | null>(null);
 
