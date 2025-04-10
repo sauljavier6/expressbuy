@@ -34,6 +34,9 @@
   "paymentMethods": "Métodos de Pago",
   "allRightsReserved": "Todos los derechos reservados.",
   "productsTitle": "Productos",
+  "loadingProducts": "Cargando productos...",
+  "noProductsAvailable": "No hay productos disponibles.",
+  "errorFetchingProducts": "Hubo un error al obtener los productos.",
   "personalInfo": {
     "title": "Información Personal",
     "name": "Nombre",
