@@ -41,33 +41,31 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
     fetchProducts();
   }, [category, t]);
 
-  if (loading) {
-    return (
-      <p className="text-gray-500 col-span-full text-center">
-        {t("loadingProducts")}
-      </p>
-    );
-  }
-
-  if (error) {
-    return (
-      <p className="text-red-500 col-span-full text-center">
-        {error}
-      </p>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {products.length > 0 ? (
-        products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))
-      ) : (
+    <div className="container mx-auto p-2">
+      <h1 className="text-3xl font-bold mb-4 text-center">
+      {t("productsTitle")}
+      </h1>
+
+      {loading && (
+        <p className="text-gray-500 col-span-full text-center">Loading products...</p>
+      )}
+
+      {error && (
+        <p className="text-red-500 col-span-full text-center">{error}</p>
+      )}
+
+      {!loading && !error && products.length === 0 && (
         <p className="text-gray-500 col-span-full text-center">
-          {t("noProductsAvailable")}
+          There are no products available.
         </p>
       )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {products.map((product) => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </div>
     </div>
   );
 }

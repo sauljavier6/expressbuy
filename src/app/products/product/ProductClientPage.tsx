@@ -70,9 +70,7 @@ export default function ProductClientPage({
       </button>
       <main className="w-full md:w-3/4 container mx-auto p-6">
         {categoryId && <ProductsCategory category={categoryId} />}
-        {productTypeId && !categoryId && (
-          <ProductTypeProducts productType={productTypeId} />
-        )}
+        {productTypeId && !categoryId && (<ProductTypeProducts productType={productTypeId} /> )}
         {!categoryId && !productTypeId && <Products />}
       </main>
     </div>
