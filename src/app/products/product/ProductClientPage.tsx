@@ -20,6 +20,9 @@ export default function ProductClientPage({
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [productTypeId, setProductTypeId] = useState<string | null>(null);
 
+  console.log('product client',categoryIdFromUrl)
+  console.log('product client',productTypeIdFromUrl)
+
   useEffect(() => {
     if (categoryIdFromUrl) {
       setCategoryId(categoryIdFromUrl);

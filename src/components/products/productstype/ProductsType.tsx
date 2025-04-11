@@ -22,7 +22,12 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log('productType fuera del usefect', productType)
+
+
   useEffect(() => {
+    console.log('productType fuera del usefect', productType)
+
     const fetchProducts = async () => {
       try {
         const res = await fetch(`/api/products/producttype/${productType}`);

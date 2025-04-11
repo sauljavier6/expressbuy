@@ -22,7 +22,10 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log('category fuera del usefect', category)
+
   useEffect(() => {
+    console.log('category dentro del usefect', category)
     const fetchProducts = async () => {
       try {
         const res = await fetch(`/api/products/category/${category}`);
