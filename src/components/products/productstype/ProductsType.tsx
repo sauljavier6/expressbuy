@@ -36,6 +36,7 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
         }
         const data = await res.json();
         setProducts(data);
+        console.log('data dentro de useffect',data)
       } catch (error) {
         setError(t("errorFetchingProducts"));
       } finally {
