@@ -16,7 +16,7 @@ interface ProductsCategoryProps {
   category: string;
 }
 
-export default function ProductsCategory({ category }: ProductsCategoryProps) {
+export default async function ProductsCategory({ category }: ProductsCategoryProps) {
   const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`/api/products/category/${category}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/products/category/${category}`);
         const data = await res.json();
   
         //if (!res.ok) throw new Error(data.message);
