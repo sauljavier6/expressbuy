@@ -38,6 +38,7 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
         setProducts(data);
         console.log('data dentro de useffect',data)
       } catch (error) {
+        console.log('data dentro de error')
         setError(t("errorFetchingProducts"));
       } finally {
         setLoading(false);
