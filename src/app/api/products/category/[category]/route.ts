@@ -7,6 +7,7 @@ export async function GET(
   { params }: { params: { category: string } }
 ) {
   try {
+    await connectToDatabase();
     const { category } = params;
 
     const categoryRecord = await Category.findById(category);
@@ -29,3 +30,7 @@ export async function GET(
     );
   }
 }
+function connectToDatabase() {
+  throw new Error('Function not implemented.');
+}
+
