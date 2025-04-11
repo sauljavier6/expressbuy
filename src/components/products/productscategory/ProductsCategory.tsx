@@ -24,7 +24,6 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
 
   console.log('products fuera del usefect', products)
 
-  useEffect(() => {
     fetch(`/api/products/category/${category}`)
       .then((res) => res.json())
       .then((data) => {setProducts(data), console.log(data)})
@@ -34,7 +33,6 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
       .finally(() => {
         setLoading(false);
       });
-  }, [category,t]);
 
   return (
     <div className="container mx-auto p-2">
