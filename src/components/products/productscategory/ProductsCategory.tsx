@@ -22,44 +22,31 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log(products)
+  
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-  
-    fetch(`/api/products/category/${category}`)
-      .then(async (res) => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/products/category/${category}`);
         const data = await res.json();
-        console.log("Status:", res.status, "Data:", data);
-        if (!res.ok) throw new Error(data.message || "Error fetching products");
-        setProducts(data);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setError(t("errorFetchingProducts"));
-      })
-      .finally(() => setLoading(false));
-  }, [category]);
   
+        if (!res.ok) throw new Error(data.message);
+        console.log("Producto recibido:", data);
+        setProducts(data)
+      } catch (error) {
+        console.error("Error al obtener producto:", error);
+      }
+    };
+  
+    fetchProduct();
+  }, [category]);
+
 
   return (
     <div className="container mx-auto p-2">
       <h1 className="text-3xl font-bold mb-4 text-center">
         {t("productsTitle")}
       </h1>
-
-      {loading && (
-        <p className="text-gray-500 col-span-full text-center">Loading products...</p>
-      )}
-
-      {error && (
-        <p className="text-red-500 col-span-full text-center">{error}</p>
-      )}
-
-      {!loading && !error && products.length === 0 && (
-        <p className="text-gray-500 col-span-full text-center">
-          There are no products available.
-        </p>
-      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
