@@ -30,7 +30,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
         const res = await fetch(`/api/products/category/${category}`);
         const data = await res.json();
   
-        if (!res.ok) throw new Error(data.message);
+        //if (!res.ok) throw new Error(data.message);
         console.log("Producto recibido:", data);
         setProducts(data)
       } catch (error) {
