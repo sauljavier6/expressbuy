@@ -7,9 +7,7 @@ export async function GET(request: NextRequest,  { params }: { params: Promise<{
   const { category } = await params;
   console.log('entro a la api', category)
   try {
-    const products = await Product.find({ category: category });
-
-    return NextResponse.json(products);
+    return NextResponse.json({name:"producto prueba"});
   } catch (error) {
     console.error("Error fetching products:", error);
     return new NextResponse(
