@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Category } from '@/models/Category';
 import Product from '@/models/Product';
+import { connectDB } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { category: string } }
 ) {
   try {
-    await connectToDatabase();
+    await connectDB();
     const { category } = params;
 
     const categoryRecord = await Category.findById(category);
@@ -30,7 +31,3 @@ export async function GET(
     );
   }
 }
-function connectToDatabase() {
-  throw new Error('Function not implemented.');
-}
-
