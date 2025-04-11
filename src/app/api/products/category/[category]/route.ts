@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Category } from '@/models/Category';
 import Product from '@/models/Product';
-import mongoose from 'mongoose';
 
-export async function GET(request: NextRequest,  { params }: { params: Promise<{ category: string }> }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { category: string } }
+) {
   try {
-    const { category } = await params;
+    const { category } = params;
 
-    // Verificar si la categoría existe
     const categoryRecord = await Category.findById(category);
 
     if (!categoryRecord) {
@@ -17,7 +18,6 @@ export async function GET(request: NextRequest,  { params }: { params: Promise<{
       );
     }
 
-    // Si la categoría existe, obtener los productos asociados a esa categoría
     const products = await Product.find({ category: category });
 
     return NextResponse.json(products);

@@ -1,4 +1,4 @@
-
+"use client";
 
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/productcard/productcard";
