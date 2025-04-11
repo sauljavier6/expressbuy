@@ -27,7 +27,7 @@ export default async function ProductsCategory({ category }: ProductsCategoryPro
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}api/products/category/${category}`);
+        const res = await fetch(`/api/products/category/${category}`);
         const data = await res.json();
   
         //if (!res.ok) throw new Error(data.message);
