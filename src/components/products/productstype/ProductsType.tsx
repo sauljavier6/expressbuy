@@ -24,30 +24,17 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
 
   console.log('productType fuera del usefect', productType)
 
-
   useEffect(() => {
-    if (!productType) return; // ⛔️ No ejecutes si category es null
-
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`/api/products/producttype/${productType}`);
-        if (!res.ok) {
-          throw new Error("Error al obtener productos");
-        }
-        const data = await res.json();
-        setProducts(data);
-        console.log('data dentro de useffect',data)
-      } catch (error) {
-        console.log('data dentro de error')
+    fetch(`/api/products/producttype/${productType}`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((error) => {
         setError(t("errorFetchingProducts"));
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [productType, t]);
-
+      });
+  }, [productType,t]);
 
   return (
     <div className="container mx-auto p-2">

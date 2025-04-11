@@ -25,26 +25,16 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   console.log('category fuera del usefect', category)
 
   useEffect(() => {
-    if (!category) return; // ⛔️ No ejecutes si category es null
-  
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`/api/products/category/${category}`);
-        if (!res.ok) {
-          throw new Error("Error al obtener productos");
-        }
-        const data = await res.json();
-        setProducts(data);
-      } catch (error) {
+    fetch(`/api/products/category/${category}`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((error) => {
         setError(t("errorFetchingProducts"));
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-  
-    fetchProducts();
-  }, [category, t]);
-  
+      });
+  }, [category,t]);
 
   return (
     <div className="container mx-auto p-2">
