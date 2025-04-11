@@ -1,4 +1,4 @@
-
+"use client";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,12 +22,12 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('category fuera del usefect', category)
+  console.log('products fuera del usefect', products)
 
   useEffect(() => {
     fetch(`/api/products/category/${category}`)
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then((data) => {setProducts(data), console.log(data)})
       .catch((error) => {
         setError(t("errorFetchingProducts"));
       })
