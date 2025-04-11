@@ -26,7 +26,7 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
 
 
   useEffect(() => {
-    console.log('productType fuera del usefect', productType)
+    if (!productType) return; // ⛔️ No ejecutes si category es null
 
     const fetchProducts = async () => {
       try {

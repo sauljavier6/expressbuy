@@ -25,7 +25,8 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   console.log('category fuera del usefect', category)
 
   useEffect(() => {
-    console.log('category dentro del usefect', category)
+    if (!category) return; // ⛔️ No ejecutes si category es null
+  
     const fetchProducts = async () => {
       try {
         const res = await fetch(`/api/products/category/${category}`);
@@ -34,16 +35,16 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
         }
         const data = await res.json();
         setProducts(data);
-        console.log('data dentro de useffect',data)
       } catch (error) {
         setError(t("errorFetchingProducts"));
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchProducts();
   }, [category, t]);
+  
 
   return (
     <div className="container mx-auto p-2">
