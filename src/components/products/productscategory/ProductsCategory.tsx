@@ -22,22 +22,29 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('products fuera del usefect', products)
-
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+  
     fetch(`/api/products/category/${category}`)
-      .then((res) => res.json())
-      .then((data) => {setProducts(data), console.log(data)})
-      .catch((error) => {
+      .then(async (res) => {
+        const data = await res.json();
+        console.log("Status:", res.status, "Data:", data);
+        if (!res.ok) throw new Error(data.message || "Error fetching products");
+        setProducts(data);
+      })
+      .catch((err) => {
+        console.error("Fetch error:", err);
         setError(t("errorFetchingProducts"));
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
+  }, [category]);
+  
 
   return (
     <div className="container mx-auto p-2">
       <h1 className="text-3xl font-bold mb-4 text-center">
-      {t("productsTitle")}
+        {t("productsTitle")}
       </h1>
 
       {loading && (
