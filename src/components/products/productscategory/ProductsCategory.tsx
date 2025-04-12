@@ -23,16 +23,22 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!category) return; // ← importante
+    if (!category) return;
   
-    console.log("📦 Fetching products for category:", category);
+    const url = `api/products/category/${category}`;
+    console.log("📦 Fetching from:", url);
   
-    fetch(`/api/products/category/${category}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener productos");
-        return res.json();
+    fetch(url)
+      .then(async (res) => {
+        const text = await res.text(); // recibimos como texto
+        try {
+          const json = JSON.parse(text); // intentamos parsear
+          setProducts(json);
+        } catch (e) {
+          console.error("❌ Response is not valid JSON:", text);
+          throw new Error("Invalid JSON from server");
+        }
       })
-      .then((data) => setProducts(data))
       .catch((error) => {
         console.error("Error fetching:", error);
         setError(t("errorFetchingProducts"));
