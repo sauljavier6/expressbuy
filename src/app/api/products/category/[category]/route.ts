@@ -9,7 +9,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { category } = await params;
     console.log('category desde la api',category)
 
-    if (!category) {
+    /*if (!category) {
       return NextResponse.json(
         { message: "Missing productType ID" },
         { status: 400 }
@@ -22,8 +22,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         { message: "Product type not found" },
         { status: 404 }
       );
-    }
-    const products = await Product.find({ category: category });
+    }*/
+    const products = await Product.find({ category: "67e302992f121b2eb4f7ff26" });
 
     return NextResponse.json(products);
   } catch (error) {
