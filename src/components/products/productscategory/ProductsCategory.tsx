@@ -25,7 +25,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   useEffect(() => {
     if (!category) return;
   
-    const url = `api/products/category/${category}`;
+    const url = `/api/category/${category}`;
     console.log("📦 Fetching from:", url);
   
     fetch(url)
