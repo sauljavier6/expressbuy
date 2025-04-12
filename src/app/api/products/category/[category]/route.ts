@@ -7,6 +7,7 @@ import { connectDB } from '@/lib/db';
 export async function GET(request: NextRequest, { params }: { params: Promise<{ category: string }> }) {
   try {
     const { category } = await params;
+    console.log('category desde la api',category)
 
     if (!category) {
       return NextResponse.json(
