@@ -22,25 +22,21 @@ export default async function ProductsCategory({ category }: ProductsCategoryPro
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log(products)
-  
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}api/products/category/${category}`);
+        const res = await fetch(`api/products/category/${category}`);
         const data = await res.json();
-  
-        //if (!res.ok) throw new Error(data.message);
-        console.log("Producto recibido:", data);
-        setProducts(data)
+        setProducts(data.bestSellingProducts);
       } catch (error) {
-        console.error("Error al obtener producto:", error);
+        console.error("Error fetching best sellers:", error);
+      } finally {
+        setLoading(false);
       }
     };
-  
-    fetchProduct();
-  }, [category]);
 
+    fetchProducts();
+  }, [category,t]);
 
   return (
     <div className="container mx-auto p-2">
