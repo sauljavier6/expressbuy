@@ -24,7 +24,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   useEffect(() => {
     // Usamos axios para hacer la petición
     axios
-      .get(`${process.env.NEXT_PUBLIC_URL}/api/products/category/${category}`)
+      .get(`${process.env.NEXT_PUBLIC_URL}api/products/category/${category}`)
       .then((response) => {
         setProducts(response.data); // Axios devuelve los datos en response.data
       })
