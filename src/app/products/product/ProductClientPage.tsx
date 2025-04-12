@@ -72,10 +72,16 @@ export default function ProductClientPage({
         <img src="/icons/more.png" alt="Menu" className="w-6 h-6" />
       </button>
       <main className="w-full md:w-3/4 container mx-auto p-6">
+        {/* Forzar carga con ID fijo */}
+        <ProductsCategory category="67e302992f121b2eb4f7ff26" />
+
+        {/* Comentado por ahora
         {categoryId && <ProductsCategory category={categoryId} />}
         {productTypeId && !categoryId && (<ProductTypeProducts productType={productTypeId} /> )}
         {!categoryId && !productTypeId && <Products />}
+        */}
       </main>
+
     </div>
   );
 }
