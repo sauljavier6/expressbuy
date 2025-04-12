@@ -27,7 +27,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   
     console.log("📦 Fetching products for category:", category);
   
-    fetch(`${process.env.NEXT_PUBLIC_URL}api/products/category/${category}`)
+    fetch(`/api/products/category/${category}`)
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener productos");
         return res.json();
