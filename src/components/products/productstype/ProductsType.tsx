@@ -22,10 +22,12 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log('products; desde el componente de typo de productos',products)
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`api/products/producttype/${productType}`);
+        const res = await fetch(`api/products/producttype/67e33cdacfe36b9905f99f7e`);
         const data = await res.json();
         setProducts(data.bestSellingProducts);
       } catch (error) {
