@@ -22,22 +22,18 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('products; desde el componente de typo de productos',products)
+  console.log('productType fuera del usefect', productType)
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`api/products/producttype/67e33cdacfe36b9905f99f7e`);
-        const data = await res.json();
-        setProducts(data.bestSellingProducts);
-      } catch (error) {
-        console.error("Error fetching best sellers:", error);
-      } finally {
+    fetch(`/api/products/producttype/${productType}`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((error) => {
+        setError(t("errorFetchingProducts"));
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchProducts();
+      });
   }, [productType,t]);
 
   return (
