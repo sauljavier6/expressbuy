@@ -23,7 +23,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/products/category/67e302992f121b2eb4f7ff26`)
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/products/category/${category}`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((error) => {
