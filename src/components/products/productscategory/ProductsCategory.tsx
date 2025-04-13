@@ -22,32 +22,17 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!category) return;
-  
-    const url = `/api/category/category/${category}`;
-    console.log("📦 Fetching from:", url);
-  
-    fetch(url)
-      .then(async (res) => {
-        const text = await res.text(); // recibimos como texto
-        try {
-          const json = JSON.parse(text); // intentamos parsear
-          setProducts(json);
-        } catch (e) {
-          console.error("❌ Response is not valid JSON:", text);
-          throw new Error("Invalid JSON from server");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching:", error);
-        setError(t("errorFetchingProducts"));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [category, t]);
-  
+    useEffect(() => {
+      fetch(`/api/products/category/${category}`)
+        .then((res) => res.json())
+        .then((data) => setProducts(data))
+        .catch((error) => {
+          setError(t("errorFetchingProducts"));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, [category,t]);
 
   return (
       <div className="container mx-auto p-2">
