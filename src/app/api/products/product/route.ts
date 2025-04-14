@@ -15,6 +15,7 @@ export async function GET() {
 // 📌 POST: Agregar producto
 export async function POST(req: Request) {
   const data = await req.formData();
+  console.log(data)
 
   const file1 = data.get("image") as File;
   const file2 = data.get("imageTwo") as File;
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
   const sex = data.get("sex");
 
   if (!file1 || !file2 || !name || !price || !talla || !category || !productType || !stock || !sex) {
+    console.log('faltan datos')
     return NextResponse.json({ success: false, msg: "Faltan datos necesarios" });
   }
 
