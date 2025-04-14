@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   const data = await req.formData();
 
   const file1 = data.get("image") as File;
-  const file2 = data.get("imagedos") as File;
+  const file2 = data.get("imageTwo") as File;
 
   const name = data.get("name");
   const price = parseFloat(data.get("price") as string);
