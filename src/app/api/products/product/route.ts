@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   const category = data.get("category");
   const productType = data.get("productType");
   const stock = parseInt(data.get("stock") as string, 10);
-  const sex = data.get("sex");  
+  const sex = data.get("gender");  
 
   if (!name || !price || !talla || !category || !productType || !stock || !sex) {
     console.log('faltan datos')
