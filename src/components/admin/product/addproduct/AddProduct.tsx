@@ -47,12 +47,8 @@ export default function CreateProduct() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-  
-    // If the field is "price" or "stock", convert it to a number
-    const newValue = ["price", "stock"].includes(name) ? Number(value) || 0 : value;
-  
-    setProduct({ ...product, [name]: newValue });
-  };
+    setProduct({ ...product, [name]: value });
+  };  
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -73,10 +69,10 @@ export default function CreateProduct() {
     const formData = new FormData();
     formData.append("name", product.name);
     formData.append("size", product.size);
-    formData.append("price", product.price.toString());
+    formData.append("price", product.price);
     formData.append("category", product.category);
     formData.append("productType", product.productType);
-    formData.append("stock", product.stock.toString());
+    formData.append("stock", product.stock);
     formData.append("gender", product.gender);
   
     if (product.image) {

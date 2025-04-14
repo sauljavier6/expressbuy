@@ -26,9 +26,9 @@ export async function POST(req: Request) {
   const category = data.get("category");
   const productType = data.get("productType");
   const stock = parseInt(data.get("stock") as string, 10);
-  const sex = data.get("sex");
+  const sex = data.get("sex");  
 
-  if (!file1 || !file2 || !name || !price || !talla || !category || !productType || !stock || !sex) {
+  if (!name || !price || !talla || !category || !productType || !stock || !sex) {
     console.log('faltan datos')
     return NextResponse.json({ success: false, msg: "Faltan datos necesarios" });
   }
