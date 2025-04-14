@@ -13,6 +13,7 @@ export default function CreateProduct() {
     stock: "",
     gender: "",
   });
+  console.log('product',product)
 
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
   const [productTypes, setProductTypes] = useState<{ _id: string; name: string }[]>([]);
@@ -85,6 +86,8 @@ export default function CreateProduct() {
     if (product.imageTwo) {
       formData.append("imageTwo", product.imageTwo);
     }
+
+    console.log(formData)
   
     try {
       const res = await fetch("/api/products/product", {
