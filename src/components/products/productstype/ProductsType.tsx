@@ -22,8 +22,6 @@ export default function ProductsType({ productType }: ProductsTypeProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('productType fuera del usefect', productType)
-
   useEffect(() => {
     fetch(`/api/products/producttype/${productType}`)
       .then((res) => res.json())

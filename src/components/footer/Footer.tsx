@@ -28,9 +28,9 @@ const Footer = () => {
 
   const paymentMethods = [
     { icon: "/icons/visa.png", alt: "Visa" },
-    { icon: "/icons/mastercard.png", alt: "MasterCard" },
+    { icon: "/icons/master.png", alt: "Master" },
     { icon: "/icons/paypal.png", alt: "PayPal" },
-    { icon: "/icons/AmericanExpress.png", alt: "AmericanExpress" },
+    { icon: "/icons/american.png", alt: "American" },
   ];
 
   return (

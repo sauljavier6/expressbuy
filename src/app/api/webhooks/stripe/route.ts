@@ -12,6 +12,7 @@ import nodemailer from "nodemailer";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
+
   const sig = req.headers.get("stripe-signature");
   const rawBody = await req.text();
 
@@ -25,101 +26,105 @@ export async function POST(req: Request) {
     );
 
 
-    if (event.type === "checkout.session.completed") {
-        const session = event.data.object as Stripe.Checkout.Session;
-    
-        await connectDB();
-    
-        const userId = session.metadata?.userId;
-        const email = session.metadata?.email;
-        const name = session.metadata?.userName;
-        const total = parseFloat(session.metadata?.total || '0');
-        const deliveryAddress = JSON.parse(session.metadata?.deliveryAddress || '{}');
-        const items = JSON.parse(session.metadata?.items || '[]');
-    
-        // Aquí podrías guardar o actualizar la orden relacionada con session.id
-          
-            // ✅ Validación: si no se creó correctamente la orden
-            if (!session || session.id === "") {
-                return NextResponse.json({ error: "No se pudo crear la orden en stripe." }, { status: 400 });
-              }
-          
-              const formattedAddress = `${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.state}, ${deliveryAddress.zip}, ${deliveryAddress.country}`;
-          
-              // 2️⃣ Guardar la orden en MongoDB
-              const order = await Order.create({
-                name: name,
-                email: email,
-                total: total,
-                paymentId: session.payment_intent,
-                userId: userId ?? null,
-                status: "paid",
-                address: formattedAddress,
-              });
-          
-              // 3️⃣ Guardar productos
-              const orderItems = await Promise.all(
-                items.map(async (item: { _id: any; name: any; price: any; quantity: any; talla: any; }) => {
-                  return await OrderItem.create({
-                    orderId: order._id,
-                    productId: item._id,
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity || 1,
-                    talla: item.talla || "",
-                  });
-                })
-              );
-          
-              order.items = orderItems.map(item => item._id);
-              await order.save();
-          
-              // 4️⃣ Guardar dirección si no existe
-              if (userId && (userId !== "" || userId !== null)) {
-                const existingAddress = await Address.findOne({
-                  userId: userId,
-                  street: deliveryAddress.street,
-                  city: deliveryAddress.city,
-                  state: deliveryAddress.state,
-                  zip: deliveryAddress.zip,
-                  country: deliveryAddress.country
-                });
-          
-                if (!existingAddress) {
-                  await Address.create({
-                    userId: userId,
-                    street: deliveryAddress.street,
-                    city: deliveryAddress.city,
-                    state: deliveryAddress.state,
-                    zip: deliveryAddress.zip,
-                    country: deliveryAddress.country
-                  });
-                }
-              }
-          
-              // 5️⃣ Restar stock
-              await Promise.all(
-                items.map(async (item: { _id: any; quantity: number; }) => {
-                  const product = await Product.findById(item._id);
-                  if (product) {
-                    if (product.stock >= item.quantity) {
-                      product.stock -= item.quantity;
-                      await product.save();
-                    } else {
-                      throw new Error(`No hay suficiente stock para el producto ${product.name}`);
-                    }
-                  }
-                })
-              );
-    
-        // 6️⃣ Enviar correo
-        if (email && name) {
-            await sendConfirmationEmail(email, name, order._id.toString(), total, formattedAddress, items);
-          }
-          
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    // ✅ Validar que el pago esté realmente completado
+    if (session.payment_status !== "paid") {
+      console.warn("⚠️ Pago no completado. Ignorando el evento.");
+      return NextResponse.json({ error: "Pago no completado." }, { status: 400 });
+    }
+
+    await connectDB();
+
+    const userId = session.metadata?.userId;
+    const email = session.metadata?.email;
+    const name = session.metadata?.userName;
+    const total = parseFloat(session.metadata?.total || '0');
+    const deliveryAddress = JSON.parse(session.metadata?.deliveryAddress || '{}');
+    const items = JSON.parse(session.metadata?.items || '[]');
+
+    // ✅ Verifica si ya se procesó esta orden
+    const existingOrder = await Order.findOne({ paymentId: session.payment_intent });
+    if (existingOrder) {
+      console.log("⚠️ Orden ya procesada. Evitando duplicación.");
+      return NextResponse.json({ received: true });
+    }
+
+    const formattedAddress = `${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.state}, ${deliveryAddress.zip}, ${deliveryAddress.country}`;
+
+    // Guardar la orden
+    const order = await Order.create({
+      name,
+      email,
+      total,
+      paymentId: session.payment_intent,
+      userId: userId ?? null,
+      status: "paid",
+      address: formattedAddress,
+    });
+
+    // Guardar productos
+    const orderItems = await Promise.all(
+      items.map(async (item: { _id: any; name: any; price: any; quantity: any; talla: any; }) => {
+        return await OrderItem.create({
+          orderId: order._id,
+          productId: item._id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity || 1,
+          talla: item.talla || "",
+        });
+      })
+    );
+
+    order.items = orderItems.map(item => item._id);
+    await order.save();
+
+    // Guardar dirección si no existe
+    if (userId && userId !== "") {
+      const existingAddress = await Address.findOne({
+        userId,
+        street: deliveryAddress.street,
+        city: deliveryAddress.city,
+        state: deliveryAddress.state,
+        zip: deliveryAddress.zip,
+        country: deliveryAddress.country
+      });
+
+      if (!existingAddress) {
+        await Address.create({
+          userId,
+          street: deliveryAddress.street,
+          city: deliveryAddress.city,
+          state: deliveryAddress.state,
+          zip: deliveryAddress.zip,
+          country: deliveryAddress.country
+        });
       }
+    }
 
+    // Restar stock
+    await Promise.all(
+      items.map(async (item: { _id: any; quantity: number; }) => {
+        const product = await Product.findById(item._id);
+        if (product) {
+          if (product.stock >= item.quantity) {
+            product.stock -= item.quantity;
+            await product.save();
+          } else {
+            throw new Error(`No hay suficiente stock para el producto ${product.name}`);
+          }
+        }
+      })
+    );
 
+    // Enviar correo
+    if (email && name) {
+      await sendConfirmationEmail(email, name, order._id.toString(), total, formattedAddress, items);
+    }
+  }
+  
   } catch (err) {
     console.error("⚠️ Webhook error:", err);
     return NextResponse.json({ error: "Webhook signature verification failed" }, { status: 400 });
