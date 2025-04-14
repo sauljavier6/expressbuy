@@ -22,13 +22,13 @@ export async function POST(req: Request) {
 
   const name = data.get("name");
   const price = parseFloat(data.get("price") as string);
-  const talla = data.get("talla");
+  const size = data.get("size");
   const category = data.get("category");
   const productType = data.get("productType");
   const stock = parseInt(data.get("stock") as string, 10);
-  const sex = data.get("gender");  
+  const gender = data.get("gender");  
 
-  if (!name || !price || !talla || !category || !productType || !stock || !sex) {
+  if (!name || !price || !size || !category || !productType || !stock || !gender) {
     console.log('faltan datos')
     return NextResponse.json({ success: false, msg: "Faltan datos necesarios" });
   }
@@ -52,11 +52,11 @@ export async function POST(req: Request) {
     const newProduct = await Product.create({
       name,
       price,
-      talla,
+      size,
       category,
       productType,
       stock,
-      sex,
+      gender,
       image: `/products/${filename1}`,
       imagedos: `/products/${filename2}`,
     });

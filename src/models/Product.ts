@@ -2,14 +2,14 @@ import { Schema, model, models } from 'mongoose';
 
 const productSchema = new Schema({
   name: { type: String, required: true },
-  talla: { type: String, required: true },
+  size: { type: String, required: true },
   price: { type: Number, required: true },
   category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
   productType: { type: Schema.Types.ObjectId, ref: 'ProductType', required: true },
   imagedos: { type: String, required: true },
   image: { type: String, required: true },
   stock: { type: Number, required: true },
-  sex: { type: String, required: true },
+  gender: { type: String, required: true },
 }, { timestamps: true });
 
 productSchema.index({ category: 1 });
