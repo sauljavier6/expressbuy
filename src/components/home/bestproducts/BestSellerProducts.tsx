@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";  
-import Image from "next/image";
 import Link from "next/link";
+import router from "next/router";
 
 export interface IBestSellerProduct {
   _id: string;
@@ -42,7 +42,11 @@ const BestSellerProducts = () => {
     };
 
     fetchProducts();
-  }, []); // ✅ useEffect solo se ejecuta una vez
+  }, []);
+
+  const handleCardClick = (productId: string) => {
+    router.push(`/products/productdetails/${productId}`);
+  };  
 
   if (!isClient) {
     return <h2 className="text-2xl text-center">Cargando...</h2>;
@@ -58,15 +62,9 @@ const BestSellerProducts = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {products.map((product) => (
-            <div key={product._id} className="border rounded-lg p-4 shadow-md bg-white relative">
+            <div key={product._id} onClick={() => handleCardClick(product._id)} className="border rounded-lg p-4 shadow-md bg-white relative">
               <div className="relative">
-                <Image 
-                  src={product.image} 
-                  alt={product.name} 
-                  width={200} 
-                  height={200} 
-                  className="w-full h-48 object-cover rounded-md"
-                />
+                <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md"/>
               </div>
               {/* <p className="text-xs text-gray-500 mt-2">{product.category}</p> */}
               <h3 className="text-sm font-semibold">{product.name}</h3>

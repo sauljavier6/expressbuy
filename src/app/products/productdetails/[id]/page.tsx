@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 import { useCart } from "@/context/cartcontext/CartContext"; // Importamos el contexto
 
 interface Product {
@@ -55,7 +54,7 @@ export default function Page() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Galería de Imágenes */}
         <div className="flex flex-col">
-          <Image
+          <img
             src={mainImage}
             alt={product.name}
             width={600}
@@ -66,7 +65,7 @@ export default function Page() {
           {/* Miniaturas */}
           <div className="flex gap-4 mt-4">
             {[product.image, product.imagedos].map((img, index) => (
-              <Image
+              <img
                 key={index}
                 src={img}
                 alt={`Miniatura ${index}`}
