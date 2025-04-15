@@ -11,15 +11,14 @@ export interface IBestSellerProduct {
   name: string;
   price: number;
   quantity: number;
-  talla?: string;
+  size: string;
   image: string;
 }
 
 
 const BestSellerProducts = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(); 
 
-  // ✅ TODOS los useState están definidos al inicio del componente
   const [isClient, setIsClient] = useState(false);
   const [products, setProducts] = useState<IBestSellerProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +51,7 @@ const BestSellerProducts = () => {
   };  
 
   if (!isClient) {
-    return <h2 className="text-2xl text-center">Cargando...</h2>;
+    return <h2 className="text-2xl text-center">Loading...</h2>;
   }
 
   return (
@@ -61,7 +60,7 @@ const BestSellerProducts = () => {
       <p className="text-gray-500 text-center mb-6">{t("bestSellerDescription")}</p>
 
       {isLoading ? (
-        <p className="text-center">Cargando productos...</p>
+        <p className="text-center">Loading products...</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {products.map((product) => (
@@ -69,7 +68,7 @@ const BestSellerProducts = () => {
               <div className="relative">
                 <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md"/>
               </div>
-              {/* <p className="text-xs text-gray-500 mt-2">{product.category}</p> */}
+              <p className="text-xs text-gray-500 mt-2">{product.size}</p>
               <h3 className="text-sm font-semibold">{product.name}</h3>
               <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
               <Link href="#" passHref>

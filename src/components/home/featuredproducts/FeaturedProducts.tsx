@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 interface IFeaturedProduct {
   _id: string;
   name: string;
-  category: string;
+  size: string;
   price: number;
   image: string;
 }
@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
     router.push(`/products/productdetails/${productId}`);
   };  
 
-  if (!isClient) return <h2 className="text-2xl text-center">Cargando...</h2>;
+  if (!isClient) return <h2 className="text-2xl text-center">Loading...</h2>;
 
   return (
     <section className="py-12 px-6 md:px-12">
@@ -52,7 +52,7 @@ const FeaturedProducts = () => {
       <p className="text-gray-500 text-center mb-6">{t("featuredDescription")}</p>
 
       {isLoading ? (
-        <p className="text-center">Cargando productos...</p>
+        <p className="text-center">Loading products...</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {products.map((product) => (
@@ -60,7 +60,7 @@ const FeaturedProducts = () => {
               <div className="relative">
                 <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md"/>
               </div>
-              <p className="text-xs text-gray-500 mt-2">{product.category}</p>
+              <p className="text-xs text-gray-500 mt-2">{product.size}</p>
               <h3 className="text-sm font-semibold">{product.name}</h3>
               <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
               <Link href="#" passHref>

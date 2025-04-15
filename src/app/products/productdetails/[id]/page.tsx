@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useCart } from "@/context/cartcontext/CartContext"; // Importamos el contexto
+import { useCart } from "@/context/cartcontext/CartContext";
+import { useTranslation } from "react-i18next"; 
 
 interface Product {
   _id: string;
@@ -12,16 +13,21 @@ interface Product {
   image: string;
   imagedos: string;
   stock: number;
-  sex?: string;
+  gender: string;
 }
 
 export default function Page() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [mainImage, setMainImage] = useState<string>("");
-
-  const { addToCart, getProductQuantity } = useCart(); // Usamos el contexto
+  const { t } = useTranslation();
+  const { addToCart, getProductQuantity } = useCart();
   const quantity = product ? getProductQuantity(product._id) : 0;
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -44,8 +50,10 @@ export default function Page() {
   };
 
   if (!product) {
-    return <p className="text-center mt-10">Cargando producto...</p>;
+    return <p className="text-center mt-10">Loading products...</p>;
   }
+
+  if (!isClient) return null;
 
   const outOfStock = quantity >= product.stock;
 
@@ -84,20 +92,14 @@ export default function Page() {
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-            <p className="text-xl text-gray-700 mb-2">
-              Precio: <span className="font-semibold">${product.price}</span>
-            </p>
-            <p className="text-gray-600 mb-1">Talla: {product.size}</p>
-            <p className="text-gray-600 mb-1">
-              Stock disponible: {product.stock}
-            </p>
-            {product.sex && (
-              <p className="text-gray-600 mb-1">Sexo: {product.sex}</p>
-            )}
+            <p className="text-xl text-gray-700 mb-2">{t("Products.price")}: <span className="font-semibold">${product.price}</span></p>
+            <p className="text-gray-600 mb-1">{t("Products.size")}: {product.size}</p>
+            <p className="text-gray-600 mb-1">{t("Products.stockAvailable")}: {product.stock}</p>
+            <p className="text-gray-600 mb-1">{t("Products.gender")}: {product.gender}</p>
 
             {quantity > 0 && (
               <p className="text-sm text-blue-500 mt-2">
-                En carrito: {quantity}
+                {t("Products.inCart")}: {quantity}
               </p>
             )}
           </div>
@@ -111,7 +113,7 @@ export default function Page() {
             }`}
             disabled={outOfStock}
           >
-            {outOfStock ? "Sin stock" : "Agregar al carrito 🛒"}
+            {outOfStock ? t("Products.outOfStock") : t("Products.addToCart")} 🛒
           </button>
         </div>
       </div>

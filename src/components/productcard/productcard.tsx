@@ -2,6 +2,8 @@
 
 import { useCart } from "@/context/cartcontext/CartContext";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next"; 
 
 interface ProductProps {
   _id: string;
@@ -15,12 +17,20 @@ export default function ProductCard({ product }: { product: ProductProps }) {
   const { addToCart, getProductQuantity } = useCart();
   const router = useRouter();
   const quantity = getProductQuantity(product._id);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleCardClick = () => {
     router.push(`/products/productdetails/${product._id}`);
   };
 
-  return (
+  if (!isClient) return null;
+
+  return ( 
     <div
       className="border p-4 rounded shadow cursor-pointer hover:shadow-lg transition"
       onClick={handleCardClick}
@@ -28,9 +38,9 @@ export default function ProductCard({ product }: { product: ProductProps }) {
       <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
       <h2 className="text-lg font-bold mt-2">{product.name}</h2>
       <p className="text-gray-600">${product.price}</p>
-      <p className="text-sm text-gray-500">Stock disponible: {product.stock}</p>
+      <p className="text-sm text-gray-500">{t("Products.stockAvailable")}:  {product.stock}</p>
 
-      {quantity > 0 && <p className="text-sm text-blue-500">En carrito: {quantity}</p>}
+      {quantity > 0 && <p className="text-sm text-blue-500">{t("Products.inCart")}: {quantity}</p>}
 
       <button
         className={`px-4 py-2 rounded mt-2 ${
@@ -44,7 +54,7 @@ export default function ProductCard({ product }: { product: ProductProps }) {
         }}
         disabled={quantity >= product.stock}
       >
-        {quantity < product.stock ? "Añadir al Carrito" : "Sin Stock"}
+        {quantity < product.stock ? t("Products.addToCart") : t("Products.outOfStock")}
       </button>
     </div>
   );

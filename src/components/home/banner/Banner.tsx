@@ -15,7 +15,7 @@ const Banner = () => {
     setIsClient(true);
   }, []);
 
-  if (!isClient) return null; // Evita el error de hidratación
+  if (!isClient) return null;
 
   const icons = [
     {

@@ -122,5 +122,14 @@
     "total": "Total",
     "payWithStripe": "Pay with Stripe",
     "payWithPaypal": "Pay with PayPal"
+  },
+  "Products": {
+    "price": "Price",
+    "size": "Size",
+    "stockAvailable": "Available stock",
+    "gender": "Gender",
+    "inCart": "In cart",
+    "outOfStock": "Out of stock",
+    "addToCart": "Add to cart"
   }
 }

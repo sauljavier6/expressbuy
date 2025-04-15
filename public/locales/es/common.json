@@ -122,6 +122,16 @@
     "total": "Total",
     "payWithStripe": "Pagar con Stripe",
     "payWithPaypal": "Pagar con PayPal"
+  },
+  "Products": {
+    "price": "Precio",
+    "size": "Talla",
+    "stockAvailable": "Stock disponible",
+    "gender": "Sexo",
+    "inCart": "En carrito",
+    "outOfStock": "Sin stock",
+    "addToCart": "Agregar al carrito"
   }
+  
 
 }
