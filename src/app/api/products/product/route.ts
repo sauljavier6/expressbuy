@@ -2,21 +2,11 @@ import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
-
-// 📌 GET: Obtener productos
-export async function GET() {
-  await connectDB();
-  const products = await Product.find();
-  return NextResponse.json(products);
-}
+import cloudinary from "@/lib/cloudinary";
 
 // 📌 POST: Agregar producto
 export async function POST(req: Request) {
   const data = await req.formData();
-  console.log(data)
-
   const file1 = data.get("image") as File;
   const file2 = data.get("imageTwo") as File;
 
@@ -26,29 +16,34 @@ export async function POST(req: Request) {
   const category = data.get("category");
   const productType = data.get("productType");
   const stock = parseInt(data.get("stock") as string, 10);
-  const gender = data.get("gender");  
+  const gender = data.get("gender");
 
   if (!name || !price || !size || !category || !productType || !stock || !gender) {
-    console.log('faltan datos')
     return NextResponse.json({ success: false, msg: "Faltan datos necesarios" });
   }
 
-  const uploadDir = path.join(process.cwd(), "public", "products");
-  await mkdir(uploadDir, { recursive: true });
-
-  // 📌 Procesar imagen 1
-  const filename1 = `${uuidv4()}.${file1.name.split(".").pop()}`;
-  const filepath1 = path.join(uploadDir, filename1);
+  // 📌 Convertir archivos a base64
   const buffer1 = Buffer.from(await file1.arrayBuffer());
-  await writeFile(filepath1, buffer1);
+  const base64Image1 = `data:${file1.type};base64,${buffer1.toString("base64")}`;
 
-  // 📌 Procesar imagen 2
-  const filename2 = `${uuidv4()}.${file2.name.split(".").pop()}`;
-  const filepath2 = path.join(uploadDir, filename2);
   const buffer2 = Buffer.from(await file2.arrayBuffer());
-  await writeFile(filepath2, buffer2);
+  const base64Image2 = `data:${file2.type};base64,${buffer2.toString("base64")}`;
 
   try {
+    await connectDB();
+
+    // 📌 Subir imágenes a Cloudinary
+    const upload1 = await cloudinary.uploader.upload(base64Image1, {
+      folder: "products",
+      public_id: uuidv4(),
+    });
+
+    const upload2 = await cloudinary.uploader.upload(base64Image2, {
+      folder: "products",
+      public_id: uuidv4(),
+    });
+
+    // 📌 Crear producto con URLs de Cloudinary
     const newProduct = await Product.create({
       name,
       price,
@@ -57,8 +52,8 @@ export async function POST(req: Request) {
       productType,
       stock,
       gender,
-      image: `/products/${filename1}`,
-      imagedos: `/products/${filename2}`,
+      image: upload1.secure_url,
+      imagedos: upload2.secure_url,
     });
 
     return NextResponse.json({ success: true, product: newProduct, msg: "success" });
