@@ -4,6 +4,14 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import cloudinary from "@/lib/cloudinary";
 
+// 📌 GET: Obtener productos
+export async function GET() {
+  await connectDB();
+  const products = await Product.find();
+  return NextResponse.json(products);
+}
+
+
 // 📌 POST: Agregar producto
 export async function POST(req: Request) {
   const data = await req.formData();
