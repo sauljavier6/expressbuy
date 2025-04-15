@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";  
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 export interface IBestSellerProduct {
   _id: string;
@@ -23,6 +23,7 @@ const BestSellerProducts = () => {
   const [isClient, setIsClient] = useState(false);
   const [products, setProducts] = useState<IBestSellerProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -43,6 +44,8 @@ const BestSellerProducts = () => {
 
     fetchProducts();
   }, []);
+
+  console.log(products)
 
   const handleCardClick = (productId: string) => {
     router.push(`/products/productdetails/${productId}`);

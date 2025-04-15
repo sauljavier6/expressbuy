@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";  
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 interface IFeaturedProduct {
   _id: string;
@@ -18,6 +18,7 @@ const FeaturedProducts = () => {
   const [isClient, setIsClient] = useState(false);
   const [products, setProducts] = useState<IFeaturedProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);

@@ -7,7 +7,7 @@ import { useCart } from "@/context/cartcontext/CartContext"; // Importamos el co
 interface Product {
   _id: string;
   name: string;
-  talla: string;
+  size: string;
   price: number;
   image: string;
   imagedos: string;
@@ -87,7 +87,7 @@ export default function Page() {
             <p className="text-xl text-gray-700 mb-2">
               Precio: <span className="font-semibold">${product.price}</span>
             </p>
-            <p className="text-gray-600 mb-1">Talla: {product.talla}</p>
+            <p className="text-gray-600 mb-1">Talla: {product.size}</p>
             <p className="text-gray-600 mb-1">
               Stock disponible: {product.stock}
             </p>
