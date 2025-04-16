@@ -142,7 +142,10 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
           </tbody>
         </table>
   
-        <p style="font-size: 16px; color: #555;"><strong>Total:</strong> $${total.toFixed(2)} USD</p>
+        <p style="font-size: 16px; color: #555;"><strong>Subtotal:</strong> $${(total - 6).toFixed(2)} USD</p>
+        <p style="font-size: 16px; color: #555;"><strong>Shipping Cost:</strong> $6.00 USD</p>
+        <p style="font-size: 18px; color: #000;"><strong>Total:</strong> $${total.toFixed(2)} USD</p>
+
         <p style="font-size: 16px; color: #555;"><strong>Delivery Address:</strong></p>
         <p style="font-size: 16px; color: #555;">${formattedAddress}</p>
         

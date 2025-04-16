@@ -89,7 +89,7 @@ const SideBar = () => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebar__logo}>
-        <img src="/logo/logo.jpg" alt="Logo" />
+        <img src="/logo/logo.png" alt="Logo" />
       </div>
       <h3>Home</h3>
       <ul>

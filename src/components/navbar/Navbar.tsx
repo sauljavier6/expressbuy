@@ -44,7 +44,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold tracking-wide hover:text-gray-300 transition">
-          LOGO
+        <img src="/logo/logo.png" alt="Logo" />
         </Link>
 
         {/* Menú en pantallas grandes */}
