@@ -120,6 +120,7 @@
     "checkoutTitle": "Checkout",
     "orderDetails": "Order Details:",
     "total": "Total",
+    "shippingCost": "Shipping Cost",
     "payWithStripe": "Pay with Stripe",
     "payWithPaypal": "Pay with PayPal"
   },

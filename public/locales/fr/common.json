@@ -118,6 +118,7 @@
     "checkoutTitle": "Caisse",
     "orderDetails": "Détails de la commande:",
     "total": "Total",
+    "shippingCost": "Frais de livraison",
     "payWithStripe": "Payer avec Stripe",
     "payWithPaypal": "Payer avec PayPal"
   },

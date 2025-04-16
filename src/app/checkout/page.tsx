@@ -15,17 +15,18 @@ export default function Page() {
   const [isClient, setIsClient] = useState(false);
   const [storedId, setStoredId] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
+  const SHIPPING_COST = 6;
+
 
   useEffect(() => {
     setIsClient(true);
-
-    // Solo se ejecuta en cliente
+  
     const id = localStorage.getItem("userId");
     setStoredId(id);
-
-    // Calcular total del carrito
-    const calculatedTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    setTotal(calculatedTotal);
+  
+    // Calcular total del carrito + envío
+    const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    setTotal(subtotal + SHIPPING_COST);
   }, [cart]);
 
   if (!isClient || storedId === null) return null; // Prevenir errores de SSR
@@ -72,6 +73,10 @@ export default function Page() {
           </ul>
         </div>
 
+        <p className="text-right text-sm text-gray-700">
+          {t("CheckoutPage.shippingCost")}: ${SHIPPING_COST.toFixed(2)}
+        </p>
+
         <p className="text-lg font-bold text-right mb-6">
           {t("CheckoutPage.total")}: ${total.toFixed(2)}
         </p>
@@ -90,28 +95,40 @@ export default function Page() {
                 const res = await fetch("/api/checkout", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    items: cart,
-                    total,
-                    deliveryAddress,
-                    user,
-                    storedId,
-                    paymentMethod: "paypal",
-                  }),
+                  body: JSON.stringify({ total }), // Solo total
                 });
 
-                const order = await res.json();
-                return order.id;
+                const data = await res.json();
+                return data.id; // orderId que devuelve el backend
               }}
               onCancel={(data) => {
-                console.log("Cancelled:", data);
+                console.log("Pago cancelado:", data);
               }}
-              onApprove={async (data, actions) => {
-                const order = await actions.order?.capture();
+              onApprove={async (data) => {
+                try {
+                  const res = await fetch("/api/checkout/paypal", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      orderId: data.orderID,
+                      items: cart,
+                      total,
+                      deliveryAddress,
+                      user,
+                      storedId,
+                    }),
+                  });
 
-                if (order?.status === "COMPLETED") {
-                  clearCart();
-                  router.push("/account");
+                  const result = await res.json();
+
+                  if (result.success) {
+                    clearCart();
+                    router.push("/account");
+                  } else {
+                    console.error("Error al capturar la orden:", result.error);
+                  }
+                } catch (err) {
+                  console.error("Fallo en onApprove:", err);
                 }
               }}
             />
