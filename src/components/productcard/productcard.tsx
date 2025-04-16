@@ -11,6 +11,8 @@ interface ProductProps {
   price: number;
   image: string;
   stock: number;
+  size: string;
+  gender: string;
 }
 
 export default function ProductCard({ product }: { product: ProductProps }) {
@@ -38,7 +40,9 @@ export default function ProductCard({ product }: { product: ProductProps }) {
       <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
       <h2 className="text-lg font-bold mt-2">{product.name}</h2>
       <p className="text-gray-600">${product.price}</p>
-      <p className="text-sm text-gray-500">{t("Products.stockAvailable")}:  {product.stock}</p>
+      <p className="text-sm text-gray-500">{t("Products.size")}: {product.size}</p>
+      <p className="text-sm text-gray-500">{t("Products.gender")}: {product.gender}</p>
+      <p className="text-sm text-gray-500">{t("Products.stockAvailable")}: {product.stock}</p>
 
       {quantity > 0 && <p className="text-sm text-blue-500">{t("Products.inCart")}: {quantity}</p>}
 

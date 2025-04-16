@@ -60,21 +60,42 @@
 
 /* 📌 Media query para dispositivos pequeños */
 @media (max-width: 426px) {
-    .container__content {
-        flex-direction: column; /* Apila los elementos */
-        height: auto; /* Permite altura dinámica */
-        align-items: center;
+    .container {
+      padding-left: 1.5rem; /* Agrega padding izquierdo */
+      padding-right: 1.5rem; /* Agrega padding derecho */
     }
-
+  
+    .container__content {
+      flex-direction: column;
+      height: auto;
+      align-items: center;
+    }
+  
     .container__content__imageContainer,
     .container__content__collectionDetails,
     .container__content__imgDetails {
-        width: 100%; /* Ocupan todo el ancho */
-        height: auto; /* Se ajustan automáticamente */
+      width: 100%;
+      height: auto;
     }
-
+  
+    .container__content__collectionDetails {
+      flex-direction: column;
+    }
+  
+    .container__content__collectionDetails__collectionTitle {
+      height: 60px;
+      font-size: 1.5rem;
+    }
+  
+    .container__content__imgDetails {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
     .container__content__imgDetails img {
-        height: auto; /* Evita recortes */
-        max-width: 100%; /* Ajusta tamaño */
+      width: 100%;
+      height: auto;
+      object-fit: cover;
     }
-}
+  }
+  

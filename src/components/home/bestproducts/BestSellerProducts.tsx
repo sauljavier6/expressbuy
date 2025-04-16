@@ -18,7 +18,6 @@ export interface IBestSellerProduct {
 
 const BestSellerProducts = () => {
   const { t } = useTranslation(); 
-
   const [isClient, setIsClient] = useState(false);
   const [products, setProducts] = useState<IBestSellerProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +52,7 @@ const BestSellerProducts = () => {
   if (!isClient) {
     return <h2 className="text-2xl text-center">Loading...</h2>;
   }
-
+ 
   return (
     <section className="py-12 px-6 md:px-12">
       <h2 className="text-2xl font-semibold text-center">{t("bestSeller")}</h2>
@@ -73,7 +72,7 @@ const BestSellerProducts = () => {
               <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
               <Link href="#" passHref>
                 <button className="mt-2 bg-black text-white px-4 py-1 rounded hover:bg-gray-800 transition">
-                  Add to Cart
+                  {t("Products.addToCart")} 🛒
                 </button>
               </Link>
             </div>

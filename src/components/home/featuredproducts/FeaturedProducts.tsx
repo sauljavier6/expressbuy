@@ -65,7 +65,7 @@ const FeaturedProducts = () => {
               <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
               <Link href="#" passHref>
                 <button className="mt-2 bg-black text-white px-4 py-1 rounded hover:bg-gray-800 transition">
-                  Add to Cart
+                  {t("Products.addToCart")} 🛒
                 </button>
               </Link>
             </div>

@@ -11,7 +11,7 @@ const brands = [
 
 const BrandsSection = () => {
   return (
-    <section className="py-8 px-12">
+    <section className="py-12 px-6 md:px-12 bg-white dark:bg-neutral-900 transition-colors duration-300">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 justify-items-center">
         {brands.map((brand) => (
           <div key={brand.id} className="flex items-center justify-center">
@@ -21,7 +21,7 @@ const BrandsSection = () => {
               width={100} 
               height={50} 
               className="w-auto h-12 object-contain"
-            />
+            /> 
           </div>
         ))}
       </div>

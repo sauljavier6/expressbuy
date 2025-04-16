@@ -129,7 +129,15 @@
     "inCart": "Dans le panier",
     "outOfStock": "Rupture de stock",
     "addToCart": "Ajouter au panier"
+  },
+  "gender": {
+  "men": "Hommes",
+  "women": "Femmes",
+  "boys": "Garçons",
+  "girls": "Filles",
+  "unknown": "Inconnu"
   }
+
   
   
 }

@@ -49,6 +49,17 @@ export default function Page() {
     }
   };
 
+  const getGenderLabel = (code: string) => {
+    switch (code) {
+      case "H": return t("gender.men");
+      case "M": return t("gender.women");
+      case "O": return t("gender.boys");
+      case "A": return t("gender.girls");
+      default: return t("gender.unknown");
+    }
+  };
+  
+
   if (!product) {
     return <p className="text-center mt-10">Loading products...</p>;
   }
@@ -92,10 +103,13 @@ export default function Page() {
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-            <p className="text-xl text-gray-700 mb-2">{t("Products.price")}: <span className="font-semibold">${product.price}</span></p>
+            <p className="text-gray-600 mb-1">{t("Products.price")}: <span className="font-semibold">${product.price}</span></p>
             <p className="text-gray-600 mb-1">{t("Products.size")}: {product.size}</p>
             <p className="text-gray-600 mb-1">{t("Products.stockAvailable")}: {product.stock}</p>
-            <p className="text-gray-600 mb-1">{t("Products.gender")}: {product.gender}</p>
+            
+            <p className="text-sm text-gray-500">
+              {t("Products.gender")}: {getGenderLabel(product.gender)}
+            </p>
 
             {quantity > 0 && (
               <p className="text-sm text-blue-500 mt-2">

@@ -131,7 +131,15 @@
     "inCart": "En carrito",
     "outOfStock": "Sin stock",
     "addToCart": "Agregar al carrito"
-  }
+  },
+  "gender": {
+  "men": "Hombres",
+  "women": "Mujeres",
+  "boys": "Niños",
+  "girls": "Niñas",
+  "unknown": "Desconocido"
+}
+
   
 
 }

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { id } = await params;
 
-    const product = await Product.findById(id); // aquí va el id directamente
+    const product = await Product.findById(id);
 
     if (!product) {
       return new NextResponse(JSON.stringify({ message: 'Producto no encontrado' }), {
