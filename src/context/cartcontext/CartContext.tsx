@@ -35,7 +35,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
-
   }, []);
 
   // Guardar carrito en localStorage cuando cambie

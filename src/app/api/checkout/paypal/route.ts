@@ -97,8 +97,8 @@ export async function POST(req: Request) {
   }
 }
 
-
-async function sendConfirmationEmail(userEmail: string, userName: string, orderId: string, total: number, formattedAddress: string, items: any[]) {
+//Funcion de email
+async function sendConfirmationEmail(userEmail: string, userName: string, orderId: string, total: number, formattedAddress: string, items:any) {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || "587"),
@@ -114,26 +114,48 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
     to: userEmail,
     subject: "Purchase Confirmation",
     html: `
-      <h2>Thank you for your purchase, ${userName}!</h2>
-      <p>Your order ID is <strong>${orderId}</strong></p>
-      <table>
-        <thead>
-          <tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
-        </thead>
-        <tbody>
-          ${items.map(item => `
-            <tr>
-              <td>${item.name}</td>
-              <td>$${item.price.toFixed(2)}</td>
-              <td>${item.quantity}</td>
-              <td>$${(item.price * item.quantity).toFixed(2)}</td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-      <p><strong>Total:</strong> $${total.toFixed(2)} USD</p>
-      <p><strong>Shipping to:</strong> ${formattedAddress}</p>
-    `
-  };
+      <div style="font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <h1 style="text-align: center; color: #4CAF50;">Thank you for your purchase, ${userName}!</h1>
+      
+        <p style="font-size: 16px; color: #555;">Your order <strong>${orderId}</strong> has been successfully processed.</p>
+        <p style="font-size: 16px; color: #555;">Here are the details of your purchase:</p>
+  
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background-color: #4CAF50; color: white;">
+              <th style="padding: 10px; text-align: left;">Product</th>
+              <th style="padding: 10px; text-align: left;">Price</th>
+              <th style="padding: 10px; text-align: left;">Quantity</th>
+              <th style="padding: 10px; text-align: left;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map((item: { name: any; price: number; quantity: number; }) => `
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">${item.name}</td>
+                <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
+                <td style="padding: 10px;">${item.quantity}</td>
+                <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+  
+        <p style="font-size: 16px; color: #555;"><strong>Total:</strong> $${total.toFixed(2)} USD</p>
+        <p style="font-size: 16px; color: #555;"><strong>Delivery Address:</strong></p>
+        <p style="font-size: 16px; color: #555;">${formattedAddress}</p>
+        
+        <p style="font-size: 16px; color: #555;">We will notify you when your order is on its way.</p>
+  
+        <div style="text-align: center; margin-top: 30px;">
+          <p style="font-size: 14px; color: #888;">If you have any questions, feel free to contact us.</p>
+          <p style="font-size: 14px; color: #888;">Thank you for choosing us!</p>
+        </div>
+      </div>
+    </div>
+    `,
+  };  
 
   await transporter.sendMail(mailOptions);
 }
