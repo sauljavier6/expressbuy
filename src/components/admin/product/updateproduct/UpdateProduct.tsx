@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 interface Product {
   _id: string;
   name: string;
-  talla: string;
+  size: string;
   price: number;
   category: string;
   productType: string;
   stock: number;
-  sex: string;
+  gender: string;
   image: any;
   imagedos: any;
 }
@@ -77,12 +77,12 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
   
     const formData = new FormData();
     formData.append("name", updatedProduct.name);
-    formData.append("talla", updatedProduct.talla);
+    formData.append("talla", updatedProduct.size);
     formData.append("price", updatedProduct.price.toString());
     formData.append("category", updatedProduct.category);
     formData.append("productType", updatedProduct.productType);
     formData.append("stock", updatedProduct.stock.toString());
-    formData.append("sex", updatedProduct.sex);
+    formData.append("sex", updatedProduct.gender);
   
     // Si el usuario seleccionó una nueva imagen, añadirla
     if (updatedProduct.image) {
@@ -138,7 +138,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
           <input
             type="text"
             name="talla"
-            value={updatedProduct.talla}
+            value={updatedProduct.size}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
           />
@@ -208,7 +208,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
           <label className="block text-sm font-medium text-gray-700">Sexo</label>
           <select
             name="sex"
-            value={updatedProduct.sex}
+            value={updatedProduct.gender}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required

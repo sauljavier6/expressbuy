@@ -2,12 +2,10 @@ import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import cloudinary from "@/lib/cloudinary";
 
 // 📌 PUT: Actualizar producto
-export async function PUT(req: Request,  { params }: { params: Promise<{ id: string }> }) {
-
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await params;
@@ -15,6 +13,7 @@ export async function PUT(req: Request,  { params }: { params: Promise<{ id: str
     const data = await req.formData();
     const file = data.get("image") as File | null;
     const file2 = data.get("imagedos") as File | null;
+
     const name = data.get("name");
     const price = data.get("price") ? parseFloat(data.get("price") as string) : undefined;
     const talla = data.get("talla");
@@ -25,36 +24,32 @@ export async function PUT(req: Request,  { params }: { params: Promise<{ id: str
 
     const updateFields: any = { name, price, talla, category, productType, stock, sex };
 
-    // 📌 Si hay una imagen nueva, guardarla
+    // 📌 Subir imagen a Cloudinary si hay una nueva
     if (file && file.size > 0) {
-      const newFilename = `${uuidv4()}.${file.name.split(".").pop()}`;
-      const uploadDir = path.join(process.cwd(), "public", "products");
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const base64Image = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-      await mkdir(uploadDir, { recursive: true });
+      const upload = await cloudinary.uploader.upload(base64Image, {
+        folder: "products",
+        public_id: uuidv4(),
+      });
 
-      const newFilePath = path.join(uploadDir, newFilename);
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      await writeFile(newFilePath, buffer);
-      updateFields.image = `/products/${newFilename}`;
+      updateFields.image = upload.secure_url;
     }
 
     if (file2 && file2.size > 0) {
-      const newFilename2 = `${uuidv4()}.${file2.name.split(".").pop()}`;
-      const uploadDir = path.join(process.cwd(), "public", "products");
-    
-      await mkdir(uploadDir, { recursive: true });
-    
-      const newFilePath2 = path.join(uploadDir, newFilename2);
-      const bytes2 = await file2.arrayBuffer();
-      const buffer2 = Buffer.from(bytes2);
-    
-      await writeFile(newFilePath2, buffer2);
-      updateFields.imagedos = `/products/${newFilename2}`;
+      const buffer2 = Buffer.from(await file2.arrayBuffer());
+      const base64Image2 = `data:${file2.type};base64,${buffer2.toString("base64")}`;
+
+      const upload2 = await cloudinary.uploader.upload(base64Image2, {
+        folder: "products",
+        public_id: uuidv4(),
+      });
+
+      updateFields.imagedos = upload2.secure_url;
     }
 
-    // 📌 Filtrar campos undefined para no sobrescribir valores existentes
+    // 📌 Filtrar campos undefined
     Object.keys(updateFields).forEach((key) => updateFields[key] === undefined && delete updateFields[key]);
 
     const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, { new: true });

@@ -5,13 +5,13 @@ import UpdateProduct from "@/components/admin/product/updateproduct/UpdateProduc
 interface Product {
     _id: string;
     name: string;
-    talla: string;
+    size: string;
     price: number;
     category: string;
     productType: string;
     stock: number;
-    sex: string;
-    image: any;
+    gender: string;
+    image: any; 
     imagedos: any;
 }
 
