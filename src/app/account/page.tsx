@@ -46,7 +46,7 @@ interface Address {
 interface UserData {
   user: user;
   orders: orders[];
-  addresses: Address[]; // 🔥 Ahora es un array
+  addresses: Address[];
 }
 
 export default function Page() {
@@ -67,7 +67,8 @@ export default function Page() {
     }
   }, [isClient, isAuthenticated]);
   
-
+  console.log('userData',userData);
+  
   const loadUserData = async () => {
     try {
       if (!isAuthenticated) return;
