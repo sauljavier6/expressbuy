@@ -41,10 +41,17 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md text-white z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="mx-auto px-5 py-3 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold tracking-wide hover:text-gray-300 transition">
-        <img src="/logo/logo.png" alt="Logo" className="w-32 h-auto object-contain" />
+        <Link
+          href="/"
+          className="hidden md:flex items-center text-2xl font-bold tracking-wide hover:text-gray-300 transition"
+        >
+        <img
+          src="/logo/logo.png"
+          alt="Logo"
+          className="w-10 h-auto object-contain rounded-full"
+        />
         </Link>
 
         {/* Menú en pantallas grandes */}
