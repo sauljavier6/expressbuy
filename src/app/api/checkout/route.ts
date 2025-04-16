@@ -39,9 +39,8 @@ export async function POST(req: Request) {
     const response = await client.execute(request);
     const paymentId = response.result.id;
 
-    // ✅ Validación: si no se creó correctamente la orden
-    if (!paymentId || response.statusCode !== 201) {
-      return NextResponse.json({ error: "No se pudo crear la orden en PayPal." }, { status: 400 });
+    if (!response.result || response.result.status !== "COMPLETED") {
+      return NextResponse.json({ error: "El pago no fue completado." }, { status: 400 });
     }
 
     const formattedAddress = `${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.state}, ${deliveryAddress.zip}, ${deliveryAddress.country}`;
