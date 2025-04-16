@@ -10,6 +10,8 @@ interface Product {
   price: number;
   image: string;
   stock: number;
+  size: string;
+  gender: string;
 }
 
 interface ProductsCategoryProps {
