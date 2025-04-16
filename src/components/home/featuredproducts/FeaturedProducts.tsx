@@ -8,9 +8,10 @@ import { useRouter } from "next/navigation";
 interface IFeaturedProduct {
   _id: string;
   name: string;
-  size: string;
   price: number;
   image: string;
+  size: string;
+  gender: string;
 }
 
 const FeaturedProducts = () => {

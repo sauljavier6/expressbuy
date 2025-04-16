@@ -12,7 +12,8 @@ export interface IBestSellerProduct {
   price: number;
   quantity: number;
   size: string;
-  image: string;
+  gender: string;
+  image: string; 
 }
 
 
