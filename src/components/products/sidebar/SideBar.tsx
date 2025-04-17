@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useState } from "react";
 import styles from "./SideBar.module.scss";
+import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
   setCategoryId: (id: string | null) => void;
@@ -14,6 +15,12 @@ const SideBar: FC<SidebarProps> = ({ setCategoryId, setProductTypeId, setIsSideb
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [productTypes, setProductTypes] = useState<{ id: string; name: string }[]>([]);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -80,21 +87,23 @@ const SideBar: FC<SidebarProps> = ({ setCategoryId, setProductTypeId, setIsSideb
     setOpenMenu(null);
     setIsSidebarOpen?.(false); // ← También cierra si se da "See all"
   };
+
+  if (!isClient) return null;
   
 
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebar__logo}>
-        <img src="/logo/logo.jpg" alt="Logo" />
+        <img src="/logo/logo.png" alt="Logo" />
       </div>
 
-      <h3>Home</h3>
+      <h3>{t("sidebar.home")}</h3>
       
       {/* Botón para ver todos los productos */}
       <ul>
       <li className={styles.sidebar__item}>
         <button onClick={handleResetFilters} className={styles.sidebar__button}>
-          See all
+        {t("sidebar.seeAll")}
         </button>
       </li>
       </ul>
@@ -106,7 +115,7 @@ const SideBar: FC<SidebarProps> = ({ setCategoryId, setProductTypeId, setIsSideb
               onClick={() => toggleMenu(menu)}
               className={`${styles.sidebar__button} ${openMenu === menu ? styles.open : ""}`}
             >
-              {menu}
+              {t(`sidebar.${menu.toLowerCase()}`)}
               <img src="/icons/next.png" alt="Arrow" className={styles.sidebar__arrow} />
             </button>
 

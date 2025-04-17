@@ -137,6 +137,12 @@
   "boys": "Garçons",
   "girls": "Filles",
   "unknown": "Inconnu"
+  },
+  "sidebar": {
+    "home": "Accueil",
+    "seeAll": "Voir tout",
+    "categories": "Catégories",
+    "products": "Produits"
   }
 
   

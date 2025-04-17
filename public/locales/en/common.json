@@ -139,6 +139,12 @@
     "boys": "Boys",
     "girls": "Girls",
     "unknown": "Unknown"
+  },
+  "sidebar": {
+    "home": "Home",
+    "seeAll": "See all",
+    "categories": "Categories",
+    "products": "Products"
   }
   
 }

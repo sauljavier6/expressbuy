@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./SideBar.module.scss";
+import { useTranslation } from "react-i18next";
 
 const SideBar = () => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [productTypes, setProductTypes] = useState<{ id: string; name: string }[]>([]);
-  const router = useRouter(); // Instancia del router
+  const router = useRouter();
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -84,14 +91,15 @@ const SideBar = () => {
       router.push(`/products/product?productTypeId=${id}`);
     }
   };
-   
 
+  if (!isClient) return null;
+   
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebar__logo}>
         <img src="/logo/logo.png" alt="Logo" />
       </div>
-      <h3>Home</h3>
+      <h3>{t("sidebar.home")}</h3>
       <ul>
         {["Categories", "Products"].map((menu) => (
           <li key={menu} className={styles.sidebar__item}>
@@ -99,7 +107,7 @@ const SideBar = () => {
               onClick={() => toggleMenu(menu)} 
               className={`${styles.sidebar__button} ${openMenu === menu ? styles.open : ""}`}
             >
-              {menu} 
+              {t(`sidebar.${menu.toLowerCase()}`)}
               <img 
                 src="/icons/next.png" 
                 alt="Arrow" 
