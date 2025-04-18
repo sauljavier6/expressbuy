@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <LanguageProvider>
       <html lang="en">
       <head>
-          <title> CinederellaHeels</title>
+          <title> CinderellaHeels</title>
       </head>
       <body className={`${inter.variable} ${robotoMono.variable} antialiased`}>
           <SessionProviderWrapper>
