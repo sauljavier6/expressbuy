@@ -198,7 +198,7 @@
       "category": "Category",
       "selectCategory": "Select a category",
       "productType": "Product Type",
-      "selectType": "Select a type",
+      "selectproductType": "Select a type",
       "stock": "Stock",
       "gender": "Gender",
       "select": "Select",
@@ -213,7 +213,8 @@
       "errorLoadingTypes": "Error loading product types.",
       "success": "Product created successfully.",
       "errorCreating": "Error creating product.",
-      "connectionError": "Connection error with the server."
+      "connectionError": "Connection error with the server.",
+      "cancel": "Cancel"
   },
   "adminOrders": {
     "title": "Orders",

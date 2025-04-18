@@ -200,7 +200,7 @@ export default function CreateProduct() {
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Select a type</option>
+            <option value="">{t("createProduct.selectproductType")}</option>
             {productTypes.map((type) => (
               <option key={type._id} value={type._id}>
                 {type.name}

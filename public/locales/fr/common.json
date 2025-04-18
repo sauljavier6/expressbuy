@@ -193,7 +193,7 @@
     "category": "Catégorie",
     "selectCategory": "Sélectionner une catégorie",
     "productType": "Type de Produit",
-    "selectType": "Sélectionner un type",
+    "selectproductType": "Sélectionner un type",
     "stock": "Stock",
     "gender": "Genre",
     "select": "Sélectionner",
@@ -208,7 +208,8 @@
     "errorLoadingTypes": "Erreur lors du chargement des types de produit.",
     "success": "Produit créé avec succès.",
     "errorCreating": "Erreur lors de la création du produit.",
-    "connectionError": "Erreur de connexion avec le serveur."
+    "connectionError": "Erreur de connexion avec le serveur.",
+    "cancel": "Canceller"
   },
   "adminOrders": {
     "title": "Commandes",

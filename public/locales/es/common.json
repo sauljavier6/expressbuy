@@ -198,7 +198,7 @@
   "category": "Categoría",
   "selectCategory": "Selecciona una categoría",
   "productType": "Tipo de Producto",
-  "selectType": "Selecciona un tipo",
+  "selectproductType": "Selecciona un tipo",
   "stock": "Inventario",
   "gender": "Género",
   "select": "Seleccionar",
@@ -213,7 +213,8 @@
   "errorLoadingTypes": "Error al cargar tipos de producto.",
   "success": "Producto creado exitosamente.",
   "errorCreating": "Error al crear el producto.",
-  "connectionError": "Error de conexión con el servidor."
+  "connectionError": "Error de conexión con el servidor.",
+  "cancel": "Cancelar"
   },
   "adminOrders": {
     "title": "Órdenes",

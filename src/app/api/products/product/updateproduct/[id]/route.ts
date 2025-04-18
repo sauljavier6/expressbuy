@@ -16,13 +16,13 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
     const name = data.get("name");
     const price = data.get("price") ? parseFloat(data.get("price") as string) : undefined;
-    const talla = data.get("talla");
+    const size = data.get("size");
     const category = data.get("category");
     const productType = data.get("productType");
     const stock = data.get("stock") ? parseInt(data.get("stock") as string, 10) : undefined;
-    const sex = data.get("sex");
+    const gender = data.get("gender");
 
-    const updateFields: any = { name, price, talla, category, productType, stock, sex };
+    const updateFields: any = { name, price, size, category, productType, stock, gender };
 
     // 📌 Subir imagen a Cloudinary si hay una nueva
     if (file && file.size > 0) {

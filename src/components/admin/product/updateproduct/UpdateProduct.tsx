@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Product {
   _id: string;
@@ -25,6 +26,12 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
   const [productTypes, setProductTypes] = useState<{ _id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
     useEffect(() => {
       fetchCategories();
@@ -37,7 +44,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         const data = await res.json();
         setCategories(data);
       } catch (error) {
-        setError("Error al cargar las categorías.");
+        setError("Error loading categories.");
       }
     };
   
@@ -47,7 +54,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         const data = await res.json();
         setProductTypes(data);
       } catch (error) {
-        setError("Error al cargar los tipos de producto.");
+        setError("Error loading product types.");
       }
     }
 
@@ -71,18 +78,18 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
     setError(null);
   
     if (!product._id) {
-      setError("Error: No se encontró el ID del producto.");
+      setError("Error: Product ID not found.");
       return;
     }
   
     const formData = new FormData();
     formData.append("name", updatedProduct.name);
-    formData.append("talla", updatedProduct.size);
+    formData.append("size", updatedProduct.size);
     formData.append("price", updatedProduct.price.toString());
     formData.append("category", updatedProduct.category);
     formData.append("productType", updatedProduct.productType);
     formData.append("stock", updatedProduct.stock.toString());
-    formData.append("sex", updatedProduct.gender);
+    formData.append("gender", updatedProduct.gender);
   
     // Si el usuario seleccionó una nueva imagen, añadirla
     if (updatedProduct.image) {
@@ -103,26 +110,25 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
       const data = await res.json();
   
       if (data.success) {
-        alert("Producto actualizado correctamente.");
+        alert("Product updated successfully.");
         fetchProducts();
         onCancel(); // Cerrar modal o limpiar formulario
       } else {
-        setError("Error al actualizar el producto.");
+        setError("Error updating the product.");
       }
     } catch (error) {
-      setError("Error de conexión con el servidor.");
+      setError("Server connection error.");
     } finally {
       setLoading(false);
     }
   };
   
-
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Editar Producto</h2>
       <form onSubmit={handleUpdate}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Nombre</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.name")}</label>
           <input
             type="text"
             name="name"
@@ -134,10 +140,10 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Talla</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.size")}</label>
           <input
             type="text"
-            name="talla"
+            name="size"
             value={updatedProduct.size}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
@@ -145,7 +151,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Precio</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.price")}</label>
           <input
             type="number"
             name="price"
@@ -157,7 +163,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Stock</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.stock")}</label>
           <input
             type="number"
             name="stock"
@@ -169,7 +175,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Categoría</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.category")}</label>
           <select
             name="category"
             value={product.category}
@@ -177,7 +183,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Selecciona una categoría</option>
+            <option value="">{t("createProduct.selectCategory")}</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -187,7 +193,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Tipo de Producto</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.productType")}</label>
           <select
             name="productType"
             value={product.productType}
@@ -195,7 +201,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Selecciona un tipo</option>
+            <option value="">{t("createProduct.selectproductType")}</option>
             {productTypes.map((type) => (
               <option key={type._id} value={type._id}>
                 {type.name}
@@ -205,22 +211,24 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Sexo</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.gender")}</label>
           <select
-            name="sex"
+            name="gender"
             value={updatedProduct.gender}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="H">Hombre</option>
-            <option value="M">Mujer</option>
-            <option value="U">Unisex</option>
+            <option value="">{t("createProduct.selectCategory")}</option>
+            <option value="H">{t("createProduct.men")}</option>
+            <option value="M">{t("createProduct.women")}</option>
+            <option value="O">{t("createProduct.boys")}</option>
+            <option value="A">{t("createProduct.girls")}</option>
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Imagen</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.image")}</label>
           <input
             type="file"
             name="image"
@@ -231,7 +239,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Imagen</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.image")}</label>
           <input
             type="file"
             name="imagedos"
@@ -244,10 +252,10 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
         <button type="submit" disabled={loading} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-        {loading ? "Guardando..." : "Guardar cambios"}
+        {loading ? t("createProduct.saving") : t("createProduct.button")}
         </button>
         <button type="button" onClick={onCancel} className="ml-2 bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">
-          Cancelar
+        {t("createProduct.cancel")}  
         </button>
       </form>
     </div>
