@@ -147,7 +147,7 @@ export default function CreateCategory() {
         </button>
       </form>
 
-      <h2 className="text-2xl font-bold mt-6">{t("existingCategories")}</h2>
+      <h2 className="text-2xl font-bold mt-6">{t("admincategory.existingCategories")}</h2>
       <ul className="mt-4">
         {categories.length === 0 ? (
           <li>{t("admincategory.noCategories")}</li>

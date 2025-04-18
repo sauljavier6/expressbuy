@@ -25,6 +25,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <LanguageProvider>
       <html lang="en">
+      <head>
+          <title> CinederellaHeels</title>
+          <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className={`${inter.variable} ${robotoMono.variable} antialiased`}>
           <SessionProviderWrapper>
             <Navbar />

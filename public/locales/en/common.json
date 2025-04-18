@@ -192,6 +192,7 @@
   },
     "createProduct": {
       "title": "Create Product",
+      "titleedit": "Edit Product",
       "name": "Name",
       "size": "Size",
       "price": "Price",
@@ -208,13 +209,15 @@
       "girls": "Girls",
       "image": "Image",
       "button": "Create Product",
+      "buttonedit": "Edit Product",
       "saving": "Saving...",
       "errorLoadingCategories": "Error loading categories.",
       "errorLoadingTypes": "Error loading product types.",
       "success": "Product created successfully.",
       "errorCreating": "Error creating product.",
       "connectionError": "Connection error with the server.",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "message": "Are you sure you want to delete this product?"
   },
   "adminOrders": {
     "title": "Orders",

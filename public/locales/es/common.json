@@ -192,6 +192,7 @@
   },
   "createProduct": {
   "title": "Crear Producto",
+  "titleedit": "Editar Producto",
   "name": "Nombre",
   "size": "Talla",
   "price": "Precio",
@@ -208,13 +209,15 @@
   "girls": "Niña",
   "image": "Imagen",
   "button": "Crear Producto",
+  "buttonedit": "Editar Producto",
   "saving": "Guardando...",
   "errorLoadingCategories": "Error al cargar categorías.",
   "errorLoadingTypes": "Error al cargar tipos de producto.",
   "success": "Producto creado exitosamente.",
   "errorCreating": "Error al crear el producto.",
   "connectionError": "Error de conexión con el servidor.",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar", 
+  "message": "¿Estás seguro de que deseas eliminar este producto?"
   },
   "adminOrders": {
     "title": "Órdenes",
@@ -230,7 +233,7 @@
   },
   "productList": {
     "title": "Lista de Productos",
-    "subtitle": "Products",
+    "subtitle": "Productos",
     "noProducts": "No hay productos disponibles.",
     "edit": "Editar",
     "delete": "Eliminar"

@@ -42,39 +42,33 @@ export default function ProductList() {
     }
   };
 
-  // Obtener productos de la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Cambiar de página
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // Función para eliminar producto
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Estás seguro de que deseas eliminar este producto?")) return;
+    if (!confirm(t('productList.message'))) return;
 
     try {
       await fetch(`/api/products/product/deleteproduct/${id}`, { method: "DELETE" });
       setProducts(products.filter((product) => product._id !== id));
     } catch (error) {
-      console.error("Error eliminando producto:", error);
+      console.error("Error deleting product:", error);
     }
   };
 
   if (!isClient) return null;
-
 
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">{t('productList.title')}</h2>
 
       {editProduct ? (
-        // Muestra el formulario de edición si hay un producto seleccionado
         <UpdateProduct product={editProduct} onCancel={() => setEditProduct(null)} fetchProducts={fetchProducts}/>
       ) : (
         <div>
-          {/* Listado de productos */}
           <div className="container mx-auto p-2">
             <h1 className="text-3xl font-bold mb-4 text-center">{t('productList.subtitle')}</h1>
 

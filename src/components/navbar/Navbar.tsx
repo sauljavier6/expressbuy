@@ -30,19 +30,17 @@ const Navbar = () => {
 
   if (!language) return null;
 
-  // Array de enlaces para el menú, incluyendo la verificación del rol de admin
   const navItems = [
     { href: "/", label: t("home") },
     { href: "/products/product", label: t("products") },
     session?.user?.role === "admin" ? { href: "/admin", label: t("admin") } : null,
     { href: "/account", label: t("myAccount") },
     { href: "/cart", label: t("cart") },
-  ].filter(Boolean); // Filtramos cualquier valor nulo o falso
+  ].filter(Boolean);
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md text-white z-50 shadow-md">
       <div className="mx-auto px-5 py-3 flex items-center justify-between">
-        {/* Logo */}
         <Link
           href="/"
           className="hidden md:flex items-center text-2xl font-bold tracking-wide hover:text-gray-300 transition"
@@ -57,11 +55,10 @@ const Navbar = () => {
         {/* Menú en pantallas grandes */}
         <div className="hidden md:flex items-center space-x-6">
           {navItems.map((item) => {
-            // Verificación de que 'item' no es null
             if (item) {
               return (
                 <Link
-                  key={item.href}  // Asegúrate de usar 'href' como key, ya que es único
+                  key={item.href}
                   href={item.href}
                   className="text-sm hover:text-gray-300 transition"
                 >
@@ -69,10 +66,9 @@ const Navbar = () => {
                 </Link>
               );
             }
-            return null;  // Si 'item' es null, no se renderiza nada
+            return null;
           })}
 
-          {/* Sesión */}
           {session ? (
             <button
               onClick={logOut}
@@ -89,7 +85,6 @@ const Navbar = () => {
             </Link>
           )}
 
-          {/* Idioma */}
           <select
             className="bg-gray-800 text-white text-sm px-2 py-1 rounded-md"
             value={language}
@@ -101,7 +96,6 @@ const Navbar = () => {
           </select>
         </div>
 
-        {/* Botón hamburguesa */}
         <button
           className="md:hidden focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -120,20 +114,19 @@ const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden bg-black/95 w-full py-4 space-y-4 text-center transition-all duration-300">
           {navItems.map((item) => {
-            // Verificación de que 'item' no es null
             if (item) {
               return (
                 <Link
-                  key={item.href}  // Asegúrate de usar 'href' como key, ya que es único
+                  key={item.href}
                   href={item.href}
-                  onClick={() => setMenuOpen(false)}  // Cerrar el menú al hacer clic en un enlace
+                  onClick={() => setMenuOpen(false)}
                   className="block text-sm text-white hover:text-gray-300 transition"
                 >
                   {item.label}
                 </Link>
               );
             }
-            return null;  // Si 'item' es null, no se renderiza nada
+            return null;
           })}
 
           {session ? (
@@ -146,7 +139,7 @@ const Navbar = () => {
           ) : (
             <Link
               href="/login"
-              onClick={() => setMenuOpen(false)}  // Cerrar el menú al hacer clic en el enlace
+              onClick={() => setMenuOpen(false)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition"
             >
               {t("logIn")}

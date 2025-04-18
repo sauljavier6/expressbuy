@@ -56,7 +56,6 @@ export default function CreateProductType() {
     try {
       let response;
       if (editingProductTypeId) {
-        // Update product type if editing
         response = await fetch(`/api/producttype/producttype/${editingProductTypeId}`, {
           method: "PUT",
           headers: {
@@ -65,7 +64,6 @@ export default function CreateProductType() {
           body: JSON.stringify(productTypeData),
         });
       } else {
-        // Create product type if new
         response = await fetch("/api/producttype", {
           method: "POST",
           headers: {
@@ -78,9 +76,8 @@ export default function CreateProductType() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Product type saved:", data);
-        setProductTypeName(""); // Clear the field after creating or updating
-        setEditingProductTypeId(null); // Clear the editing product type
+        setProductTypeName("");
+        setEditingProductTypeId(null);
         fetchProductTypes();
       } else {
         setError("Error creating/updating the product type.");
@@ -122,11 +119,11 @@ export default function CreateProductType() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">{t("createEditProductType")}e</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("adminproducttype.createEditProductType")}e</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700" htmlFor="productTypeName">
-          {t("productTypeName")}
+          {t("adminproducttype.productTypeName")}
           </label>
           <input
             type="text"
@@ -143,14 +140,14 @@ export default function CreateProductType() {
           className="bg-blue-500 text-white py-2 px-4 rounded"
           disabled={loading}
         >
-          {loading ? t("saving") : editingProductTypeId ? t("updateProductType") : t("createProductType")}
+          {loading ? t("adminproducttype.saving") : editingProductTypeId ? t("adminproducttype.updateProductType") : t("adminproducttype.createProductType")}
         </button>
       </form>
 
-      <h2 className="text-2xl font-bold mt-6">{t("existingProductTypes")}</h2>
+      <h2 className="text-2xl font-bold mt-6">{t("adminproducttype.existingProductTypes")}</h2>
       <ul className="mt-4">
         {productTypes.length === 0 ? (
-          <li>{t("noProductTypes")}</li>
+          <li>{t("adminproducttype.noProductTypes")}</li>
         ) : (
           productTypes.map((productType) => (
             <li key={productType._id} className="flex justify-between items-center py-2">
@@ -160,13 +157,13 @@ export default function CreateProductType() {
                   onClick={() => handleEditProductType(productType._id, productType.name)}
                   className="ml-4 text-blue-500"
                 >
-                  {t("edit")}
+                  {t("adminproducttype.edit")}
                 </button>
                 <button
                   onClick={() => handleDeleteProductType(productType._id)}
                   className="ml-4 text-red-500"
                 >
-                  {t("delete")}
+                  {t("adminproducttype.delete")}
                 </button>
               </div>
             </li>

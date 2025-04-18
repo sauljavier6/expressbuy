@@ -125,7 +125,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
   
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Editar Producto</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("createProduct.titleedit")}</h2> 
       <form onSubmit={handleUpdate}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">{t("createProduct.name")}</label>
@@ -252,7 +252,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
         <button type="submit" disabled={loading} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-        {loading ? t("createProduct.saving") : t("createProduct.button")}
+        {loading ? t("createProduct.saving") : t("createProduct.buttonedit")}
         </button>
         <button type="button" onClick={onCancel} className="ml-2 bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">
         {t("createProduct.cancel")}  

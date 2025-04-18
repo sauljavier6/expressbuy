@@ -35,7 +35,7 @@ export default function Page() {
       }
 
       setTimeout(() => {
-        router.push("/"); // Redirigir después de login exitoso
+        router.push("/");
       }, 2000);
     }
   }, [session, router]);
@@ -74,10 +74,8 @@ export default function Page() {
         setError("Credenciales incorrectas, por favor revisa tu correo o contraseña.");
       } else {
         setError(null);
-        console.log("Login exitoso:", result);
       
         const updatedSession = await getSession();
-        console.log("🟢 Sesión actualizada:", updatedSession);
       
       }      
     } catch (err) {

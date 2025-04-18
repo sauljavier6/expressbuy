@@ -187,6 +187,7 @@
   },
   "createProduct": {
     "title": "Créer un Produit",
+    "titleedit": "Modifier le produit",
     "name": "Nom",
     "size": "Taille",
     "price": "Prix",
@@ -203,13 +204,15 @@
     "girls": "Fille",
     "image": "Image",
     "button": "Créer le Produit",
+    "buttonedit": "Modifier le produit",
     "saving": "Enregistrement...",
     "errorLoadingCategories": "Erreur lors du chargement des catégories.",
     "errorLoadingTypes": "Erreur lors du chargement des types de produit.",
     "success": "Produit créé avec succès.",
     "errorCreating": "Erreur lors de la création du produit.",
     "connectionError": "Erreur de connexion avec le serveur.",
-    "cancel": "Canceller"
+    "cancel": "Canceller",
+    "message": "Êtes-vous sûr de vouloir supprimer ce produit ?"
   },
   "adminOrders": {
     "title": "Commandes",
