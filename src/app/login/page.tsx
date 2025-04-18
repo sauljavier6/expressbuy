@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { useTranslation } from "react-i18next";
@@ -69,13 +69,18 @@ export default function Page() {
         email: formData.email,
         password: formData.password,
       });
-
+      
       if (result?.error) {
         setError("Credenciales incorrectas, por favor revisa tu correo o contraseña.");
       } else {
         setError(null);
         console.log("Login exitoso:", result);
-      }
+      
+        // 🔄 Recargar sesión manualmente
+        const updatedSession = await getSession();
+        console.log("🟢 Sesión actualizada:", updatedSession);
+      
+      }      
     } catch (err) {
       console.error("Error:", err);
       setError("Hubo un problema al intentar iniciar sesión. Inténtalo de nuevo más tarde.");

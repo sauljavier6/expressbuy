@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { jsPDF } from "jspdf";
+import { useTranslation } from "react-i18next";
 
 interface OrderItem {
   productId: { _id: string; name: string; price: number; image: string };
@@ -22,6 +23,12 @@ const AdminOrders = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const fetchOrders = async () => {
     try {
@@ -145,15 +152,17 @@ const AdminOrders = () => {
 
   if (loading) return <p className="text-center text-xl text-gray-500">Loading...</p>;
 
+  if (!isClient) return null;
+
   return (
     <div className="admin-orders max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-semibold text-gray-800 mb-6">Orders</h1>
+      <h1 className="text-3xl font-semibold text-gray-800 mb-6">{t("adminOrders.title")}</h1>
 
       {/* Buscador */}
       <div className="mb-4 flex items-center gap-4">
         <input
           type="text"
-          placeholder="Search by Order ID..."
+          placeholder={t("adminOrders.searchPlaceholder")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-lg w-64"
@@ -162,7 +171,7 @@ const AdminOrders = () => {
           onClick={fetchSearchResults}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
-          Search
+          {t("adminOrders.searchButton")}
         </button>
       </div>
 
@@ -170,11 +179,11 @@ const AdminOrders = () => {
         <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-800 text-white">
             <tr>
-            <th className="px-4 py-2 text-left">Order ID</th>
-            <th className="px-4 py-2 text-left">Date</th>
-            <th className="px-4 py-2 text-left">Total</th>
-            <th className="px-4 py-2 text-left">Status</th>
-            <th className="px-4 py-2 text-left">Actions</th>
+            <th className="px-4 py-2 text-left">{t("adminOrders.orderId")}</th>
+            <th className="px-4 py-2 text-left">{t("adminOrders.date")}</th>
+            <th className="px-4 py-2 text-left">{t("adminOrders.total")}</th>
+            <th className="px-4 py-2 text-left">{t("adminOrders.status")}</th>
+            <th className="px-4 py-2 text-left">{t("adminOrders.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -214,7 +223,7 @@ const AdminOrders = () => {
                       onClick={() => generatePDF(order)}
                       className="ml-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                     >
-                      Print PDF
+                      {t("adminOrders.printPDF")}
                     </button>
                   </td>
                 </tr>
@@ -222,7 +231,7 @@ const AdminOrders = () => {
             ) : (
               <tr>
                 <td colSpan={5} className="text-center py-4 text-gray-500">
-                  No orders found.
+                {t("adminOrders.noOrders")}
                 </td>
               </tr>
             )}

@@ -18,7 +18,7 @@ const UserSchema = new Schema<UserDocument>(
     phone: { type: String },
     dateOfBirth: { type: Date },
     password: { type: String },
-    googleId: { type: String, unique: true },
+    googleId: { type: String}, 
     role: { 
       type: String, 
       enum: ["user", "admin"], 

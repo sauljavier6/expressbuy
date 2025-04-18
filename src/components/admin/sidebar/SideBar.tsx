@@ -1,4 +1,7 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
   onSelect: (section: string) => void;
@@ -7,6 +10,12 @@ interface SidebarProps {
 
 export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSelect = (section: string) => {
     onSelect(section);
@@ -14,6 +23,8 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
       setIsSidebarOpen(false); // cerrar menú en mobile después de seleccionar
     }
   };
+
+  if (!isClient) return null;
 
   return (
     <div className="bg-gray-800 text-white h-full md:h-screen w-64 fixed md:static top-0 left-0 z-50 p-4 overflow-y-auto">
@@ -24,7 +35,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => handleSelect("Category")}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left"
           >
-            Categories
+            {t("sidebaradmin.categories")}
           </button>
         </li>
         <li className="mb-4">
@@ -32,7 +43,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => handleSelect("ProductType")}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left"
           >
-            Product Type
+            {t("sidebaradmin.productType")}
           </button>
         </li>
         <li className="mb-4">
@@ -40,7 +51,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left flex justify-between items-center"
           >
-            Products
+            {t("sidebaradmin.products")}
             <img
               src="/icons/down-arrow.png"
               alt="Flecha"
@@ -54,7 +65,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
                   onClick={() => handleSelect("ListProducts")}
                   className="hover:bg-gray-600 p-2 w-full text-left"
                 >
-                  View All
+                  {t("sidebaradmin.viewAll")}
                 </button>
               </li>
               <li>
@@ -62,7 +73,7 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
                   onClick={() => handleSelect("Products")}
                   className="hover:bg-gray-600 p-2 w-full text-left"
                 >
-                  Add Product
+                  {t("sidebaradmin.addProduct")}
                 </button>
               </li>
             </ul>
@@ -73,10 +84,11 @@ export default function Sidebar({ onSelect, setIsSidebarOpen }: SidebarProps) {
             onClick={() => handleSelect("Orders")}
             className="text-lg hover:bg-gray-700 p-2 w-full text-left"
           >
-            Orders
+            {t("sidebaradmin.orders")}
           </button>
         </li>
       </ul>
     </div>
   );
 }
+

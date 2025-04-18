@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
-import UpdateProduct from "@/components/admin/product/updateproduct/UpdateProduct"; // Importamos el formulario
+import UpdateProduct from "@/components/admin/product/updateproduct/UpdateProduct";
+import { useTranslation } from "react-i18next"; 
 
 interface Product {
     _id: string;
@@ -20,6 +21,12 @@ export default function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [editProduct, setEditProduct] = useState<Product | null>(null); // Producto a editar
   const itemsPerPage = 5;
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -55,9 +62,12 @@ export default function ProductList() {
     }
   };
 
+  if (!isClient) return null;
+
+
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Lista de Productos</h2>
+      <h2 className="text-2xl font-bold mb-4">{t('productList.title')}</h2>
 
       {editProduct ? (
         // Muestra el formulario de edición si hay un producto seleccionado
@@ -66,10 +76,10 @@ export default function ProductList() {
         <div>
           {/* Listado de productos */}
           <div className="container mx-auto p-2">
-            <h1 className="text-3xl font-bold mb-4 text-center">Products</h1>
+            <h1 className="text-3xl font-bold mb-4 text-center">{t('productList.subtitle')}</h1>
 
             {currentProducts.length === 0 ? (
-              <p className="text-gray-500 col-span-full text-center">No products available.</p>
+              <p className="text-gray-500 col-span-full text-center">{t('productList.noProducts')}</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {currentProducts.map((product) => (
@@ -87,13 +97,13 @@ export default function ProductList() {
                         className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                         onClick={() => setEditProduct(product)}
                       >
-                        Edit
+                        {t('productList.edit')}
                       </button>
                       <button
                         onClick={() => handleDelete(product._id)}
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                       >
-                        Delete
+                        {t('productList.delete')}
                       </button>
                     </div>
                   </div>

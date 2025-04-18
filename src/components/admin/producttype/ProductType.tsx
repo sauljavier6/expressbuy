@@ -1,6 +1,7 @@
 // src/components/CreateProductType.tsx
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next"; 
 
 export default function CreateProductType() {
   const [productTypeName, setProductTypeName] = useState("");
@@ -8,6 +9,12 @@ export default function CreateProductType() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [editingProductTypeId, setEditingProductTypeId] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Fetch all product types from the API
   const fetchProductTypes = async () => {
@@ -111,13 +118,15 @@ export default function CreateProductType() {
     }
   };
 
+  if (!isClient) return null;
+
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Create/Edit Product Type</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("createEditProductType")}e</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700" htmlFor="productTypeName">
-            Product Type Name
+          {t("productTypeName")}
           </label>
           <input
             type="text"
@@ -134,14 +143,14 @@ export default function CreateProductType() {
           className="bg-blue-500 text-white py-2 px-4 rounded"
           disabled={loading}
         >
-          {loading ? "Saving..." : editingProductTypeId ? "Update Product Type" : "Create Product Type"}
+          {loading ? t("saving") : editingProductTypeId ? t("updateProductType") : t("createProductType")}
         </button>
       </form>
 
-      <h2 className="text-2xl font-bold mt-6">Existing Product Types</h2>
+      <h2 className="text-2xl font-bold mt-6">{t("existingProductTypes")}</h2>
       <ul className="mt-4">
         {productTypes.length === 0 ? (
-          <li>No product types available.</li>
+          <li>{t("noProductTypes")}</li>
         ) : (
           productTypes.map((productType) => (
             <li key={productType._id} className="flex justify-between items-center py-2">
@@ -151,13 +160,13 @@ export default function CreateProductType() {
                   onClick={() => handleEditProductType(productType._id, productType.name)}
                   className="ml-4 text-blue-500"
                 >
-                  Edit
+                  {t("edit")}
                 </button>
                 <button
                   onClick={() => handleDeleteProductType(productType._id)}
                   className="ml-4 text-red-500"
                 >
-                  Delete
+                  {t("delete")}
                 </button>
               </div>
             </li>

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CreateProduct() {
   const [product, setProduct] = useState({
@@ -13,12 +14,17 @@ export default function CreateProduct() {
     stock: "",
     gender: "",
   });
-  console.log('product',product)
 
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
   const [productTypes, setProductTypes] = useState<{ _id: string; name: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     fetchCategories();
@@ -82,8 +88,6 @@ export default function CreateProduct() {
     if (product.imageTwo) {
       formData.append("imageTwo", product.imageTwo);
     }
-
-    console.log(formData)
   
     try {
       const res = await fetch("/api/products/product", {
@@ -115,14 +119,15 @@ export default function CreateProduct() {
       setLoading(false);
     }
   };
-  
+
+  if (!isClient) return null;
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Create Product</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("createProduct.title")}</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.name")}</label>
           <input
             type="text"
             name="name"
@@ -134,7 +139,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Size</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.size")}</label>
           <input
             type="text"
             name="size"
@@ -145,7 +150,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Price</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.price")}</label>
           <input
             type="number"
             name="price"
@@ -157,7 +162,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Stock</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.stock")}</label>
           <input
             type="number"
             name="stock"
@@ -169,7 +174,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Category</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.category")}</label>
           <select
             name="category"
             value={product.category}
@@ -177,7 +182,7 @@ export default function CreateProduct() {
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Select a category</option>
+            <option value="">{t("createProduct.selectCategory")}</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -187,7 +192,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Product Type</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.productType")}</label>
           <select
             name="productType"
             value={product.productType}
@@ -205,7 +210,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Gender</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.gender")}</label>
           <select
             name="gender"
             value={product.gender}
@@ -213,16 +218,16 @@ export default function CreateProduct() {
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
           >
-            <option value="">Select</option>
-            <option value="H">Men</option>
-            <option value="M">Women</option>
-            <option value="O">Boys</option>
-            <option value="A">Girls</option>
+            <option value="">{t("createProduct.selectCategory")}</option>
+            <option value="H">{t("createProduct.men")}</option>
+            <option value="M">{t("createProduct.women")}</option>
+            <option value="O">{t("createProduct.boys")}</option>
+            <option value="A">{t("createProduct.girls")}</option>
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Image</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.image")}</label>
           <input
             type="file"
             name="image"
@@ -234,7 +239,7 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Image</label>
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.image")}</label>
           <input
             type="file"
             name="imageTwo"
@@ -248,7 +253,7 @@ export default function CreateProduct() {
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
         <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded" disabled={loading}>
-          {loading ? "Saving..." : "Create Product"}
+          {loading ? t("createProduct.saving") : t("createProduct.button")}
         </button>
       </form>
     </div>

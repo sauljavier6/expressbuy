@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CreateCategory() {
   const [categoryName, setCategoryName] = useState("");
@@ -7,8 +8,12 @@ export default function CreateCategory() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
 
-  console.log(categories);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Fetch all categories from the API
   const fetchCategories = async () => {
@@ -112,14 +117,16 @@ export default function CreateCategory() {
       }
     }
   };
+  
+  if (!isClient) return null;
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Create/Edit Category</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("admincategory.createEditCategory")}</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700" htmlFor="categoryName">
-            Category Name
+          {t("admincategory.categoryName")}
           </label>
           <input
             type="text"
@@ -136,14 +143,14 @@ export default function CreateCategory() {
           className="bg-blue-500 text-white py-2 px-4 rounded"
           disabled={loading}
         >
-          {loading ? "Saving..." : editingCategoryId ? "Update Category" : "Create Category"}
+          {loading ? t("admincategory.saving") : editingCategoryId ? t("admincategory.updateCategory") : t("admincategory.createCategory")}
         </button>
       </form>
 
-      <h2 className="text-2xl font-bold mt-6">Existing Categories</h2>
+      <h2 className="text-2xl font-bold mt-6">{t("existingCategories")}</h2>
       <ul className="mt-4">
         {categories.length === 0 ? (
-          <li>No categories available.</li>
+          <li>{t("admincategory.noCategories")}</li>
         ) : (
           categories.map((category) => (
             <li key={category._id} className="flex justify-between items-center py-2">
@@ -153,13 +160,13 @@ export default function CreateCategory() {
                   onClick={() => handleEditCategory(category._id, category.name)}
                   className="ml-4 text-blue-500"
                 >
-                  Edit
+                  {t("admincategory.edit")} 
                 </button>
                 <button
                   onClick={() => handleDeleteCategory(category._id)}
                   className="ml-4 text-red-500"
                 >
-                  Delete
+                  {t("admincategory.delete")}
                 </button>
               </div>
             </li>

@@ -5,7 +5,10 @@ import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 import bcrypt from "bcryptjs";
 
+
 export const authOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: true,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -44,7 +47,6 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user }: { user: NextAuthUser }) {
       try {
@@ -66,20 +68,20 @@ export const authOptions = {
         return false;
       }
     },
-    async session({ session, token }: { session: Session; token: any }) {
-      try {
-        if (session?.user) {
-          const dbUser = await User.findOne({ email: session.user.email });
-          if (dbUser) {
-            session.user.id = dbUser._id.toString();
-            session.user.role = dbUser.role;
-          }
-        }
-        return session;
-      } catch (error) {
-        console.error("Error en session callback:", error);
-        return session;
+    async jwt({ token, user }:any) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
       }
+      return token;
+    },
+  
+    async session({ session, token }:any) {
+      if (session?.user) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
+      return session;
     },
   },
 };

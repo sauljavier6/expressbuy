@@ -143,9 +143,92 @@
     "seeAll": "Voir tout",
     "categories": "Catégories",
     "products": "Produits"
+  },
+  "sidebaradmin":{
+    "adminPanel": "Panneau d'administration",
+    "categories": "Catégories",
+    "productType": "Types de produits",
+    "products": "Produits",
+    "viewAll": "Voir tout",
+    "addProduct": "Ajouter un produit",
+    "orders": "Commandes"
+  },
+  "admincategory": {
+    "createEditCategory": "Créer/Modifier une catégorie",
+    "categoryName": "Nom de la catégorie",
+    "errorLoading": "Erreur lors du chargement des catégories.",
+    "errorServer": "Erreur de communication avec le serveur.",
+    "errorCategoryExists": "Cette catégorie existe déjà.",
+    "successCategoryCreated": "Catégorie créée avec succès.",
+    "successCategoryUpdated": "Catégorie mise à jour avec succès.",
+    "deleteCategoryConfirmation": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
+    "deleteCategorySuccess": "Catégorie supprimée avec succès.",
+    "addCategoryButton": "Ajouter une catégorie",
+    "editCategoryButton": "Modifier la catégorie",
+    "deleteCategoryButton": "Supprimer la catégorie"
+  },
+  "adminproducttype":{
+    "createEditProductType": "Créer/Modifier un Type de Produit",
+    "productTypeName": "Nom du Type de Produit",
+    "productTypeNameRequired": "Le nom du type de produit est requis.",
+    "saving": "Enregistrement...",
+    "updateProductType": "Mettre à jour le Type de Produit",
+    "createProductType": "Créer le Type de Produit",
+    "existingProductTypes": "Types de Produit Existants",
+    "noProductTypes": "Aucun type de produit disponible.",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "errorLoading": "Erreur lors du chargement des types de produit.",
+    "errorCreatingUpdating": "Erreur lors de la création/mise à jour du type de produit.",
+    "errorDeleting": "Erreur lors de la suppression du type de produit.",
+    "errorServer": "Erreur de communication avec le serveur.",
+    "productTypeDeleted": "Type de produit supprimé avec succès.",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce type de produit ?"
+  },
+  "createProduct": {
+    "title": "Créer un Produit",
+    "name": "Nom",
+    "size": "Taille",
+    "price": "Prix",
+    "category": "Catégorie",
+    "selectCategory": "Sélectionner une catégorie",
+    "productType": "Type de Produit",
+    "selectType": "Sélectionner un type",
+    "stock": "Stock",
+    "gender": "Genre",
+    "select": "Sélectionner",
+    "men": "Homme",
+    "women": "Femme",
+    "boys": "Garçon",
+    "girls": "Fille",
+    "image": "Image",
+    "button": "Créer le Produit",
+    "saving": "Enregistrement...",
+    "errorLoadingCategories": "Erreur lors du chargement des catégories.",
+    "errorLoadingTypes": "Erreur lors du chargement des types de produit.",
+    "success": "Produit créé avec succès.",
+    "errorCreating": "Erreur lors de la création du produit.",
+    "connectionError": "Erreur de connexion avec le serveur."
+  },
+  "adminOrders": {
+    "title": "Commandes",
+    "searchPlaceholder": "Rechercher par ID de commande...",
+    "searchButton": "Rechercher",
+    "orderId": "ID de Commande",
+    "date": "Date",
+    "total": "Total",
+    "status": "Statut",
+    "actions": "Actions",
+    "printPDF": "Imprimer PDF",
+    "noOrders": "Aucune commande trouvée."
+  },
+  "productList": {
+    "title": "Liste des produits",
+    "subtitle": "Produits",
+    "noProducts": "Aucun produit disponible.",
+    "edit": "Éditer",
+    "delete": "Supprimer"
   }
 
-  
-  
 }
  

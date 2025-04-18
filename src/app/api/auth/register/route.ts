@@ -6,8 +6,10 @@ import bcrypt from "bcryptjs";
 export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
+    console.log('datos', name, email, password)
 
     if (!name || !email || !password) {
+      console.log('faltan datos')
       return NextResponse.json({ message: "Todos los campos son obligatorios" }, { status: 400 });
     }
 

@@ -9,13 +9,19 @@ import ProductType from "@/components/admin/producttype/ProductType";
 import Products from "@/components/admin/product/addproduct/AddProduct";
 import ListProducts from "@/components/admin/product/listproducts/ListProducts";
 import AdminOrders from "@/components/admin/orders/Orders";
+import { useTranslation } from "react-i18next";
 
 export default function Page() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  
   const [selectedSection, setSelectedSection] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (status === "loading") return;
