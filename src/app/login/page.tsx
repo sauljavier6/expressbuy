@@ -22,6 +22,7 @@ export default function Page() {
   });
 
   useEffect(() => {
+    console.log('session', session);
     setIsClient(true);
     if (session) {
       const userId = session.user?.id;
