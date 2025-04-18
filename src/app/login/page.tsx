@@ -22,7 +22,6 @@ export default function Page() {
   });
 
   useEffect(() => {
-    console.log('session', session);
     setIsClient(true);
     if (session) {
       const userId = session.user?.id;
@@ -77,7 +76,6 @@ export default function Page() {
         setError(null);
         console.log("Login exitoso:", result);
       
-        // 🔄 Recargar sesión manualmente
         const updatedSession = await getSession();
         console.log("🟢 Sesión actualizada:", updatedSession);
       
@@ -200,10 +198,8 @@ export default function Page() {
               </button>
             </form>
 
-            {/* Mostrar error si las credenciales son incorrectas */}
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
-            {/* Enlace para cambiar entre login y register */}
             <p className="text-sm text-gray-500 mt-4">
               {isRegister ? t("Login.alreadyHaveAccount") : t("Login.dontHaveAccount")}{" "}
               <button

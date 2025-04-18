@@ -68,14 +68,24 @@ export const authOptions = {
         return false;
       }
     },
-    async jwt({ token, user }:any) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.email = user.email;
+    
+        if (user.role) {
+          token.role = user.role;
+        } else {
+          const existingUser = await User.findOne({ email: user.email });
+          if (existingUser) {
+            token.role = existingUser.role;
+            token.id = existingUser._id.toString();
+          }
+        }
       }
+    
       return token;
     },
-  
     async session({ session, token }:any) {
       if (session?.user) {
         session.user.id = token.id;
