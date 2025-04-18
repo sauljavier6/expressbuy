@@ -27,7 +27,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en">
       <head>
           <title> CinederellaHeels</title>
-          <link rel="icon" href="/favicon.png" />
       </head>
       <body className={`${inter.variable} ${robotoMono.variable} antialiased`}>
           <SessionProviderWrapper>
