@@ -33,30 +33,30 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    fetchCategories();
-    fetchProductTypes();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch("/api/categories");
-      const data = await res.json();
-      setCategories(data);
-    } catch (error) {
-      setError("Error loading categories.");
+    useEffect(() => {
+      fetchCategories();
+      fetchProductTypes();
+    }, []);
+  
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        setError("Error loading categories.");
+      }
+    };
+  
+    const fetchProductTypes = async () => {
+      try {
+        const res = await fetch("/api/producttype");
+        const data = await res.json();
+        setProductTypes(data);
+      } catch (error) {
+        setError("Error loading product types.");
+      }
     }
-  };
-
-  const fetchProductTypes = async () => {
-    try {
-      const res = await fetch("/api/producttype");
-      const data = await res.json();
-      setProductTypes(data);
-    } catch (error) {
-      setError("Error loading product types.");
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -69,19 +69,19 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
       const file = files[0];
       setUpdatedProduct((prev) => ({ ...prev, [name]: file }));
     }
-  };
+  };  
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     setLoading(true);
     setError(null);
-
+  
     if (!product._id) {
       setError("Error: Product ID not found.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("name", updatedProduct.name);
     formData.append("size", updatedProduct.size);
@@ -90,7 +90,8 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
     formData.append("productType", updatedProduct.productType);
     formData.append("stock", updatedProduct.stock.toString());
     formData.append("gender", updatedProduct.gender);
-
+  
+    // Si el usuario seleccionó una nueva imagen, añadirla
     if (updatedProduct.image) {
       formData.append("image", updatedProduct.image);
     }
@@ -98,20 +99,22 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
     if (updatedProduct.imagedos) {
       formData.append("imagedos", updatedProduct.imagedos);
     }
-
+    
+  
     try {
       const res = await fetch(`/api/products/product/updateproduct/${updatedProduct._id}`, {
         method: "PUT",
-        body: formData,
+        body: formData, // Enviar FormData
       });
-
+  
       const data = await res.json();
-
+  
       if (data.success) {
         alert("Product updated successfully.");
+        // 🔥 Aquí va tu evento personalizado
         window.dispatchEvent(new Event("productsUpdated"));
         fetchProducts();
-        onCancel();
+        onCancel(); // Cerrar modal o limpiar formulario
       } else {
         setError("Error updating the product.");
       }
@@ -121,10 +124,10 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">{t("createProduct.titleedit")}</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("createProduct.titleedit")}</h2> 
       <form onSubmit={handleUpdate}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">{t("createProduct.name")}</label>
@@ -177,7 +180,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
           <label className="block text-sm font-medium text-gray-700">{t("createProduct.category")}</label>
           <select
             name="category"
-            value={updatedProduct.category}
+            value={product.category}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
@@ -195,7 +198,7 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
           <label className="block text-sm font-medium text-gray-700">{t("createProduct.productType")}</label>
           <select
             name="productType"
-            value={updatedProduct.productType}
+            value={product.productType}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required
@@ -251,10 +254,10 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
         <button type="submit" disabled={loading} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-          {loading ? t("createProduct.saving") : t("createProduct.buttonedit")}
+        {loading ? t("createProduct.saving") : t("createProduct.buttonedit")}
         </button>
         <button type="button" onClick={onCancel} className="ml-2 bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">
-          {t("createProduct.cancel")}
+        {t("createProduct.cancel")}  
         </button>
       </form>
     </div>
