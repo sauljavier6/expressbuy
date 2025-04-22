@@ -28,7 +28,7 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchLatestProducts = async () => {
       try {
-        const res = await fetch("/api/banner/featuredproducts"); // Asegúrate de que este endpoint existe
+        const res = await fetch("/api/banner/featuredproducts", { cache: 'no-store' });
         const data = await res.json();
         setProducts(data.latestProducts);
       } catch (error) {

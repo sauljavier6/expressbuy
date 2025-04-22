@@ -44,8 +44,6 @@ const BestSellerProducts = () => {
     fetchProducts();
   }, []);
 
-  console.log(products)
-
   const handleCardClick = (productId: string) => {
     router.push(`/products/productdetails/${productId}`);
   };  
