@@ -31,7 +31,7 @@ const BestSellerProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("/api/banner/bestsellers");
+        const res = await fetch('/api/banner/bestsellers', { cache: 'no-store' });
         const data = await res.json();
         setProducts(data.bestSellingProducts);
       } catch (error) {
@@ -42,18 +42,6 @@ const BestSellerProducts = () => {
     };
 
     fetchProducts();
-
-    // Escuchar evento personalizado
-    const handleProductsUpdate = () => {
-      setIsLoading(true);
-      fetchProducts();
-    };
-
-    window.addEventListener("productsUpdated", handleProductsUpdate);
-
-    return () => {
-      window.removeEventListener("productsUpdated", handleProductsUpdate);
-    };
   }, []);
 
   console.log(products)
