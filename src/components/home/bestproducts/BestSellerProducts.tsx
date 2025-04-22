@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";  
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,6 @@ export interface IBestSellerProduct {
   image: string; 
 }
 
-
 const BestSellerProducts = () => {
   const { t } = useTranslation(); 
   const [isClient, setIsClient] = useState(false);
@@ -28,24 +27,25 @@ const BestSellerProducts = () => {
     setIsClient(true);
   }, []);
 
+  // 👇 Usamos useCallback para evitar problemas de re-render
+  const fetchProducts = useCallback(async () => {
+    try {
+      setIsLoading(true); // Se vuelve a mostrar el loading
+      const res = await fetch("/api/banner/bestsellers");
+      const data = await res.json();
+      setProducts(data.bestSellingProducts);
+    } catch (error) {
+      console.error("Error fetching best sellers:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("/api/banner/bestsellers");
-        const data = await res.json();
-        setProducts(data.bestSellingProducts);
-      } catch (error) {
-        console.error("Error fetching best sellers:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    fetchProducts(); // carga inicial
 
-    fetchProducts();
-
-    // Escuchar evento personalizado
+    // 👇 Escuchar evento personalizado
     const handleProductsUpdate = () => {
-      setIsLoading(true);
       fetchProducts();
     };
 
@@ -54,9 +54,7 @@ const BestSellerProducts = () => {
     return () => {
       window.removeEventListener("productsUpdated", handleProductsUpdate);
     };
-  }, []);
-
-  console.log(products)
+  }, [fetchProducts]);
 
   const handleCardClick = (productId: string) => {
     router.push(`/products/productdetails/${productId}`);
@@ -76,7 +74,7 @@ const BestSellerProducts = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {products.map((product) => (
-            <div key={product._id} onClick={() => handleCardClick(product._id)} className="border rounded-lg p-4 shadow-md bg-white relative">
+            <div key={product._id} onClick={() => handleCardClick(product._id)} className="border rounded-lg p-4 shadow-md bg-white relative cursor-pointer">
               <div className="relative">
                 <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md"/>
               </div>
