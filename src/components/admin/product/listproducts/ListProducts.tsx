@@ -54,6 +54,9 @@ export default function ProductList() {
     try {
       await fetch(`/api/products/product/deleteproduct/${id}`, { method: "DELETE" });
       setProducts(products.filter((product) => product._id !== id));
+
+      // 👉 Emitir evento al eliminar
+      window.dispatchEvent(new Event("productsUpdated"));
     } catch (error) {
       console.error("Error deleting product:", error);
     }

@@ -111,6 +111,8 @@ const UpdateProduct = ({ product, onCancel, fetchProducts }: UpdateProductProps)
   
       if (data.success) {
         alert("Product updated successfully.");
+        // 🔥 Aquí va tu evento personalizado
+        window.dispatchEvent(new Event("productsUpdated"));
         fetchProducts();
         onCancel(); // Cerrar modal o limpiar formulario
       } else {
