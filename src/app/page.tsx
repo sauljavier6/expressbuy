@@ -6,6 +6,7 @@ import styles from "@/components/home/banner/Banner.module.scss";
 import SummerCollection from "@/components/home/summercollection/SummerCollection";
 import BestSellerProducts from "@/components/home/bestproducts/BestSellerProducts";
 import BrandsSection from "@/components/home/brandssection/BrandsSection";
+import StoreMap from "@/components/home/storemap/StoreMap";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <SummerCollection />
       <BestSellerProducts />
       <BrandsSection />
+      <StoreMap />
     </div>
   );
 }

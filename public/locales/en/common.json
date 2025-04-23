@@ -237,5 +237,12 @@
     "noProducts": "No products available.",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "map": {
+    "locationTitle": "Store Location",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "invitation": "Come visit us! We're located in a central and easily accessible area."
   }
 }

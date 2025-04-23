@@ -42,7 +42,7 @@ const Banner = () => {
         </div>
       </div>
       <div className={styles.image}>
-        <Image src="/banner/mocasines.png" alt="Summer Sale Shoes" width={500} height={500} />
+        <Image src="/banner/cindirellahells.png" alt="Summer Sale Shoes" width={450} height={450} />
         <div className={styles.image__icons}>
           {icons.map((pro, index) => (
             <Link key={index} href={pro.link}>
