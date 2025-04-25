@@ -3,10 +3,15 @@ import { useState, useEffect } from "react";
 import UpdateProduct from "@/components/admin/product/updateproduct/UpdateProduct";
 import { useTranslation } from "react-i18next"; 
 
+interface Size {
+  size: string;
+  stock: string;
+}
+
 interface Product {
     _id: string;
     name: string;
-    size: string;
+    sizes: Size[];
     price: number;
     category: string;
     productType: string;
