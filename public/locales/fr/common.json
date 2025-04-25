@@ -129,7 +129,9 @@
     "gender": "Sexe",
     "inCart": "Dans le panier",
     "outOfStock": "Rupture de stock",
-    "addToCart": "Ajouter au panier"
+    "addToCart": "Ajouter au panier",
+    "details":"Détails",
+    "selectSize": "Sélectionnez la taille"
   },
   "gender": {
   "men": "Hommes",

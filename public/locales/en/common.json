@@ -132,7 +132,8 @@
     "inCart": "In cart",
     "outOfStock": "Out of stock",
     "addToCart": "Add to cart", 
-    "details":"Details"
+    "details":"Details",
+    "selectSize": "Select size"
   },
   "gender": {
     "men": "Men",
