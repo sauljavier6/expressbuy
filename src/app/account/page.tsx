@@ -23,7 +23,7 @@ interface OrderItem {
   name: string,
   price: number,
   quantity: number,
-  talla: string,
+  size: string,
 }
 
 interface orders {
@@ -67,14 +67,11 @@ export default function Page() {
     }
   }, [isClient, isAuthenticated]);
   
-  console.log('userData',userData);
-  
   const loadUserData = async () => {
     try {
       if (!isAuthenticated) return;
   
       setLoading(true);
-      console.time("loadUserData");
   
       const response = await fetch(`/api/user`);
   
@@ -83,7 +80,6 @@ export default function Page() {
       }
   
       const data = await response.json();
-      console.timeEnd("loadUserData");
   
       setUserData({
         user: {
@@ -94,12 +90,11 @@ export default function Page() {
         orders: Array.isArray(data.orders) ? data.orders : [],
       });
     } catch (error) {
-      console.error("❌ Error al obtener los datos del usuario:", error);
+      console.error("❌ Error getting user data:", error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleupdate = (updatedAddresses: Address[]) => {
     setUserData((prev) => prev ? { ...prev, addresses: updatedAddresses } : null);

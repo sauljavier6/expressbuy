@@ -6,7 +6,7 @@ const orderItemSchema = new Schema({
   name: String,
   price: Number,
   quantity: Number,
-  talla: String,
+  size: String,
 });
 
 const OrderItem = models.OrderItem || model("OrderItem", orderItemSchema);

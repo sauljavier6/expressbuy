@@ -131,7 +131,8 @@
     "gender": "Gender",
     "inCart": "In cart",
     "outOfStock": "Out of stock",
-    "addToCart": "Add to cart"
+    "addToCart": "Add to cart", 
+    "details":"Details"
   },
   "gender": {
     "men": "Men",
@@ -217,7 +218,8 @@
       "errorCreating": "Error creating product.",
       "connectionError": "Connection error with the server.",
       "cancel": "Cancel",
-      "message": "Are you sure you want to delete this product?"
+      "message": "Are you sure you want to delete this product?",
+      "addSize": "Add Size"
   },
   "adminOrders": {
     "title": "Orders",

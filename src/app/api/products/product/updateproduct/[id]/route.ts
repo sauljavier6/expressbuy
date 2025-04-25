@@ -5,10 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 import cloudinary from "@/lib/cloudinary";
 
 // 📌 PUT: Actualizar producto
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
   try {
     await connectDB();
-    const { id } = await params;
+    const { id } = params;
 
     const data = await req.formData();
     const file = data.get("image") as File | null;
@@ -16,13 +16,21 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
     const name = data.get("name");
     const price = data.get("price") ? parseFloat(data.get("price") as string) : undefined;
-    const size = data.get("size");
     const category = data.get("category");
     const productType = data.get("productType");
-    const stock = data.get("stock") ? parseInt(data.get("stock") as string, 10) : undefined;
     const gender = data.get("gender");
 
-    const updateFields: any = { name, price, size, category, productType, stock, gender };
+    const sizesRaw = data.get("sizes") as string;
+    let newSizes: { size: string; stock: number }[] = [];
+
+    try {
+      newSizes = JSON.parse(sizesRaw);
+      if (!Array.isArray(newSizes)) throw new Error("Sizes must be an array");
+    } catch (err) {
+      return NextResponse.json({ success: false, msg: "Formato de talla inválido" }, { status: 400 });
+    }
+
+    const updateFields: any = { name, price, category, productType, gender };
 
     // 📌 Subir imagen a Cloudinary si hay una nueva
     if (file && file.size > 0) {
@@ -49,14 +57,40 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       updateFields.imagedos = upload2.secure_url;
     }
 
-    // 📌 Filtrar campos undefined
+    // 📌 Obtener el producto actual
+    const existingProduct = await Product.findById(id);
+    if (!existingProduct) {
+      return NextResponse.json({ success: false, msg: "Producto no encontrado" }, { status: 404 });
+    }
+
+    // 📌 Agregar nuevas tallas sin duplicar
+    const existingSizes = existingProduct.sizes || [];
+
+    // Filtrar tallas existentes y no incluir las eliminadas
+    const updatedSizes = newSizes.filter((newItem) => {
+      // Solo se mantienen las tallas nuevas o las que ya existen
+      const alreadyExists = existingSizes.some((item: any) => item.size === newItem.size);
+      if (!alreadyExists) {
+        existingSizes.push(newItem); // Agregar nuevas tallas
+      }
+      return existingSizes.some((item: any) => item.size === newItem.size);
+    });
+
+    // 📌 Eliminar las tallas que no estén en la nueva lista
+    const sizesToDelete = existingSizes.filter((item:any) => !newSizes.some((newItem) => newItem.size === item.size));
+    sizesToDelete.forEach((itemToDelete:any) => {
+      const indexToRemove = existingSizes.findIndex((size:any) => size.size === itemToDelete.size);
+      if (indexToRemove > -1) {
+        existingSizes.splice(indexToRemove, 1); // Eliminar la talla
+      }
+    });
+
+    updateFields.sizes = existingSizes;
+
+    // 📌 Eliminar campos undefined
     Object.keys(updateFields).forEach((key) => updateFields[key] === undefined && delete updateFields[key]);
 
     const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, { new: true });
-
-    if (!updatedProduct) {
-      return NextResponse.json({ success: false, msg: "Producto no encontrado" }, { status: 404 });
-    }
 
     return NextResponse.json({ success: true, product: updatedProduct, msg: "Producto actualizado correctamente" });
   } catch (error) {

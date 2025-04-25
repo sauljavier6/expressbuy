@@ -4,14 +4,18 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProductCard from "@/components/productcard/productcard";
 
+interface SizeStock {
+  size: string;
+  stock: number;
+}
+
 interface Product {
   _id: string;
   name: string;
   price: number;
   image: string;
-  stock: number;
-  size: string;
   gender: string;
+  sizes: SizeStock[];
 }
 
 interface ProductsCategoryProps {

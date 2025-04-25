@@ -51,11 +51,12 @@ export default function Page() {
               <div className="ml-6 flex-grow">
                 <h2 className="text-lg font-semibold">{item.name}</h2>
                 <p className="text-gray-600">${item.price}</p>
+                <p className="text-gray-600">#{item.size}</p>
                 <p className="text-gray-700 font-medium">{t("cartPage.quantity")}: {item.quantity}</p>
               </div>
               <button
                 className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600 transition"
-                onClick={() => removeFromCart(item._id)}
+                onClick={() => removeFromCart(item._id, item.size)}
               >
                 ❌
               </button>

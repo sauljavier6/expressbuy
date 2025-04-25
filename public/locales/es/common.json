@@ -131,7 +131,8 @@
     "gender": "Sexo",
     "inCart": "En carrito",
     "outOfStock": "Sin stock",
-    "addToCart": "Agregar al carrito"
+    "addToCart": "Agregar al carrito",
+    "details":"Detalles"
   },
   "gender": {
   "men": "Hombres",
@@ -217,7 +218,8 @@
     "errorCreating": "Error al crear el producto.",
     "connectionError": "Error de conexión con el servidor.",
     "cancel": "Cancelar", 
-    "message": "¿Estás seguro de que deseas eliminar este producto?"
+    "message": "¿Estás seguro de que deseas eliminar este producto?",
+    "addSize": "Agregar talla"
   },
   "adminOrders": {
     "title": "Órdenes",

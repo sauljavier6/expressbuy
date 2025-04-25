@@ -64,16 +64,16 @@ export async function POST(req: Request) {
       address: formattedAddress,
     });
 
-    // Guardar productos
+    // 3️⃣ Guardar productos
     const orderItems = await Promise.all(
-      items.map(async (item: { _id: any; name: any; price: any; quantity: any; talla: any; }) => {
+      items.map(async (item: any) => {
         return await OrderItem.create({
           orderId: order._id,
           productId: item._id,
           name: item.name,
           price: item.price,
           quantity: item.quantity || 1,
-          talla: item.talla || "",
+          size: item.size   || "",
         });
       })
     );
@@ -84,7 +84,7 @@ export async function POST(req: Request) {
     // Guardar dirección si no existe
     if (userId && userId !== "") {
       const existingAddress = await Address.findOne({
-        userId,
+        userId: userId,
         street: deliveryAddress.street,
         city: deliveryAddress.city,
         state: deliveryAddress.state,
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
 
       if (!existingAddress) {
         await Address.create({
-          userId,
+          userId: userId,
           street: deliveryAddress.street,
           city: deliveryAddress.city,
           state: deliveryAddress.state,
@@ -104,17 +104,29 @@ export async function POST(req: Request) {
       }
     }
 
-    // Restar stock
+    // 5️⃣ Actualizar stock
     await Promise.all(
-      items.map(async (item: { _id: any; quantity: number; }) => {
+      items.map(async (item: any) => {
         const product = await Product.findById(item._id);
+    
         if (product) {
-          if (product.stock >= item.quantity) {
-            product.stock -= item.quantity;
+          // Busca el tamaño correspondiente en el arreglo sizes
+          const size = product.sizes.find((sizeItem:any) => sizeItem.size === item.size);
+    
+          if (!size) {
+            throw new Error(`Tamaño ${item.size} no encontrado para el producto ${product.name}`);
+          }
+    
+          // Verifica si hay suficiente stock
+          if (size.stock >= item.quantity) {
+            // Resta el stock del tamaño específico
+            size.stock -= item.quantity;
             await product.save();
           } else {
-            throw new Error(`No hay suficiente stock para el producto ${product.name}`);
+            throw new Error(`Stock insuficiente para el tamaño ${item.size} del producto ${product.name}`);
           }
+        } else {
+          throw new Error(`Producto no encontrado con ID: ${item._id}`);
         }
       })
     );
@@ -124,14 +136,12 @@ export async function POST(req: Request) {
       await sendConfirmationEmail(email, name, order._id.toString(), total, formattedAddress, items);
     }
   }
-  
   } catch (err) {
     console.error("⚠️ Webhook error:", err);
     return NextResponse.json({ error: "Webhook signature verification failed" }, { status: 400 });
   }
   return NextResponse.json({ received: true });
 }
-
 
 //Funcion de email
 async function sendConfirmationEmail(userEmail: string, userName: string, orderId: string, total: number, formattedAddress: string, items:any) {
@@ -161,15 +171,17 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
           <thead>
             <tr style="background-color: #4CAF50; color: white;">
               <th style="padding: 10px; text-align: left;">Product</th>
+              <th style="padding: 10px; text-align: left;">Size</th>
               <th style="padding: 10px; text-align: left;">Price</th>
               <th style="padding: 10px; text-align: left;">Quantity</th>
               <th style="padding: 10px; text-align: left;">Subtotal</th>
             </tr>
           </thead>
           <tbody>
-            ${items.map((item: { name: any; price: number; quantity: number; }) => `
+            ${items.map((item: { name: any; size:string; price: number; quantity: number; }) => `
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px;">${item.name}</td>
+                <td style="padding: 10px;">#${item.size}</td>
                 <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
                 <td style="padding: 10px;">${item.quantity}</td>
                 <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>

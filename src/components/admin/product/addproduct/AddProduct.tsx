@@ -5,13 +5,12 @@ import { useTranslation } from "react-i18next";
 export default function CreateProduct() {
   const [product, setProduct] = useState({
     name: "",
-    size: "",
+    sizes: [{ size: "", stock: "" }],
     price: "",
     category: "",
     productType: "",
     image: null as File | null,
     imageTwo: null as File | null,
-    stock: "",
     gender: "",
   });
 
@@ -64,7 +63,24 @@ export default function CreateProduct() {
       [name]: file,
     }));
   };
+
+  const handleSizeChange = (index: number, field: string, value: string) => {
+    const updatedSizes = [...product.sizes];
+    updatedSizes[index] = {
+      ...updatedSizes[index],
+      [field]: value,
+    };
+    setProduct({ ...product, sizes: updatedSizes });
+  };
   
+  const addSizeField = () => {
+    setProduct({ ...product, sizes: [...product.sizes, { size: "", stock: "" }] });
+  };
+  
+  const removeSizeField = (index: number) => {
+    const updatedSizes = product.sizes.filter((_, i) => i !== index);
+    setProduct({ ...product, sizes: updatedSizes });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,11 +90,10 @@ export default function CreateProduct() {
   
     const formData = new FormData();
     formData.append("name", product.name);
-    formData.append("size", product.size);
+    formData.append("sizes", JSON.stringify(product.sizes));
     formData.append("price", product.price);
     formData.append("category", product.category);
     formData.append("productType", product.productType);
-    formData.append("stock", product.stock);
     formData.append("gender", product.gender);
   
     if (product.image) {
@@ -101,13 +116,12 @@ export default function CreateProduct() {
         alert("Product created successfully.");
         setProduct({
           name: "",
-          size: "",
+          sizes: [{ size: "", stock: "" }], // 👈 limpiar tallas
           price: "",
           category: "",
           productType: "",
           image: null,
           imageTwo: null,
-          stock: "",
           gender: "",
         });
       } else {
@@ -119,6 +133,7 @@ export default function CreateProduct() {
       setLoading(false);
     }
   };
+  
 
   if (!isClient) return null;
 
@@ -139,14 +154,35 @@ export default function CreateProduct() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">{t("createProduct.size")}</label>
-          <input
-            type="text"
-            name="size"
-            value={product.size}
-            onChange={handleChange}
-            className="mt-2 p-2 border border-gray-300 rounded w-full"
-          />
+          <label className="block text-sm font-medium text-gray-700">{t("createProduct.sizes")}</label>
+          {product.sizes.map((s, index) => (
+            <div key={index} className="flex items-center gap-2 mt-2">
+              <input
+                type="text"
+                placeholder={t("createProduct.size")}
+                value={s.size}
+                onChange={(e) => handleSizeChange(index, "size", e.target.value)}
+                className="p-2 border border-gray-300 rounded w-1/2"
+                required
+              />
+              <input
+                type="number"
+                placeholder={t("createProduct.stock")}
+                value={s.stock}
+                onChange={(e) => handleSizeChange(index, "stock", e.target.value)}
+                className="p-2 border border-gray-300 rounded w-1/2"
+                required
+              />
+              {product.sizes.length > 1 && (
+                <button type="button" onClick={() => removeSizeField(index)} className="text-red-500">
+                  ✕
+                </button>
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={addSizeField} className="mt-2 text-blue-500 text-sm">
+            + {t("createProduct.addSize")}
+          </button>
         </div>
 
         <div className="mb-4">
@@ -155,18 +191,6 @@ export default function CreateProduct() {
             type="number"
             name="price"
             value={product.price}
-            onChange={handleChange}
-            className="mt-2 p-2 border border-gray-300 rounded w-full"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">{t("createProduct.stock")}</label>
-          <input
-            type="number"
-            name="stock"
-            value={product.stock}
             onChange={handleChange}
             className="mt-2 p-2 border border-gray-300 rounded w-full"
             required

@@ -4,23 +4,26 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";  
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ProductCard from "@/components/productcard/productcard";
 
-export interface IBestSellerProduct {
-  _id: string;
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
+interface SizeStock {
   size: string;
-  gender: string;
-  image: string; 
+  stock: number;
 }
 
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  image: string;
+  gender: string;
+  sizes: SizeStock[];
+}
 
 const BestSellerProducts = () => {
   const { t } = useTranslation(); 
   const [isClient, setIsClient] = useState(false);
-  const [products, setProducts] = useState<IBestSellerProduct[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -60,22 +63,16 @@ const BestSellerProducts = () => {
       {isLoading ? (
         <p className="text-center">Loading products...</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <div key={product._id} onClick={() => handleCardClick(product._id)} className="border rounded-lg p-4 shadow-md bg-white relative">
-              <div className="relative">
-                <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md"/>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">{product.size}</p>
-              <h3 className="text-sm font-semibold">{product.name}</h3>
-              <p className="text-lg font-bold text-red-600">${product.price.toFixed(2)}</p>
-              <Link href="#" passHref>
-                <button className="mt-2 bg-black text-white px-4 py-1 rounded hover:bg-gray-800 transition">
-                  {t("Products.addToCart")} 🛒
-                </button>
-              </Link>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))
+          ) : (
+            <p className="text-gray-500 col-span-full text-center">
+              {t("noProductsAvailable")}
+            </p> 
+          )}
         </div>
       )}
     </section>

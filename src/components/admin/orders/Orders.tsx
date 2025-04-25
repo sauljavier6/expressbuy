@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 interface OrderItem {
   productId: { _id: string; name: string; price: number; image: string };
+  size: string;
   quantity: number;
 }
 
@@ -100,7 +101,7 @@ const AdminOrders = () => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(16);
     doc.text("Order Invoice", 10, 20);
-  
+   
     doc.setFontSize(12);
     doc.text(`Order ID: ${order._id}`, 10, 30);
     doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 10, 40);
@@ -128,23 +129,36 @@ const AdminOrders = () => {
         img.src = url;
       });
   
-    const processImagesAndSave = async () => {
-      for (let i = 0; i < order.items.length; i++) {
-        const item = order.items[i];
-        const imageData = await loadImage(item.productId.image);
-  
-        doc.text(`Product: ${item.productId.name}`, 10, y + 5);
-        doc.text(`Quantity: ${item.quantity}`, 10, y + 15);
-        doc.text(`Price: $${(item.productId.price * item.quantity).toFixed(2)}`, 10, y + 25);
-  
-        doc.addImage(imageData, "JPEG", 150, y, 40, 40);
-  
-        y += 50;
-      }
-  
-      doc.text("Thank you for your purchase!", 10, y + 10);
-      doc.save(`${order._id}.pdf`);
-    };
+      const processImagesAndSave = async () => {
+        for (let i = 0; i < order.items.length; i++) {
+          const item = order.items[i];
+          const imageData = await loadImage(item.productId.image);
+          
+          // Agregar el nombre del producto
+          doc.text(`Product: ${item.productId.name}`, 10, y + 5);
+      
+          // Agregar el tamaño del producto
+          doc.text(`Size: ${item.size}`, 10, y + 15);
+      
+          // Agregar la cantidad del producto
+          doc.text(`Quantity: ${item.quantity}`, 10, y + 25);
+      
+          // Agregar el precio total del producto
+          doc.text(`Price: $${(item.productId.price * item.quantity).toFixed(2)}`, 10, y + 35);
+      
+          // Agregar la imagen del producto
+          doc.addImage(imageData, "JPEG", 150, y, 40, 40);
+      
+          // Incrementar la posición Y para la siguiente línea
+          y += 50;
+        }
+      
+        // Agregar un mensaje de agradecimiento al final
+        doc.text("Thank you for your purchase!", 10, y + 10);
+      
+        // Guardar el documento como un archivo PDF
+        doc.save(`${order._id}.pdf`);
+      };      
   
     processImagesAndSave();
   };

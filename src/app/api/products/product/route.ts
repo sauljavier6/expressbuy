@@ -11,7 +11,6 @@ export async function GET() {
   return NextResponse.json(products);
 }
 
-
 // 📌 POST: Agregar producto
 export async function POST(req: Request) {
   const data = await req.formData();
@@ -20,14 +19,22 @@ export async function POST(req: Request) {
 
   const name = data.get("name");
   const price = parseFloat(data.get("price") as string);
-  const size = data.get("size");
   const category = data.get("category");
   const productType = data.get("productType");
-  const stock = parseInt(data.get("stock") as string, 10);
   const gender = data.get("gender");
 
-  if (!name || !price || !size || !category || !productType || !stock || !gender) {
-    return NextResponse.json({ success: false, msg: "Faltan datos necesarios" });
+  const sizesRaw = data.get("sizes") as string;
+
+  if (!name || !price || !category || !productType || !gender || !sizesRaw) {
+    return NextResponse.json({ success: false, msg: "Necessary data is missing" });
+  }
+
+  let sizes;
+  try {
+    sizes = JSON.parse(sizesRaw);
+    if (!Array.isArray(sizes)) throw new Error("Sizes is not an array");
+  } catch (err) {
+    return NextResponse.json({ success: false, msg: "Invalid size format" });
   }
 
   // 📌 Convertir archivos a base64
@@ -55,11 +62,10 @@ export async function POST(req: Request) {
     const newProduct = await Product.create({
       name,
       price,
-      size,
       category,
       productType,
-      stock,
       gender,
+      sizes,
       image: upload1.secure_url,
       imagedos: upload2.secure_url,
     });

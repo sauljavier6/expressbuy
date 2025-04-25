@@ -212,7 +212,9 @@
     "errorCreating": "Erreur lors de la création du produit.",
     "connectionError": "Erreur de connexion avec le serveur.",
     "cancel": "Canceller",
-    "message": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+    "message": "Êtes-vous sûr de vouloir supprimer ce produit ?",
+    "addSize": "Ajouter une taille",
+    "details":"Détails"
   },
   "adminOrders": {
     "title": "Commandes",

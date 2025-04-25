@@ -43,8 +43,7 @@ export default function Page() {
         total,
         deliveryAddress,
         user,
-        storedId,
-        paymentMethod: "stripe",
+        storedId
       }),
     });
 
@@ -66,7 +65,7 @@ export default function Page() {
           <ul className="border rounded-lg p-4 bg-gray-50">
             {cart.map((item, index) => (
               <li key={index} className="flex justify-between py-2 border-b last:border-b-0">
-                <span>{item.name} (x{item.quantity})</span>
+                <span>{item.name} #{item.size} (x{item.quantity})</span>
                 <span className="font-semibold">${(item.price * item.quantity).toFixed(2)}</span>
               </li>
             ))}
@@ -95,14 +94,14 @@ export default function Page() {
                 const res = await fetch("/api/checkout", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ total }), // Solo total
+                  body: JSON.stringify({ total }),
                 });
 
                 const data = await res.json();
-                return data.id; // orderId que devuelve el backend
+                return data.id;
               }}
               onCancel={(data) => {
-                console.log("Pago cancelado:", data);
+                console.log("Payment canceled:", data);
               }}
               onApprove={async (data) => {
                 try {
@@ -125,10 +124,10 @@ export default function Page() {
                     clearCart();
                     router.push("/account");
                   } else {
-                    console.error("Error al capturar la orden:", result.error);
+                    console.error("Error capturing order:", result.error);
                   }
                 } catch (err) {
-                  console.error("Fallo en onApprove:", err);
+                  console.error("Failure in onApprove:", err);
                 }
               }}
             />

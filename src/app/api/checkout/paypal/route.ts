@@ -49,13 +49,14 @@ export async function POST(req: Request) {
           name: item.name,
           price: item.price,
           quantity: item.quantity || 1,
-          talla: item.talla || "",
+          size: item.size   || "",
         });
       })
     );
 
     order.items = orderItems.map(item => item._id);
     await order.save();
+    
 
     // 4️⃣ Guardar dirección si no existe
     if (storedId && storedId !== "") {
@@ -69,7 +70,14 @@ export async function POST(req: Request) {
       });
 
       if (!exists) {
-        await Address.create({ userId: storedId, ...deliveryAddress });
+        await Address.create({ 
+          userId: storedId,
+          street: deliveryAddress.street,
+          city: deliveryAddress.city,
+          state: deliveryAddress.state,
+          zip: deliveryAddress.zip,
+          country: deliveryAddress.country, 
+        });
       }
     }
 
@@ -77,15 +85,29 @@ export async function POST(req: Request) {
     await Promise.all(
       items.map(async (item: any) => {
         const product = await Product.findById(item._id);
-        if (product && product.stock >= item.quantity) {
-          product.stock -= item.quantity;
-          await product.save();
+    
+        if (product) {
+          // Busca el tamaño correspondiente en el arreglo sizes
+          const size = product.sizes.find((sizeItem:any) => sizeItem.size === item.size);
+    
+          if (!size) {
+            throw new Error(`Tamaño ${item.size} no encontrado para el producto ${product.name}`);
+          }
+    
+          // Verifica si hay suficiente stock
+          if (size.stock >= item.quantity) {
+            // Resta el stock del tamaño específico
+            size.stock -= item.quantity;
+            await product.save();
+          } else {
+            throw new Error(`Stock insuficiente para el tamaño ${item.size} del producto ${product.name}`);
+          }
         } else {
-          throw new Error(`Stock insuficiente para el producto ${product?.name}`);
+          throw new Error(`Producto no encontrado con ID: ${item._id}`);
         }
       })
     );
-
+    
     // 6️⃣ Enviar email
     await sendConfirmationEmail(user.email, user.name, order._id.toString(), total, formattedAddress, items);
 
@@ -125,15 +147,17 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
           <thead>
             <tr style="background-color: #4CAF50; color: white;">
               <th style="padding: 10px; text-align: left;">Product</th>
+              <th style="padding: 10px; text-align: left;">Size</th>
               <th style="padding: 10px; text-align: left;">Price</th>
               <th style="padding: 10px; text-align: left;">Quantity</th>
               <th style="padding: 10px; text-align: left;">Subtotal</th>
             </tr>
           </thead>
           <tbody>
-            ${items.map((item: { name: any; price: number; quantity: number; }) => `
+            ${items.map((item: { name: any; size:string; price: number; quantity: number; }) => `
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px;">${item.name}</td>
+                <td style="padding: 10px;">#${item.size}</td>
                 <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
                 <td style="padding: 10px;">${item.quantity}</td>
                 <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>

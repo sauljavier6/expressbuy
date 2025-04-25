@@ -4,14 +4,18 @@ import { useEffect, useState } from "react";
 import ProductCard from "@/components/productcard/productcard";
 import { useTranslation } from "react-i18next";
 
+interface SizeStock {
+  size: string;
+  stock: number;
+}
+
 interface Product {
   _id: string;
   name: string;
   price: number;
   image: string;
-  stock: number;
-  size: string;
   gender: string;
+  sizes: SizeStock[];
 }
 
 export default function ProductPage() {

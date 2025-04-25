@@ -8,14 +8,15 @@ interface CartItem {
   image: string;
   quantity: number;
   stock: number;
+  size: string;
 }
 
 interface CartContextProps {
   cart: CartItem[];
   addToCart: (product: CartItem) => void;
-  removeFromCart: (id: string) => void;
+  removeFromCart: (id: string, size: string) => void;
   clearCart: () => void;
-  getProductQuantity: (id: string) => number;
+  getProductQuantity: (id: string, size: string) => number;
   deliveryAddress: string;
   setDeliveryAddress: (address: string) => void;
   user: { name: string, email: string; };
@@ -28,60 +29,80 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
   const [user, setUser] = useState<{ name: string, email: string;  }>({ name: "", email: "" });
+  const [isInitialized, setIsInitialized] = useState(false);
+
 
   // Cargar carrito y dirección de entrega desde localStorage al montar el componente
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        if (Array.isArray(parsedCart)) {
+          setCart(parsedCart);
+        }
+      } catch (err) {
+        console.error("Error al leer el carrito del localStorage", err);
+      }
     }
-  }, []);
+    setIsInitialized(true); // importante
+  }, []);   
 
   // Guardar carrito en localStorage cuando cambie
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    if (isInitialized) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart, isInitialized]);
+  
 
   const addToCart = (product: CartItem) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item._id === product._id);
-      
+      // Buscar por ID y TALLA
+      const existingItem = prevCart.find(
+        (item) => item._id === product._id && item.size === product.size
+      );
+  
       if (existingItem) {
         if (existingItem.quantity < existingItem.stock) {
           return prevCart.map((item) =>
-            item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+            item._id === product._id && item.size === product.size
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
           );
         } else {
           alert("No hay suficiente stock disponible");
           return prevCart;
         }
       } else {
+        // Agregar nueva combinación de producto + talla
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
-  };
-
-  const removeFromCart = (id: string) => {
+  };  
+  
+  const removeFromCart = (id: string, size: string) => {
     setCart((prevCart) =>
       prevCart
         .map((item) => {
-          if (item._id === id) {
+          if (item._id === id && item.size === size) {
             return item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : null;
           }
           return item;
         })
-        .filter((item) => item !== null) as CartItem[] // Filtramos elementos nulos
+        .filter((item) => item !== null) as CartItem[]
     );
-  };
+  };  
 
   const clearCart = () => {
     setCart([]);
     localStorage.removeItem("cart");
   };
 
-  const getProductQuantity = (id: string) => {
-    return cart.find((item) => item._id === id)?.quantity || 0;
-  };
+  const getProductQuantity = (id: string, size: string): number => {
+    const item = cart.find((item) => item._id === id && item.size === size);
+    return item ? item.quantity : 0;
+  };  
 
   return (
     <CartContext.Provider

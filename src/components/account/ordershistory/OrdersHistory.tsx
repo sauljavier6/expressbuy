@@ -16,7 +16,7 @@ interface OrdersHistoryProps {
       name: string;
       price: number;
       quantity: number;
-      talla: string;
+      size: string;
     }>;
   }>;
 }
@@ -29,7 +29,7 @@ const OrdersHistory = ({ orders }: OrdersHistoryProps) => {
     setIsClient(true);
   }, []);
 
-  if (!isClient) return null; // Evita el error de hidratación
+  if (!isClient) return null;
   
   return (
   <div className="bg-white shadow-md rounded-lg p-6 mb-4">
@@ -53,7 +53,7 @@ const OrdersHistory = ({ orders }: OrdersHistoryProps) => {
                 <p className="text-gray-700 font-medium">{item.name}</p>
                 <p className="text-gray-600">{t("ordersHistory.price")}: ${item.price}</p>
                 <p className="text-gray-600">{t("ordersHistory.quantity")}: {item.quantity}</p>
-                <p className="text-gray-600">{t("ordersHistory.size")}: {item.talla}</p>
+                <p className="text-gray-600">{t("ordersHistory.size")}: {item.size}</p>
               </div>
             </div>
           ))}
