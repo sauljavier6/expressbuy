@@ -1,47 +1,44 @@
 export const dynamic = 'force-dynamic';
 
-
-import { connectDB } from "@/lib/db"; 
+import { connectDB } from "@/lib/db";
 import Order from "@/models/Order";
 import "@/models/OrderItem";
 import "@/models/Product";
+import { NextResponse } from "next/server";
 
-import { NextRequest } from "next/server";
-
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     await connectDB();
 
-    // Obtener los parámetros de la URL
-    const url = new URL(req.url);
-    const searchParams = url.searchParams;
-
-    // Obtener la página actual desde los parámetros de búsqueda
+    const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
-    const ordersPerPage = 10; // Número de órdenes por página
-    
-    // Obtener el total de órdenes con status "paid"
-    const totalOrders = await Order.countDocuments({ status: "paid" });
-    
-    // Calcular el número total de páginas
-    const totalPages = Math.ceil(totalOrders / ordersPerPage);
-    
-    // Obtener las órdenes paginadas, ordenadas por la fecha de creación
-    const orders = await Order.find()//({ status: "paid" })
-      .populate({
-        path: "items",
-        populate: { path: "productId", model: "Product" },
-      })
-      .sort({ createdAt: 1 }) // Ordenar de la más vieja a la más nueva
-      .skip((page - 1) * ordersPerPage) // Paginación: omitir los primeros registros
-      .limit(ordersPerPage)
-      .lean();
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
 
-    return new Response(JSON.stringify({ orders, totalOrders, totalPages }), { status: 200 });
+    const skip = (page - 1) * limit;
+
+    const [orders, totalOrders] = await Promise.all([
+      Order.find()
+        .populate({
+          path: "items",
+          populate: { path: "productId", model: "Product" },
+        })
+        .sort({ createdAt: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Order.countDocuments({ status: "paid" })
+    ]);
+
+    const totalPages = Math.ceil(totalOrders / limit);
+
+    return NextResponse.json({
+      orders,
+      totalOrders,
+      totalPages,
+      currentPage: page
+    });
   } catch (error) {
     console.error("Error al obtener las órdenes:", error);
-    return new Response(JSON.stringify({ error: "Error interno del servidor" }), { status: 500 });
+    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }
-
-

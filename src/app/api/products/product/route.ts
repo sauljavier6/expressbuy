@@ -5,10 +5,28 @@ import { v4 as uuidv4 } from "uuid";
 import cloudinary from "@/lib/cloudinary";
 
 // 📌 GET: Obtener productos
-export async function GET() {
+export async function GET(req: Request) {
   await connectDB();
-  const products = await Product.find();
-  return NextResponse.json(products);
+
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "8", 10);
+
+  const skip = (page - 1) * limit;
+
+  const [products, total] = await Promise.all([
+    Product.find().skip(skip).limit(limit),
+    Product.countDocuments()
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
+
+  return NextResponse.json({
+    products,
+    total,
+    totalPages,
+    currentPage: page
+  });
 }
 
 // 📌 POST: Agregar producto

@@ -20,12 +20,12 @@ interface Order {
 const AdminOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const { t } = useTranslation();
   const [isClient, setIsClient] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     setIsClient(true);
@@ -34,9 +34,8 @@ const AdminOrders = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/orders?page=${currentPage}`);
+      const response = await fetch(`/api/orders?page=${page}&limit=20`);
       const data = await response.json();
-      console.log(data)
       setOrders(data.orders);
       setFilteredOrders(data.orders);
       setTotalPages(data.totalPages);
@@ -69,7 +68,7 @@ const AdminOrders = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [currentPage]);
+  }, [page]);
 
   const handleChangeStatus = async (orderId: string, newStatus: string) => {
     try {
@@ -202,7 +201,7 @@ const AdminOrders = () => {
           </thead>
           <tbody>
             {filteredOrders?.length > 0 ? (
-              filteredOrders.map((order) => (
+              filteredOrders?.map((order) => (
                 <tr key={order._id} className="border-b hover:bg-gray-100">
                   <td className="px-4 py-2">{order._id}</td>
                   <td className="px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>
@@ -252,27 +251,31 @@ const AdminOrders = () => {
           </tbody>
         </table>
       </div>
+          <div className="flex justify-center mt-6 gap-2 flex-wrap">
+            <button onClick={() => setPage(1)} disabled={page === 1} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
+              {"<<"}
+            </button>
+            <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
+              {t("previous")}
+            </button>
 
-      {/* Paginación */}
-      <div className="pagination mt-6 flex justify-between items-center text-gray-700">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="text-lg">
-          Page  {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+              <button
+                key={num}
+                onClick={() => setPage(num)}
+                className={`px-3 py-1 rounded ${page === num ? "bg-blue-500 text-white" : "bg-gray-100"}`}
+              >
+                {num}
+              </button>
+            ))}
+
+            <button onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))} disabled={page === totalPages} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
+              {t("next")}
+            </button>
+            <button onClick={() => setPage(totalPages)} disabled={page === totalPages} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
+              {">>"}
+            </button>
+          </div>
     </div>
   );
 };
