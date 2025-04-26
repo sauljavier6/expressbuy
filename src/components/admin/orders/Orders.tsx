@@ -256,7 +256,7 @@ const AdminOrders = () => {
               {"<<"}
             </button>
             <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
-              {t("previous")}
+              {t("pagination.previous")}
             </button>
 
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
@@ -270,7 +270,7 @@ const AdminOrders = () => {
             ))}
 
             <button onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))} disabled={page === totalPages} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
-              {t("next")}
+              {t("pagination.next")}
             </button>
             <button onClick={() => setPage(totalPages)} disabled={page === totalPages} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">
               {">>"}

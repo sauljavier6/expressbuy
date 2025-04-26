@@ -86,7 +86,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
             disabled={page === 1}
             className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
           >
-            {t("previous")}
+            {t("pagination.previous")}
           </button>
 
           {/* Renderizar números de página */}
@@ -107,7 +107,7 @@ export default function ProductsCategory({ category }: ProductsCategoryProps) {
             disabled={page === totalPages}
             className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
           >
-            {t("next")}
+            {t("pagination.next")}
           </button>
 
           <button

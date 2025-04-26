@@ -243,8 +243,10 @@
     "phone": "Téléphone",
     "email": "E-mail",
     "invitation": "Venez nous rendre visite ! Nous sommes situés dans un endroit central et facilement accessible."
-  }
-
-
+  },
+  "pagination": {
+    "next": "Suivant",
+    "previous": "Précédent"
+  }  
 }
  

@@ -247,5 +247,9 @@
     "phone": "Phone",
     "email": "Email",
     "invitation": "Come visit us! We're located in a central and easily accessible area."
-  }
+  },
+  "pagination": {
+    "next": "Next",
+    "previous": "Previous"
+  }  
 }

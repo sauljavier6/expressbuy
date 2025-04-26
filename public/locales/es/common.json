@@ -247,6 +247,9 @@
     "phone": "Teléfono",
     "email": "Correo",
     "invitation": "¡Ven a visitarnos! Estamos ubicados en una zona céntrica y de fácil acceso."
+  },
+  "pagination": {
+    "next": "Siguiente",
+    "previous": "Anterior"
   }
-  
 }
