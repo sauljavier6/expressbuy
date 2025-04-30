@@ -98,6 +98,7 @@ export default function Page() {
                 });
 
                 const data = await res.json();
+                console.log("createOrder response:", data);
                 return data.id;
               }}
               onCancel={(data) => {
