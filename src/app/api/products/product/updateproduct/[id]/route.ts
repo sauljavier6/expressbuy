@@ -63,27 +63,31 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       return NextResponse.json({ success: false, msg: "Producto no encontrado" }, { status: 404 });
     }
 
-    // 📌 Agregar nuevas tallas sin duplicar
     const existingSizes = existingProduct.sizes || [];
 
-    // Filtrar tallas existentes y no incluir las eliminadas
-    const updatedSizes = newSizes.filter((newItem) => {
-      // Solo se mantienen las tallas nuevas o las que ya existen
-      const alreadyExists = existingSizes.some((item: any) => item.size === newItem.size);
-      if (!alreadyExists) {
-        existingSizes.push(newItem); // Agregar nuevas tallas
+    newSizes.forEach((newItem) => {
+      const index = existingSizes.findIndex((item: any) => item.size === newItem.size);
+    
+      if (index > -1) {
+        // La talla ya existe, actualiza el stock
+        existingSizes[index].stock = newItem.stock;
+      } else {
+        // La talla no existe, agrégala
+        existingSizes.push(newItem);
       }
-      return existingSizes.some((item: any) => item.size === newItem.size);
     });
-
-    // 📌 Eliminar las tallas que no estén en la nueva lista
-    const sizesToDelete = existingSizes.filter((item:any) => !newSizes.some((newItem) => newItem.size === item.size));
-    sizesToDelete.forEach((itemToDelete:any) => {
-      const indexToRemove = existingSizes.findIndex((size:any) => size.size === itemToDelete.size);
+    
+    // Luego, eliminar las tallas que ya no están
+    const sizesToDelete = existingSizes.filter(
+      (item: any) => !newSizes.some((newItem) => newItem.size === item.size)
+    );
+    
+    sizesToDelete.forEach((itemToDelete: any) => {
+      const indexToRemove = existingSizes.findIndex((size: any) => size.size === itemToDelete.size);
       if (indexToRemove > -1) {
-        existingSizes.splice(indexToRemove, 1); // Eliminar la talla
+        existingSizes.splice(indexToRemove, 1);
       }
-    });
+    });    
 
     updateFields.sizes = existingSizes;
 

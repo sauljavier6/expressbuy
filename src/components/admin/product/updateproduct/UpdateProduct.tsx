@@ -88,6 +88,7 @@ export default function UpdateProduct({ product, onCancel, fetchProducts }: Upda
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
+    console.log("updatedProduct:",updatedProduct)
     e.preventDefault();
 
     setLoading(true);
