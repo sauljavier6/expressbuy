@@ -176,13 +176,26 @@ export default function CreateProduct() {
                 className="p-2 border border-gray-300 rounded w-1/3"
                 required
               />
-              <input
-                type="color"
-                value={s.color}
-                onChange={(e) => handleSizeChange(index, "color", e.target.value)}
-                className="p-1 w-12 h-12 border border-gray-300 rounded"
-                required
-              />
+              
+              <div className="flex space-x-4">
+                <input
+                  type="color"
+                  value={s.color}
+                  onChange={(e) => handleSizeChange(index, "color", e.target.value)}
+                  className="p-0.5 h-11 border border-gray-300 rounded w-16"
+                  required
+                  list="basic-colors"
+                />
+                
+                <datalist id="basic-colors">
+                  <option value="#000000" /> {/* Negro */}
+                  <option value="#0000FF" /> {/* Azul */}
+                  <option value="#FFFFFF" /> {/* Blanco */}
+                  <option value="#8B4513" /> {/* Café */}
+                  <option value="#FFD700" /> {/* Dorado */}
+                  <option value="#C0C0C0" /> {/* Plateado */}
+                </datalist>
+              </div>
 
               {product.sizes.length > 1 && (
                 <button type="button" onClick={() => removeSizeField(index)} className="text-red-500">

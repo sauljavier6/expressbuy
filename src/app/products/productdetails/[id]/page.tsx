@@ -29,7 +29,7 @@
     const { t } = useTranslation();
     const { addToCart, getProductQuantity } = useCart();
     const quantity = product && selectedSize
-  ? getProductQuantity(product._id, selectedSize.size)
+  ? getProductQuantity(product._id, selectedSize.size, selectedSize.color)
   : 0;
     const [isClient, setIsClient] = useState(false);
 
@@ -57,7 +57,8 @@
           ...product, 
           quantity: 1, 
           size: selectedSize.size,
-          stock: selectedSize.stock
+          stock: selectedSize.stock, 
+          color: selectedSize.color,
         });
       }
     };

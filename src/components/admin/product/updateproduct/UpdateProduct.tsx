@@ -165,13 +165,27 @@ export default function UpdateProduct({ product, onCancel, fetchProducts }: Upda
                 onChange={(e) => handleSizeChange(idx, "stock", e.target.value)}
                 className="p-2 border rounded w-1/2"
               />
-              <input
-                type="color"
-                value={item.color}
-                onChange={(e) => handleSizeChange(idx, "color", e.target.value)}
-                className="p-1 w-12 h-12 border border-gray-300 rounded"
-                required
-              />
+              
+              <div className="flex space-x-4">
+                <input
+                  type="color"
+                  value={item.color}
+                  onChange={(e) => handleSizeChange(idx, "color", e.target.value)}
+                  className="p-0.5 h-11 border border-gray-300 rounded w-16"
+                  required
+                  list="basic-colors"
+                />
+                
+                <datalist id="basic-colors">
+                  <option value="#000000" /> {/* Negro */}
+                  <option value="#0000FF" /> {/* Azul */}
+                  <option value="#FFFFFF" /> {/* Blanco */}
+                  <option value="#8B4513" /> {/* Café */}
+                  <option value="#FFD700" /> {/* Dorado */}
+                  <option value="#C0C0C0" /> {/* Plateado */}
+                </datalist>
+              </div>
+
               <button type="button" onClick={() => handleRemoveSize(idx)} className="text-red-500 font-bold">
                 ✕
               </button>

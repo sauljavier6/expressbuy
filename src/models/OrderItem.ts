@@ -7,6 +7,7 @@ const orderItemSchema = new Schema({
   price: Number,
   quantity: Number,
   size: String,
+  color:String
 });
 
 const OrderItem = models.OrderItem || model("OrderItem", orderItemSchema);
