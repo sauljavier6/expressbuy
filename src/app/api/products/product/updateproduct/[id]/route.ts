@@ -21,7 +21,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     const gender = data.get("gender");
 
     const sizesRaw = data.get("sizes") as string;
-    let newSizes: { size: string; stock: number }[] = [];
+    let newSizes: { size: string; stock: number, color:string }[] = [];
 
     try {
       newSizes = JSON.parse(sizesRaw);
