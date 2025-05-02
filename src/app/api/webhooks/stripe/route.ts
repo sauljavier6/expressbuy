@@ -74,6 +74,7 @@ export async function POST(req: Request) {
           price: item.price,
           quantity: item.quantity || 1,
           size: item.size   || "",
+          color: item.color || "#000000",
         });
       })
     );
@@ -108,25 +109,27 @@ export async function POST(req: Request) {
     await Promise.all(
       items.map(async (item: any) => {
         const product = await Product.findById(item._id);
-    
-        if (product) {
-          // Busca el tamaño correspondiente en el arreglo sizes
-          const size = product.sizes.find((sizeItem:any) => sizeItem.size === item.size);
-    
-          if (!size) {
-            throw new Error(`Tamaño ${item.size} no encontrado para el producto ${product.name}`);
-          }
-    
-          // Verifica si hay suficiente stock
-          if (size.stock >= item.quantity) {
-            // Resta el stock del tamaño específico
-            size.stock -= item.quantity;
-            await product.save();
-          } else {
-            throw new Error(`Stock insuficiente para el tamaño ${item.size} del producto ${product.name}`);
-          }
-        } else {
+
+        if (!product) {
           throw new Error(`Producto no encontrado con ID: ${item._id}`);
+        }
+
+        // Busca la combinación específica de talla y color
+        const sizeColor = product.sizes.find(
+          (entry: any) => entry.size === item.size && entry.color === item.color
+        );
+
+        if (!sizeColor) {
+          throw new Error(`No se encontró la combinación talla ${item.size} y color ${item.color} para el producto ${product.name}`);
+        }
+
+        // Verifica si hay suficiente stock
+        if (sizeColor.stock >= item.quantity) {
+          // Resta el stock del tamaño y color específico
+          sizeColor.stock -= item.quantity;
+          await product.save();
+        } else {
+          throw new Error(`Stock insuficiente para talla ${item.size} y color ${item.color} del producto ${product.name}`);
         }
       })
     );
@@ -174,16 +177,21 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
               <th style="padding: 10px; text-align: left;">Size</th>
               <th style="padding: 10px; text-align: left;">Price</th>
               <th style="padding: 10px; text-align: left;">Quantity</th>
+              <th style="padding: 10px; text-align: left;">Color</th>
               <th style="padding: 10px; text-align: left;">Subtotal</th>
             </tr>
           </thead>
           <tbody>
-            ${items.map((item: { name: any; size:string; price: number; quantity: number; }) => `
+            ${items.map((item: { name: any; size:string; price: number; quantity: number; color: string }) => `
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px;">${item.name}</td>
                 <td style="padding: 10px;">#${item.size}</td>
                 <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
                 <td style="padding: 10px;">${item.quantity}</td>
+                <td style="padding: 10px;">
+                  <span style="display: inline-block; width: 20px; height: 20px; background-color: ${item.color}; border-radius: 50%;"></span> 
+                  ${item.color}
+                </td>
                 <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>
               </tr>
             `).join('')}

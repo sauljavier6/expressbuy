@@ -7,13 +7,14 @@ export async function POST(req: Request) {
   try {
     const { items, total, deliveryAddress, user, storedId } = await req.json();
 
-    const itemsSummary = items.map((item: { _id: string, name: string; price: number; quantity: number, size: string }) => ({
+    const itemsSummary = items.map((item: { _id: string, name: string; price: number; quantity: number, size: string, color:string }) => ({
       _id: item._id,
       name: item.name,
       price: item.price,
       quantity: item.quantity,
       productId: item._id,
       size: item.size,
+      color: item.color,
     }));
 
     const itemsMetadata = JSON.stringify(itemsSummary);

@@ -188,12 +188,15 @@ export default function CreateProduct() {
                 />
                 
                 <datalist id="basic-colors">
-                  <option value="#000000" /> {/* Negro */}
-                  <option value="#0000FF" /> {/* Azul */}
-                  <option value="#FFFFFF" /> {/* Blanco */}
-                  <option value="#8B4513" /> {/* Café */}
-                  <option value="#FFD700" /> {/* Dorado */}
-                  <option value="#C0C0C0" /> {/* Plateado */}
+                  <option value="#FFD700" />
+                  <option value="#000000" />
+                  <option value="#FFFFFF" />
+                  <option value="#F5CBA7" />
+                  <option value="#C0C0C0" />
+                  <option value="#FF0000" />
+                  <option value="#800020" />
+                  <option value="#0000FF" />
+                  <option value="#FFFF00" />
                 </datalist>
               </div>
 
