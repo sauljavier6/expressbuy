@@ -6,6 +6,7 @@ interface OrderItem {
   productId: { _id: string; name: string; price: number; image: string };
   size: string;
   quantity: number;
+  color: string;
 }
 
 interface Order {
@@ -132,24 +133,31 @@ const AdminOrders = () => {
         for (let i = 0; i < order.items.length; i++) {
           const item = order.items[i];
           const imageData = await loadImage(item.productId.image);
-          
+      
           // Agregar el nombre del producto
           doc.text(`Product: ${item.productId.name}`, 10, y + 5);
       
           // Agregar el tamaño del producto
           doc.text(`Size: ${item.size}`, 10, y + 15);
       
+          // Agregar el texto "Color:"
+          doc.text("Color:", 10, y + 25);
+
+          // Mostrar el cuadro de color justo después del texto
+          doc.setFillColor(item.color); // Asegúrate que item.color sea un hex válido como '#FFD700'
+          doc.rect(32, y + 18, 8, 8, 'F'); // x, y, ancho, alto
+
           // Agregar la cantidad del producto
-          doc.text(`Quantity: ${item.quantity}`, 10, y + 25);
+          doc.text(`Quantity: ${item.quantity}`, 10, y + 35);
       
           // Agregar el precio total del producto
-          doc.text(`Price: $${(item.productId.price * item.quantity).toFixed(2)}`, 10, y + 35);
+          doc.text(`Price: $${(item.productId.price * item.quantity).toFixed(2)}`, 10, y + 45);
       
           // Agregar la imagen del producto
           doc.addImage(imageData, "JPEG", 150, y, 40, 40);
       
           // Incrementar la posición Y para la siguiente línea
-          y += 50;
+          y += 60;
         }
       
         // Agregar un mensaje de agradecimiento al final
@@ -157,7 +165,7 @@ const AdminOrders = () => {
       
         // Guardar el documento como un archivo PDF
         doc.save(`${order._id}.pdf`);
-      };      
+      };          
   
     processImagesAndSave();
   };

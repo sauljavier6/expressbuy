@@ -17,6 +17,7 @@ interface OrdersHistoryProps {
       price: number;
       quantity: number;
       size: string;
+      color: string;
     }>;
   }>;
 }
@@ -48,12 +49,25 @@ const OrdersHistory = ({ orders }: OrdersHistoryProps) => {
           <h3 className="font-semibold text-gray-800">{t("ordersHistory.products")}:</h3>
           {order.items.map((item, idx) => (
             <div key={idx} className="flex items-center border-t border-gray-200 pt-2 mt-2">
-              <img src={item.productId.image} alt={item.name} className="w-16 h-16 object-cover rounded-md mr-4" />
+              <img
+                src={item.productId.image}
+                alt={item.name}
+                className="w-16 h-16 object-cover rounded-md mr-4"
+              />
               <div>
                 <p className="text-gray-700 font-medium">{item.name}</p>
                 <p className="text-gray-600">{t("ordersHistory.price")}: ${item.price}</p>
                 <p className="text-gray-600">{t("ordersHistory.quantity")}: {item.quantity}</p>
                 <p className="text-gray-600">{t("ordersHistory.size")}: {item.size}</p>
+
+                {/* Visualización del color como círculo */}
+                <div className="flex items-center mt-1">
+                  <span className="text-gray-600 mr-2">{t("ordersHistory.color")}:</span>
+                  <span
+                    className="w-4 h-4 rounded-full border border-gray-300"
+                    style={{ backgroundColor: item.color }}
+                  ></span>
+                </div>
               </div>
             </div>
           ))}

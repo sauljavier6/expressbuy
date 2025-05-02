@@ -189,8 +189,7 @@ async function sendConfirmationEmail(userEmail: string, userName: string, orderI
                 <td style="padding: 10px;">$${item.price.toFixed(2)}</td>
                 <td style="padding: 10px;">${item.quantity}</td>
                 <td style="padding: 10px;">
-                  <span style="display: inline-block; width: 20px; height: 20px; background-color: ${item.color}; border-radius: 50%;"></span> 
-                  ${item.color}
+                  <span style="display: inline-block; width: 20px; height: 20px; background-color: ${item.color}; border-radius: 50%;"></span>
                 </td>
                 <td style="padding: 10px;">$${(item.price * item.quantity).toFixed(2)}</td>
               </tr>
