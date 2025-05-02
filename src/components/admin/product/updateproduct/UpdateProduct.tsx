@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 interface Size {
   size: string;
   stock: string;
+  color?: string;
 }
 
 interface Product {
@@ -78,7 +79,7 @@ export default function UpdateProduct({ product, onCancel, fetchProducts }: Upda
   const handleAddSize = () => {
     setUpdatedProduct(prev => ({
       ...prev,
-      sizes: [...prev.sizes, { size: "", stock: "" }],
+      sizes: [...prev.sizes, { size: "", stock: "", color: "" }],
     }));
   };
 
@@ -164,6 +165,13 @@ export default function UpdateProduct({ product, onCancel, fetchProducts }: Upda
                 onChange={(e) => handleSizeChange(idx, "stock", e.target.value)}
                 className="p-2 border rounded w-1/2"
               />
+              <input
+                type="color"
+                value={item.color}
+                onChange={(e) => handleSizeChange(idx, "color", e.target.value)}
+                className="p-1 w-12 h-12 border border-gray-300 rounded"
+                required
+              />
               <button type="button" onClick={() => handleRemoveSize(idx)} className="text-red-500 font-bold">
                 ✕
               </button>
@@ -208,7 +216,7 @@ export default function UpdateProduct({ product, onCancel, fetchProducts }: Upda
 
         {/* Tipo de producto */}
         <div className="mb-4">
-          <label className="block text-sm font-medium">{t("createProduct.productType")}</label>
+          <label className="block text-sm font-medium" >{t("createProduct.productType")}</label>
           <select
             name="productType"
             value={updatedProduct.productType}

@@ -42,6 +42,7 @@ export async function POST(req: Request) {
   const gender = data.get("gender");
 
   const sizesRaw = data.get("sizes") as string;
+  console.log("sizesRaw", sizesRaw);
 
   if (!name || !price || !category || !productType || !gender || !sizesRaw) {
     return NextResponse.json({ success: false, msg: "Necessary data is missing" });
@@ -49,7 +50,11 @@ export async function POST(req: Request) {
 
   let sizes;
   try {
-    sizes = JSON.parse(sizesRaw);
+    sizes = JSON.parse(sizesRaw).map((item:any) => ({
+      size: item.size,
+      stock: item.stock,
+      color: item.color && item.color.trim() !== "" ? item.color : "#000000"
+    }));    
     if (!Array.isArray(sizes)) throw new Error("Sizes is not an array");
   } catch (err) {
     return NextResponse.json({ success: false, msg: "Invalid size format" });
@@ -76,6 +81,7 @@ export async function POST(req: Request) {
       public_id: uuidv4(),
     });
 
+    console.log("sizes", sizes);
     // 📌 Crear producto con URLs de Cloudinary
     const newProduct = await Product.create({
       name,

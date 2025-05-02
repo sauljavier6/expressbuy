@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 export default function CreateProduct() {
   const [product, setProduct] = useState({
     name: "",
-    sizes: [{ size: "", stock: "" }],
+    sizes: [{ size: "", stock: "", color: "" }],
     price: "",
     category: "",
     productType: "",
@@ -71,10 +71,13 @@ export default function CreateProduct() {
       [field]: value,
     };
     setProduct({ ...product, sizes: updatedSizes });
-  };
+  };  
   
   const addSizeField = () => {
-    setProduct({ ...product, sizes: [...product.sizes, { size: "", stock: "" }] });
+    setProduct({
+      ...product,
+      sizes: [...product.sizes, { size: "", stock: "", color: "" }],
+    });
   };
   
   const removeSizeField = (index: number) => {
@@ -116,7 +119,7 @@ export default function CreateProduct() {
         alert("Product created successfully.");
         setProduct({
           name: "",
-          sizes: [{ size: "", stock: "" }], // 👈 limpiar tallas
+          sizes: [{ size: "", stock: "", color: "" }],
           price: "",
           category: "",
           productType: "",
@@ -162,7 +165,7 @@ export default function CreateProduct() {
                 placeholder={t("createProduct.size")}
                 value={s.size}
                 onChange={(e) => handleSizeChange(index, "size", e.target.value)}
-                className="p-2 border border-gray-300 rounded w-1/2"
+                className="p-2 border border-gray-300 rounded w-1/3"
                 required
               />
               <input
@@ -170,15 +173,23 @@ export default function CreateProduct() {
                 placeholder={t("createProduct.stock")}
                 value={s.stock}
                 onChange={(e) => handleSizeChange(index, "stock", e.target.value)}
-                className="p-2 border border-gray-300 rounded w-1/2"
+                className="p-2 border border-gray-300 rounded w-1/3"
                 required
               />
+              <input
+                type="color"
+                value={s.color}
+                onChange={(e) => handleSizeChange(index, "color", e.target.value)}
+                className="p-1 w-12 h-12 border border-gray-300 rounded"
+                required
+              />
+
               {product.sizes.length > 1 && (
                 <button type="button" onClick={() => removeSizeField(index)} className="text-red-500">
                   ✕
                 </button>
               )}
-            </div>
+            </div>          
           ))}
           <button type="button" onClick={addSizeField} className="mt-2 text-blue-500 text-sm">
             + {t("createProduct.addSize")}

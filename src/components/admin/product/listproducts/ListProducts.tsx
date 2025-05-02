@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 interface Size {
   size: string;
   stock: string;
+  color?: string;
 }
 
 interface Product {

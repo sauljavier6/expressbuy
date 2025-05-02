@@ -71,6 +71,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       if (index > -1) {
         // La talla ya existe, actualiza el stock
         existingSizes[index].stock = newItem.stock;
+        existingSizes[index].color = newItem.color;
       } else {
         // La talla no existe, agrégala
         existingSizes.push(newItem);

@@ -8,6 +8,7 @@
   interface SizeStock {
     size: string;
     stock: number;
+    color: string;
   }
 
   interface Product {
@@ -127,13 +128,20 @@
                     <button
                       key={item.size}
                       onClick={() => setSelectedSize(item)}
-                      className={`px-4 py-2 rounded border transition ${
+                      className={`flex items-center gap-2 px-4 py-2 rounded border transition ${
                         selectedSize?.size === item.size
                           ? "bg-blue-600 text-white"
                           : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
                       } ${item.stock === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={item.stock === 0}
                     >
+                      {/* 🔵 Indicador de color */}
+                      <span
+                        className="w-4 h-4 rounded-full border border-gray-300"
+                        style={{ backgroundColor: item.color || "#000000" }}
+                      ></span>
+
+                      {/* Texto con talla y stock */}
                       {item.size} ({item.stock})
                     </button>
                   ))}

@@ -6,6 +6,7 @@ const productSchema = new Schema({
     {
       size: { type: String, required: true },
       stock: { type: Number, required: true },
+      color: { type: String, default: "#000000" },
     }
   ],  
   price: { type: Number, required: true },

@@ -9,6 +9,7 @@ import ProductCard from "@/components/productcard/productcard";
 interface SizeStock {
   size: string;
   stock: number;
+  color: string;
 }
 
 interface Product {
@@ -45,11 +46,7 @@ const BestSellerProducts = () => {
     };
 
     fetchProducts();
-  }, []);
-
-  const handleCardClick = (productId: string) => {
-    router.push(`/products/productdetails/${productId}`);
-  };  
+  }, []); 
 
   if (!isClient) {
     return <h2 className="text-2xl text-center">Loading...</h2>;

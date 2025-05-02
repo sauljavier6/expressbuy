@@ -7,6 +7,7 @@ import ProductCard from "@/components/productcard/productcard";
 interface SizeStock {
   size: string;
   stock: number;
+  color: string;
 }
 
 interface Product {
