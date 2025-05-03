@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en">
       <head>
           <title> CinderellaHeels</title>
+          <meta name="google-site-verification" content="tuMkMv4CY3P6V-MI3brZrVJk3M6o3WSM2YtJf1YNN7c" />
       </head>
       <body className={`${inter.variable} ${robotoMono.variable} antialiased`}>
           <SessionProviderWrapper>
