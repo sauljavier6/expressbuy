@@ -17,7 +17,7 @@ export async function GET() {
         },
       },
       { $sort: { totalQuantity: -1 } }, // Ordenar de mayor a menor
-      { $limit: 3 }, // Obtener solo los 6 más vendidos
+      { $limit: 4 }, // Obtener solo los 6 más vendidos
       {
         $lookup: {
           from: "products", // Relación con la colección de productos

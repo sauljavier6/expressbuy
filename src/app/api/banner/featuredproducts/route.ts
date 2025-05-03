@@ -11,7 +11,7 @@ export async function GET() {
     // Buscar los productos más recientes ordenados por fecha de creación
     const latestProducts = await Product.find({})
       .sort({ createdAt: -1 }) // Ordenar descendente (más recientes primero)
-      .limit(3); // Limitar a los 6 más recientes
+      .limit(4); // Limitar a los 6 más recientes
 
     return NextResponse.json({ latestProducts }, { status: 200 });
   } catch (error) {
