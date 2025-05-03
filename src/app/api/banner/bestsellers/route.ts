@@ -34,6 +34,8 @@ export async function GET() {
           image: "$product.image",
           price: "$product.price",
           category: "$product.category",
+          gender: "$product.gender",
+          sizes: "$product.sizes",
           totalQuantity: 1,
         },
       },

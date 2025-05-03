@@ -1,9 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";  
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productcard/productcard";
 
 interface SizeStock {
@@ -26,7 +24,6 @@ const FeaturedProducts = () => {
   const [isClient, setIsClient] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -59,8 +56,8 @@ const FeaturedProducts = () => {
         <p className="text-center">Loading products...</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.length > 0 ? (
-            products.map((product) => (
+          {products?.length > 0 ? (
+            products?.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))
           ) : (

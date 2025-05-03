@@ -6,12 +6,10 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await connectDB();
-
-    // Buscar los productos más recientes ordenados por fecha de creación
+    await connectDB(); 
     const latestProducts = await Product.find({})
-      .sort({ createdAt: -1 }) // Ordenar descendente (más recientes primero)
-      .limit(4); // Limitar a los 6 más recientes
+      .sort({ createdAt: -1 })
+      .limit(4);
 
     return NextResponse.json({ latestProducts }, { status: 200 });
   } catch (error) {
