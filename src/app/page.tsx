@@ -16,7 +16,6 @@ export default function Home() {
       <FeaturedProducts />
       <SummerCollection />
       <BestSellerProducts />
-      <BrandsSection />
       <StoreMap />
     </div>
   );
