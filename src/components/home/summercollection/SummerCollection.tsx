@@ -27,7 +27,7 @@ const SummerCollection = () => {
         {/* Imagen grande a la izquierda */}
         <div className={styles.container__content__imageContainer}>
           <img
-            src="/summercollection/willdiva.jpg"
+            src="/summercollection/willdiva.png"
             alt={t("summerCollection")}
             className={styles.largeImage}
           />
